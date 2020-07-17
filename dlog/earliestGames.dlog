@@ -1,0 +1,4 @@
+[?ath, wso:earliestGames, ?games]
+:-
+[?ath, wso:earliestYear, ?y],
+[?games, dbp:year, ?y] .

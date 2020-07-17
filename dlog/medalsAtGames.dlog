@@ -1,0 +1,7 @@
+[?part, wso:medalsAtGames, ?ct]
+:-
+AGGREGATE(
+    [?part, wso:hasInstance, ?inst],
+    [?inst, wso:medal, ?med]
+    ON ?part
+    BIND COUNT(?med) AS ?ct ) .

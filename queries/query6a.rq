@@ -1,0 +1,19 @@
+## Query 6 - Get a list of every city that an athlete from Serbia and Montenegro competed in. Count the number of males and females that ever competed in one of those cities and return these counts.
+
+PREFIX walls: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX noc: <http://wallscope.co.uk/resource/olympics/NOC/>
+SELECT ?genderName (COUNT(?athlete) AS ?count)
+WHERE {
+  noc:SCG walls:countryInCity   ?city .
+ 
+  ?athlete walls:athleteInCity  ?city .
+
+  ?athlete foaf:gender ?gender .
+ 
+  ?gender rdfs:label ?genderName .
+}
+GROUP BY ?genderName

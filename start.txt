@@ -1,0 +1,17 @@
+dstore create olympics par-complex-nn
+active olympics
+
+set output out
+
+set dir.queries "$(dir.root)/queries/"
+set dir.facts "$(dir.root)/data/"
+set dir.dlog "$(dir.root)/dlog/"
+set dir.output "$(dir.root)/output/"
+
+
+
+import olympics-e.ttl
+
+import athleteInGames.dlog countryInGames.dlog minAge.dlog \
+        earliestYear.dlog earliestGames.dlog Participation.dlog \
+        birthYear.dlog medalCount.dlog hasInstance.dlog medalsAtGames.dlog

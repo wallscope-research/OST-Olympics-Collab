@@ -1,0 +1,4 @@
+@prefix walls: <http://wallscope.co.uk/ontology/olympics/>
+@prefix noc: <http://wallscope.co.uk/resource/olympics/NOC/>
+@prefix dbp: <http://dbpedia.org/property>
+select ?city ?year where { ?games a walls:Olympics . ?games dbp:location ?city . ?games dbp:year ?year}

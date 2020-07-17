@@ -1,0 +1,6 @@
+[?ath, wso:earliestYear, ?min]
+:-
+AGGREGATE(
+    [?ath, wso:athleteInGames, ?g],
+    [?g, dbp:year, ?y]
+    ON ?ath BIND MIN(?y) AS ?min ) .

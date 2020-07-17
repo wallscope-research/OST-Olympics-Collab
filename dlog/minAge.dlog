@@ -1,0 +1,5 @@
+[?ath, wso:minAge, ?min]
+:-
+AGGREGATE(
+    [?ath, foaf:age, ?age]
+    ON ?ath BIND MIN(?age) AS ?min ) .

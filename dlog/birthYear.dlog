@@ -1,0 +1,5 @@
+[?ath, wso:birthYear, ?by]
+:-
+[?ath, wso:earliestYear, ?ey],
+[?ath, wso:minAge, ?age],
+BIND(?ey - ?age AS ?by) .

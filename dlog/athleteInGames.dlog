@@ -1,0 +1,4 @@
+[?athlete, wso:athleteInGames, ?games]
+:- 
+[?instance, wso:athlete, ?athlete],
+[?instance, wso:games, ?games].

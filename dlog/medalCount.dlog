@@ -1,0 +1,7 @@
+[?ath, wso:medalCount, ?mc]
+:-
+AGGREGATE(
+    [?node, wso:athlete, ?ath],
+    [?node, wso:medal, ?med]
+    ON ?ath
+    BIND COUNT(?med) AS ?mc ) .

@@ -1,0 +1,7 @@
+@prefix walls: <http://wallscope.co.uk/ontology/olympics/> .
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix dbp: <http://dbpedia.org/property/> .
+
+[?athlete, walls:athleteInGames, ?games] :- 
+[?instance, walls:athlete, ?athlete],
+[?instance, walls:games, ?games].

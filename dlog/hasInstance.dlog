@@ -1,0 +1,8 @@
+[?part, wso:hasInstance, ?inst]
+:-
+[?part, wso:hasYear, ?y],
+[?part, wso:hasAthlete, ?a],
+[?part, wso:hasGames, ?g],
+[?inst, wso:games, ?g],
+[?inst, wso:athlete, ?a],
+[?g, dbp:year, ?y] .

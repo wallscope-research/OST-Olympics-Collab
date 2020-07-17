@@ -1,0 +1,15 @@
+PREFIX walls: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX noc: <http://wallscope.co.uk/resource/olympics/NOC/>
+
+SELECT (SUM(?NumGames) AS ?x)
+WHERE {SELECT ?athlete (COUNT(?games) AS ?NumGames)
+
+WHERE {
+  ?athlete walls:athleteInGames ?games .
+}
+GROUP BY ?athlete
+}
