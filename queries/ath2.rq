@@ -1,0 +1,3 @@
+# Stats (age, height, weight, num medals) compared to all other athletes but allow selection of continent and sport to compare.
+# This query should return {{athletes}} stats and AVG of all. (Default view)
+# Users can filter this by {{continent}} and {{sport}}.

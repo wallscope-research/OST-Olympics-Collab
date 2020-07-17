@@ -1,0 +1,3 @@
+# Number of medals and athletes over time. Can see a regions rise to dominance in a sport using sport filters.
+# Return total number of athletes and medals (could report medals per athlete too?). This is filtered when given a {{sport}}
+# Essentially, this chart will show a {{continents}} spread of sports e.g. focus on snowsports.
