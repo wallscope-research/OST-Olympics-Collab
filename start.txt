@@ -10,7 +10,8 @@ set dir.output "$(dir.root)/output/"
 
 
 
-import olympics-e.ttl
+import olympics.ttl
+import continents.nt
 
 import athleteInGames.dlog countryInGames.dlog minAge.dlog \
         earliestYear.dlog earliestGames.dlog Participation.dlog \
