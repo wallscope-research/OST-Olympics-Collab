@@ -8,7 +8,10 @@ set dir.facts "$(dir.root)/data/"
 set dir.dlog "$(dir.root)/dlog/"
 set dir.output "$(dir.root)/output/"
 
-
+prefix wso: <http://wallscope.co.uk/ontology/olympics/>
+prefix dbo: <http://dbpedia.org/ontology/>
+prefix dbp: <http://dbpedia.org/property/>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
 
 import olympics.ttl
 import continents.nt
