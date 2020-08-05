@@ -10,11 +10,11 @@
 [?g, dbp:year, ?y],
 FILTER( ?age + ?by = ?y),
 BIND(IRI(
-    CONCAT(STR(:),
+    CONCAT(STR(wso:),
         "participation/",
         REPLACE(STR(?ath),
-            STR(:),""),
+            STR(wso:),""),
         "_",
         REPLACE(STR(?g),
-            STR(:),"")))
+            STR(wso:),"")))
     AS ?part ) .
