@@ -15,7 +15,7 @@ import MedalsAtAge from '@/components/MedalsAtAge.vue';
 import ParallelChart from '@/components/ParallelChart.vue';
 import Navbar from '@/components/Navbar.vue';
 @Component({ components: { InfoBox, News, MedalsAtAge, ParallelChart, Navbar } })
-export default class Home extends Vue {}
+export default class AthleteView extends Vue {}
 </script>
 
 
