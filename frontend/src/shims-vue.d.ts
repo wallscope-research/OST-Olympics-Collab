@@ -3,3 +3,4 @@ declare module '*.vue' {
 
   export default Vue;
 }
+declare module '*'; // import modules without types as "any"
