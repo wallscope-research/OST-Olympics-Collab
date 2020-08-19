@@ -1,9 +1,6 @@
 <template lang="pug">
-div
-  h2.chart-title Athlete Info
-  p Age: {{ "age" }}
-  p Medals: {{ "medals" }}
-  p Sport: {{ "sport" }}
+  #footer
+    p footer
 </template>
 
 
@@ -11,9 +8,16 @@ div
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
-export default class InfoBox extends Vue {}
+export default class Footer extends Vue {}
 </script>
 
 
 <style lang="scss">
+#footer {
+  background: var(--violet);
+  min-height: 100px;
+  p {
+    color: white;
+  }
+}
 </style>

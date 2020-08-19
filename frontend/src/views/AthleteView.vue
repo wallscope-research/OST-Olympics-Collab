@@ -1,10 +1,16 @@
 <template lang="pug">
 .home
-  Navbar.navbar
-  InfoBox.infobox
-  MedalsAtAge.medals-at-age
-  ParallelChart.stats
-  News.news
+  .title
+    h3 Michael Fred Phelps II
+  .charts
+    .one
+      InfoBox
+    .two
+      MedalsAtAge
+    .three
+      ParallelChart
+    .four
+      News
 </template>
 
 <script lang="ts">
@@ -13,38 +19,40 @@ import InfoBox from '@/components/InfoBox.vue';
 import News from '@/components/News.vue';
 import MedalsAtAge from '@/components/MedalsAtAge.vue';
 import ParallelChart from '@/components/ParallelChart.vue';
-import Navbar from '@/components/Navbar.vue';
-@Component({ components: { InfoBox, News, MedalsAtAge, ParallelChart, Navbar } })
+@Component({ components: { InfoBox, News, MedalsAtAge, ParallelChart } })
 export default class AthleteView extends Vue {}
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .home {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 5% 1fr 1fr 1fr;
-  gap: 1px 1px;
-  grid-template-areas: 'navbar navbar navbar navbar' 'infobox medals-at-age medals-at-age news' 'stats stats stats news' 'stats stats stats news';
+  padding: 20px 50px 60px 50px;
+  .title {
+    h3 {
+      font-size: 26px;
+      color: var(--violet);
+      font-weight: normal;
+      margin-bottom: 30px;
+    }
+  }
+  .charts {
+    display: grid;
+    grid-template-columns: 0.4fr 0.6fr 1fr;
+    grid-gap: 35px;
+    
+    >div {
+      background: white;
+      padding: 14px 20px;
+      box-shadow: 9px 8px 10px #00000017;
+      &.four {
+        grid-row: 1/3;
+        grid-column: 3/4;
+      }
+      &.three {
+        grid-column: 1/3;
+      }
+    }
+  }
 }
 
-.navbar {
-  grid-area: navbar;
-}
-
-.infobox {
-  grid-area: infobox;
-}
-
-.medals-at-age {
-  grid-area: medals-at-age;
-}
-
-.news {
-  grid-area: news;
-}
-
-.stats {
-  grid-area: stats;
-}
 </style>

@@ -1,6 +1,6 @@
 <template lang="pug">
 #medalsContainer
-  h2 Medals By Age
+  h2.chart-title Medals By Age
   chart(:options='bar', ref='bar', theme='ovilia-green', autoresize)
 </template>
 

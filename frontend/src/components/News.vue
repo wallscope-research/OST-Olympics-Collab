@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  h2 News
+  h2.chart-title News
   p some text here
 </template>
 
