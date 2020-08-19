@@ -1,0 +1,5 @@
+[?athlete, wso:hasContinent, ?continent]
+:-
+[?athlete, a, foaf:Person],
+[?athlete, wso:hasCountry, ?ctry],
+[?ctry, dbo:continent, ?continent] .

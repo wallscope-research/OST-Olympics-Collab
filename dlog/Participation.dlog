@@ -2,19 +2,21 @@
 [?part, wso:hasAthlete, ?ath],
 [?part, wso:hasGames, ?g],
 [?part, wso:hasYear, ?y],
-[?part, wso:hasAthleteAge, ?age]
+[?part, wso:hasAthleteAge, ?age],
+[?part, wso:hasCountry, ?ctry]
 :-
 [?ath, wso:athleteInGames, ?g],
 [?ath, wso:birthYear, ?by],
+[?ath, wso:hasCountry, ?ctry],
 [?ath, foaf:age, ?age],
 [?g, dbp:year, ?y],
 FILTER( ?age + ?by = ?y),
 BIND(IRI(
-    CONCAT(STR(wso:),
+    CONCAT(STR(wsr:),
         "participation/",
         REPLACE(STR(?ath),
-            STR(wso:),""),
+            STR(wsr:),""),
         "_",
         REPLACE(STR(?g),
-            STR(wso:),"")))
+            STR(wsr:),"")))
     AS ?part ) .
