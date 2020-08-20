@@ -1,5 +1,6 @@
 <template lang="pug">
 div 
+  h2.chart-title Statistic comparison
   #parallel
 </template>
 
