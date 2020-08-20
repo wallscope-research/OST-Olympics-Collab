@@ -1,6 +1,7 @@
 <template lang="pug">
 .home
-  .title
+  .title-page
+    icon(:icon="['fas', 'user']")
     h3 Michael Fred Phelps II
   .charts
     .one
@@ -27,12 +28,19 @@ export default class AthleteView extends Vue {}
 <style lang="scss" scoped>
 .home {
   padding: 12px 50px 60px 50px;
-  .title {
+  .title-page {
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    svg {
+      font-size: 22px;
+      color: var(--violet);
+      margin-right: 8px;
+    }
     h3 {
       font-size: 26px;
       color: var(--violet);
       font-weight: normal;
-      margin-bottom: 25px;
     }
   }
   .charts {
