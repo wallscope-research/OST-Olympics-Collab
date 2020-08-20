@@ -32,14 +32,20 @@ import Instance.dlog #e.g. Bolt_100m_2008 \
         medalsAtGames.dlog #e.g. Bolt_2016 -- > 3 \
         totalMedalCount.dlog #Across olympics, e.g. Bolt --> 2+3+3 = 8 \
         yearHasAverageMedals.dlog #By birthyear, e.g. 2001 --> 0.125 \
-        hasContinent.dlog \
-        AbstractSport.dlog #e.g. Asia_Boxing \
+        hasContinent.dlog 
+
+import  AbstractSport.dlog #e.g. Asia_Boxing_1980 \
         ContinentInSport.dlog \
         continentAverageFemaleAge.dlog \
         continentAverageMaleAge.dlog \
         continentAverageFemaleHeight.dlog \
         continentAverageMaleHeight.dlog \
         continentAverageFemaleWeight.dlog \
-        continentAverageMaleWeight.dlog 
+        continentAverageMaleWeight.dlog  \
+        continentAverageFemaleMinAge.dlog \
+        continentAverageMaleMinAge.dlog \
+        continentAverageFemaleMedalCount.dlog \
+        continentAverageMaleMedalCount.dlog \
+        continentInSportAverageMaleHeight
 
 endpoint start
