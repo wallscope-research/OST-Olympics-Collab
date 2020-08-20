@@ -38,14 +38,22 @@ import  AbstractSport.dlog #e.g. Asia_Boxing_1980 \
         ContinentInSport.dlog \
         continentAverageFemaleAge.dlog \
         continentAverageMaleAge.dlog \
+        continentAverageFemaleMinAge.dlog \
+        continentAverageMaleMinAge.dlog \
         continentAverageFemaleHeight.dlog \
         continentAverageMaleHeight.dlog \
         continentAverageFemaleWeight.dlog \
         continentAverageMaleWeight.dlog  \
-        continentAverageFemaleMinAge.dlog \
-        continentAverageMaleMinAge.dlog \
-        continentAverageFemaleMedalCount.dlog \
-        continentAverageMaleMedalCount.dlog \
-        continentInSportAverageMaleHeight
+        #continentAverageFemaleMedalCount.dlog \
+        #continentAverageMaleMedalCount.dlog \
+        continentInSportAverageFemaleAge.dlog \
+        continentInSportAverageMaleAge.dlog \
+        continentInSportAverageFemaleMinAge.dlog \
+        continentInSportAverageMaleMinAge.dlog \
+        continentInSportAverageFemaleHeight.dlog \
+        continentInSportAverageMaleHeight \
+        continentInSportAverageFemaleWeight.dlog \
+        continentInSportAverageMaleWeight.dlog
+
 
 endpoint start

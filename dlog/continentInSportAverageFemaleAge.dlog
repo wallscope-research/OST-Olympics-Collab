@@ -1,0 +1,9 @@
+[?continentInSport, wso:continentInSportAverageFemaleAge, ?avg]
+:-
+[?continentInSport, a, wso:ContinentInSport],
+AGGREGATE(
+    [?continentInSport, wso:hasAthlete, ?ath],
+    [?ath, foaf:age, ?a],
+    [?ath, foaf:gender, wsr:gender\/F]
+        ON ?continentInSport
+        BIND AVG(?a) AS ?avg) .
