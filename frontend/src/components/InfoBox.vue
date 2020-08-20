@@ -6,7 +6,7 @@ div
   .sport
     p Sport: 
     Tag(
-      text='swimming'
+      tag-text='swimming'
     )
 </template>
 

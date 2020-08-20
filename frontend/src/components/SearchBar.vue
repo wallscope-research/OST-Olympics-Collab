@@ -16,5 +16,6 @@ export default class SearchBar extends Vue {}
     background: var(--grey-search-bar);
     box-shadow: 9px 8px 10px #00000017;
     min-height: 50px;
+    padding: 20px 30px;
   }
 </style>

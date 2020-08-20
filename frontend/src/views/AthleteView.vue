@@ -26,19 +26,19 @@ export default class AthleteView extends Vue {}
 
 <style lang="scss" scoped>
 .home {
-  padding: 20px 50px 60px 50px;
+  padding: 12px 50px 60px 50px;
   .title {
     h3 {
       font-size: 26px;
       color: var(--violet);
       font-weight: normal;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
   }
   .charts {
     display: grid;
     grid-template-columns: 0.4fr 0.6fr 1fr;
-    grid-gap: 35px;
+    grid-gap: 25px;
     
     >div {
       background: white;

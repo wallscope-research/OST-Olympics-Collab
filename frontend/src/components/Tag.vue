@@ -1,7 +1,7 @@
 <template lang="pug">
-.container
+.container(title="search by")
   .tag
-    p {{ text }}
+    p {{ tagText }}
 </template>
 
 
@@ -10,7 +10,7 @@ import { Component, Vue, Prop} from 'vue-property-decorator';
 
 @Component
 export default class Tag extends Vue {
-  @Prop() text!: string;
+  @Prop() tagText!: string;
 }
 </script>
 

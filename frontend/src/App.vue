@@ -16,7 +16,7 @@
   export default class App extends Vue {}
 </script>
 
-<style>
+<style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap');
 #app {
   font-family: 'Ubuntu', sans-serif;
@@ -58,5 +58,22 @@ p, h1, h2, h3, h4, h5, h6 {
 .chart-title {
   color: var(--violet);
   font-size: 18px;
+  margin-bottom: 20px;
+}
+.navbar-group {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.5fr;
+  grid-template-rows: 30px 60px 30px;
+  > div {
+    &:nth-child(1){
+      grid-column: 1/4;
+      grid-row: 1/3;
+    }
+    &:nth-child(2){
+      grid-column: 2/3;
+      grid-row: 2/4;
+    }
+  }
 }
 </style>
