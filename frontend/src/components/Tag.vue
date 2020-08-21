@@ -21,7 +21,7 @@ export default class Tag extends Vue {
 }
 .tag {
   cursor: pointer;
-  background: #F6F4F4;
+  background: #f1f1f1;
   border-radius: 30px;
   padding: 2px 10px;
   height: 28px;

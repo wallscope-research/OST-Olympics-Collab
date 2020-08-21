@@ -63,7 +63,7 @@ p, h1, h2, h3, h4, h5, h6 {
 .navbar-group {
   width: 100%;
   display: grid;
-  grid-template-columns: 0.5fr 1fr 0.5fr;
+  grid-template-columns: 0.8fr 1.3fr 0.5fr;
   grid-template-rows: 30px 60px 30px;
   > div {
     &:nth-child(1){

@@ -6183,7 +6183,7 @@ loglevel@^1.6.8:
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.6.8.tgz#8a25fb75d092230ecd4457270d80b54e28011171"
   integrity sha512-bsU7+gc9AJ2SqpzxwU3+1fedl8zAntbtC5XYlt3s2j1hJcn2PsXSmgN8TaLG/J1/2mod4+cE/3vNL70/c1RNCA==
 
-loose-envify@^1.0.0:
+loose-envify@^1.0.0, loose-envify@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
@@ -9489,6 +9489,13 @@ vue-class-component@^7.1.0, vue-class-component@^7.2.3:
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.5.tgz#212b3548c4fdd3314774c4adbc1c3792a40b52d0"
   integrity sha512-0CSftHY0bDTD+4FbYkuFf6+iKDjZ4h2in2YYJDRMk5daZIjrgT9LjFHvP7Rzqy9/s1pij3zDtTSLRUjsPWMwqg==
 
+vue-clickaway@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/vue-clickaway/-/vue-clickaway-2.1.0.tgz#392de764751f31cd20787e8fb3a6e319825f8d4f"
+  integrity sha1-OS3nZHUfMc0geH6Ps6bjGYJfjU8=
+  dependencies:
+    loose-envify "^1.2.0"
+
 vue-echarts@^5.0.0-beta.0:
   version "5.0.0-beta.0"
   resolved "https://registry.yarnpkg.com/vue-echarts/-/vue-echarts-5.0.0-beta.0.tgz#438dd4b0fc5ccea281709c1f7c6321b05352bdf4"
@@ -9514,6 +9521,14 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
+
+vue-instant@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/vue-instant/-/vue-instant-1.0.4.tgz#1cb24acfec83e70316c45af5b0b96086f5373318"
+  integrity sha512-gSSEz+F6JrmtNsLS/+x1rY2V6Y2o9hLETrNcnkQyM2QMb/7sv7Kimev9Ua7gLj4u3Nqm3zrwa5pZ+Yci5Y2m7Q==
+  dependencies:
+    vue "^2.1.8"
+    vue-clickaway "2.1.0"
 
 vue-loader@^15.9.2:
   version "15.9.3"
@@ -9566,6 +9581,11 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
+
+vue@^2.1.8:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
+  integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
 
 vue@^2.6.11:
   version "2.6.11"
