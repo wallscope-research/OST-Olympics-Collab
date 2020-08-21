@@ -33,24 +33,49 @@ export default class SportView extends Vue {}
 
 
 <style lang="scss" scoped>
-.home {
-  .charts {
-    grid-template-columns: 0.5fr 0.20fr 0.20fr 0.5fr 1fr;
-    grid-template-rows: repeat(4, 1fr);
-    >div {
-      &.two {
-        grid-column: 2/4;
-      }
-      &.four {
-        grid-row: 1/5;
-        grid-column: 5/6;
-      }
-      &.five{
+@media only screen and (max-width: 768px ) {
+  .home {
+    .charts {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+@media only screen and (min-width:769px) and (max-width:1300px){
+  .home {
+    .charts {
+      grid-template-columns: 1fr 1fr;
+      >div {
         grid-column: 1/3;
-        grid-row: 2/5;
+        &.two {
+          grid-column: 1/2;
+        }
+        &.three {
+          grid-column: 2/3;
+        }
       }
-      &.six, &.seven, &.eight {
-        grid-column: 3/5;
+    }
+  }
+}
+@media only screen and (min-width: 1301px) {
+  .home {
+    .charts {
+      grid-template-columns: 0.5fr 0.20fr 0.20fr 0.5fr 1fr;
+      grid-template-rows: repeat(4, 1fr);
+      >div {
+        &.two {
+          grid-column: 2/4;
+        }
+        &.four {
+          grid-row: 1/5;
+          grid-column: 5/6;
+        }
+        &.five{
+          grid-column: 1/3;
+          grid-row: 2/5;
+        }
+        &.six, &.seven, &.eight {
+          grid-column: 3/5;
+        }
       }
     }
   }
