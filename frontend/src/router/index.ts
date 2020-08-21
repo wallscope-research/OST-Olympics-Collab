@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import AthleteView from '../views/AthleteView.vue';
+import SportView from '../views/SportView.vue';
 
 Vue.use(VueRouter);
 
@@ -9,6 +10,11 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: 'Home',
     component: AthleteView,
+  },
+  {
+    path: '/sport',
+    name: 'Sport',
+    component: SportView,
   },
   // {
   //   path: '/about',

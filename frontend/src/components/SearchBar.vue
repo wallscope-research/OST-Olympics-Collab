@@ -31,10 +31,11 @@
       .termType
         svg.custom(role='img' aria-label='Search')
           use(xlink:href='#sbx-icon-search-11')
-        p sport discipline
+        p sport
       .termType
         icon(:icon="['fas', 'user']")
-        p player's name
+        p player
+      span
 </template>
 
 
@@ -77,16 +78,16 @@ svg.custom {
   transition: box-shadow .4s ease, background .4s ease;
   border: 0;
   border-radius: 26px;
-  box-shadow: inset 0 0 0 2px #9c9c9c;
+  box-shadow: inset 0 0 0 2.5px #9c9c9c;
   background: #FFFFFF !important;
   padding: 0;
   padding-right: 41px;
-  padding-left: 51px;
+  padding-left: 41px;
   width: 100%;
   height: 100%;
   vertical-align: middle;
   white-space: normal;
-  font-size: 16px;
+  font-size: 20px;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -102,7 +103,7 @@ svg.custom {
 
 .sbx-custom__input:focus, .sbx-custom__input:active {
   outline: 0;
-  box-shadow: inset 0 0 0 2px var(--active-color);
+  box-shadow: inset 0 0 0 2.5px var(--active-color);
   background: #FFFFFF;
 }
 
@@ -132,7 +133,7 @@ svg.custom {
   border-radius: 25px 0 0 25px;
   background-color: rgba(255, 255, 255, 0);
   padding: 0;
-  width: 51px;
+  width: 41px;
   height: 100%;
   vertical-align: middle;
   text-align: center;
@@ -171,6 +172,7 @@ svg.custom {
   position: absolute;
   top: 12px;
   right: 12px;
+  width:27px;
   margin: 0;
   border: 0;
   background: none;
@@ -235,10 +237,10 @@ svg.custom {
     background: var(--grey-search-bar);
     box-shadow: 9px 8px 10px #00000017;
     min-height: 50px;
-    padding: 8px 10px 10px 20px;
+    padding: 8px 15px 10px 20px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap:15px;
+    grid-template-columns: 1.5fr 1fr;
+    grid-gap:25px;
     > div {
       &:nth-child(1){
         display: flex;
@@ -248,15 +250,15 @@ svg.custom {
         > div {
           &:nth-child(1){
             p {
-              font-size: 13px;
+              font-size: 15px;
               padding:0;
               color: #635b75;
             }
           }
           &:nth-child(2){
             display: grid;
-            grid-template-columns: auto  auto  130px;
-            grid-gap: 5px;
+            grid-template-columns: auto  auto  auto 1fr;
+            grid-gap: 20px;
             .termType{
               display: flex;
               align-items: center;

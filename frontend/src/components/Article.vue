@@ -33,14 +33,14 @@ export default class Article extends Vue {
   .article-link {
     cursor: pointer;
     &:hover {
-      h4 {
+      h4, svg {
         color: var(--active-color);
       }
     }
     h4 {
-    padding:0;
-    padding-bottom: 5px;
-    line-height: 22px;
+      padding:0;
+      padding-bottom: 5px;
+      line-height: 22px;
     }
   }
   .tag-group {

@@ -2,7 +2,10 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 
 import {} from '@fortawesome/pro-light-svg-icons';
 
-import { faTimes as farTimes } from '@fortawesome/pro-regular-svg-icons';
+import { 
+  faTimes as farTimes,
+  faExternalLinkSquare as farExternalLinkSquare,
+} from '@fortawesome/pro-regular-svg-icons';
 
 import { 
   faGlobeEurope as fasGlobeEurope,
@@ -15,6 +18,7 @@ library.add(
 
   // regular
   farTimes,
+  farExternalLinkSquare,
   //solid
   fasGlobeEurope,
   fasUser,

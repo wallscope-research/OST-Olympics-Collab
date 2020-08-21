@@ -63,7 +63,7 @@ p, h1, h2, h3, h4, h5, h6 {
 .navbar-group {
   width: 100%;
   display: grid;
-  grid-template-columns: 0.8fr 1.3fr 0.5fr;
+  grid-template-columns: 0.8fr 1.5fr 0.5fr;
   grid-template-rows: 30px 60px 30px;
   > div {
     &:nth-child(1){
@@ -74,6 +74,38 @@ p, h1, h2, h3, h4, h5, h6 {
       grid-column: 2/3;
       grid-row: 2/4;
     }
+  }
+}
+.home {
+  padding: 12px 50px 60px 50px;
+  .title-page {
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    svg {
+      font-size: 22px;
+      color: var(--violet);
+      margin-right: 8px;
+    }
+    h3 {
+      font-size: 22px;
+      color: var(--violet);
+      font-weight: normal;
+    }
+  }
+  .charts {
+    display: grid;
+    grid-gap: 25px;
+    >div {
+      background: white;
+      padding: 14px 20px;
+      box-shadow: 9px 8px 10px #00000017;
+    }
+  }
+}
+.athletsList {
+  >div {
+    margin-bottom: 10px;
   }
 }
 </style>

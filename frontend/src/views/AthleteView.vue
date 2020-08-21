@@ -27,31 +27,9 @@ export default class AthleteView extends Vue {}
 
 <style lang="scss" scoped>
 .home {
-  padding: 12px 50px 60px 50px;
-  .title-page {
-    margin-bottom: 25px;
-    display: flex;
-    align-items: center;
-    svg {
-      font-size: 22px;
-      color: var(--violet);
-      margin-right: 8px;
-    }
-    h3 {
-      font-size: 26px;
-      color: var(--violet);
-      font-weight: normal;
-    }
-  }
   .charts {
-    display: grid;
     grid-template-columns: 0.4fr 0.6fr 1fr;
-    grid-gap: 25px;
-    
     >div {
-      background: white;
-      padding: 14px 20px;
-      box-shadow: 9px 8px 10px #00000017;
       &.four {
         grid-row: 1/3;
         grid-column: 3/4;

@@ -23,8 +23,7 @@ export default class Tag extends Vue {
   cursor: pointer;
   background: #f1f1f1;
   border-radius: 30px;
-  padding: 2px 10px;
-  height: 28px;
+  padding: 0 10px;
   display: flex;
   align-items: center;
   width: auto;
@@ -36,7 +35,7 @@ export default class Tag extends Vue {
   }
   p {
     color: var(--active-color);
-    font-size: 18px;
+    font-size: 17px;
   }
 }
 </style>
