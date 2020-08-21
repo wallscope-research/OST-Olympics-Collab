@@ -78,7 +78,7 @@ svg.custom {
   border: 0;
   border-radius: 26px;
   box-shadow: inset 0 0 0 2px #9c9c9c;
-  background: #FFFFFF;
+  background: #FFFFFF !important;
   padding: 0;
   padding-right: 41px;
   padding-left: 51px;
@@ -191,7 +191,8 @@ svg.custom {
 .sbx-custom__reset svg {
   display: block;
   margin: 4px;
-  font-size: 18px;
+  font-size: 17px;
+  color:grey;
   &:hover {
     color: var(--active-color);
   }

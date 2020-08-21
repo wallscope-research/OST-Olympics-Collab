@@ -1,5 +1,5 @@
 <template lang="pug">
-.container(title="search by")
+.container(:title="'search for '+ tagText")
   .tag
     p {{ tagText }}
 </template>
