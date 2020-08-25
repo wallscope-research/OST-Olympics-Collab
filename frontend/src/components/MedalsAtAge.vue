@@ -1,7 +1,8 @@
 <template lang="pug">
 #medalsContainer
   h2.chart-title Medals By Age
-  chart(:options='bar', ref='bar', theme='ovilia-green', autoresize)
+  .chart
+    chart(:options='bar', ref='bar', theme='ovilia-green', autoresize)
 </template>
 
 
@@ -111,5 +112,8 @@ export default class MedalsAtAge extends Vue {
   display: grid;
   grid-template-columns: 1fr;
   align-content: center;
+  .chart {
+    justify-self: center;
+  }
 }
 </style>

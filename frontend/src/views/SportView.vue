@@ -37,6 +37,11 @@ export default class SportView extends Vue {}
   .home {
     .charts {
       grid-template-columns: 1fr;
+      >div {
+        &.four {
+          grid-row: 8/9;
+        }
+      }
     }
   }
 }
@@ -51,6 +56,9 @@ export default class SportView extends Vue {}
         }
         &.three {
           grid-column: 2/3;
+        }
+        &.four {
+          grid-row: 7/8;
         }
       }
     }

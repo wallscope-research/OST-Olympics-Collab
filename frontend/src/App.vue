@@ -60,22 +60,7 @@ p, h1, h2, h3, h4, h5, h6 {
   font-size: 18px;
   margin-bottom: 20px;
 }
-.navbar-group {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 0.8fr 1.5fr 0.5fr;
-  grid-template-rows: 30px 60px 30px;
-  > div {
-    &:nth-child(1){
-      grid-column: 1/4;
-      grid-row: 1/3;
-    }
-    &:nth-child(2){
-      grid-column: 2/3;
-      grid-row: 2/4;
-    }
-  }
-}
+
 .home {
   padding: 12px 50px 60px 50px;
   .title-page {
@@ -92,6 +77,10 @@ p, h1, h2, h3, h4, h5, h6 {
       color: var(--violet);
       font-weight: normal;
     }
+    @media only screen and (max-width: 1301px ) {
+      margin-bottom: 15px;
+      margin-top: 5px;
+    }
   }
   .charts {
     display: grid;
@@ -102,10 +91,31 @@ p, h1, h2, h3, h4, h5, h6 {
       box-shadow: 9px 8px 10px #00000017;
     }
   }
+  @media only screen and (max-width: 768px ) {
+    padding: 12px 25px 60px 25px;
+  }
 }
 .athletsList {
   >div {
     margin-bottom: 10px;
+  }
+}
+@media only screen and (min-width: 1301px) {
+  .navbar-group {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 0.8fr 1.5fr 0.5fr;
+    grid-template-rows: 30px 60px 30px;
+    > div {
+      &:nth-child(1){
+        grid-column: 1/4;
+        grid-row: 1/3;
+      }
+      &:nth-child(2){
+        grid-column: 2/3;
+        grid-row: 2/4;
+      }
+    }
   }
 }
 </style>

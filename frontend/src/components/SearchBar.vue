@@ -233,52 +233,74 @@ svg.custom {
     opacity: 1;
   }
 }
-  #searchBar {
-    background: var(--grey-search-bar);
-    box-shadow: 9px 8px 10px #00000017;
-    min-height: 50px;
-    padding: 8px 15px 10px 20px;
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    grid-gap:25px;
-    > div {
-      &:nth-child(1){
-        display: flex;
-        align-items: center;
-      }
-      &:nth-child(2){
-        > div {
-          &:nth-child(1){
+#searchBar {
+  background: var(--grey-search-bar);
+  box-shadow: 9px 8px 10px #00000017;
+  min-height: 50px;
+  padding: 8px 15px 10px 20px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  grid-gap:25px;
+  > div {
+    &:nth-child(1){
+      display: flex;
+      align-items: center;
+    }
+    &:nth-child(2){
+      > div {
+        &:nth-child(1){
+          p {
+            font-size: 15px;
+            padding:0;
+            color: #635b75;
+          }
+        }
+        &:nth-child(2){
+          display: grid;
+          grid-template-columns: auto  auto  auto 1fr;
+          grid-gap: 20px;
+          .termType{
+            display: flex;
+            align-items: center;
             p {
               font-size: 15px;
-              padding:0;
               color: #635b75;
             }
-          }
-          &:nth-child(2){
-            display: grid;
-            grid-template-columns: auto  auto  auto 1fr;
-            grid-gap: 20px;
-            .termType{
-              display: flex;
-              align-items: center;
-              p {
-                font-size: 15px;
-                color: #635b75;
-              }
-              img {
-                width: 24px;
-                margin-right: 5px;
-              }
-              svg {
-                margin-right: 5px;
-                color: #756c88;
-                font-size: 25px;
-              }
+            img {
+              width: 24px;
+              margin-right: 5px;
             }
+            svg {
+              margin-right: 5px;
+              color: #756c88;
+              font-size: 25px;
+            }
+          }
+          @media only screen and (max-width: 768px ) {
+            grid-gap: 10px;
           }
         }
       }
     }
   }
+}
+@media only screen and (max-width: 768px ) {
+  #searchBar {
+    padding: 8px 25px 20px 25px;
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+    > div {
+      &:nth-child(2){
+        grid-row: 1/2;
+      }
+    }
+  }
+}
+@media only screen and (min-width:769px) and (max-width:1300px){
+  #searchBar {
+    padding: 8px 50px 10px 50px;
+  }
+}
+@media only screen and (min-width: 1301px) {
+}
 </style>
