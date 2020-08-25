@@ -177,5 +177,7 @@ export default class ParallelChart extends Vue {
 <style lang="scss">
 #parallel {
   margin: 10px;
+  display: flex;
+  justify-content: center;
 }
 </style>

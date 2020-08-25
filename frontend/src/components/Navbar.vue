@@ -19,7 +19,7 @@ export default class Navbar extends Vue {}
 <style lang="scss">
 #topBar {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr auto;
   background: var(--violet);
   padding-top: 10px;
   padding-bottom: 10px;
@@ -38,6 +38,9 @@ export default class Navbar extends Vue {}
         font-size: 20px;
       }
     }
+  }
+  @media only screen and (max-width: 768px ) {
+    padding: 20px 25px 20px 25px;
   }
 }
 </style>

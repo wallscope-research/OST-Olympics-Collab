@@ -1,7 +1,10 @@
 <template lang="pug">
 .home
   .title-page
-    icon(:icon="['fas', 'user']")
+    OlympicTorch(
+      icon-width = 26
+      icon-height = 36
+    )
     h3 Swimming
   .charts
     .one
@@ -27,7 +30,8 @@ import InfoBox from '@/components/InfoBox.vue';
 import News from '@/components/News.vue';
 import TopMaleAthlets from '@/components/TopMaleAthlets.vue';
 import TopFemaleAthlets from '@/components/TopFemaleAthlets.vue';
-@Component({ components: { InfoBox, News, TopFemaleAthlets, TopMaleAthlets } })
+import OlympicTorch from '@/components/OlympicTorch.vue'
+@Component({ components: { InfoBox, News, TopFemaleAthlets, TopMaleAthlets, OlympicTorch} })
 export default class SportView extends Vue {}
 </script>
 
@@ -37,6 +41,11 @@ export default class SportView extends Vue {}
   .home {
     .charts {
       grid-template-columns: 1fr;
+      >div {
+        &.four {
+          grid-row: 8/9;
+        }
+      }
     }
   }
 }
@@ -51,6 +60,9 @@ export default class SportView extends Vue {}
         }
         &.three {
           grid-column: 2/3;
+        }
+        &.four {
+          grid-row: 7/8;
         }
       }
     }
