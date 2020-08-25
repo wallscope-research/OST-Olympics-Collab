@@ -55,6 +55,7 @@ export default class ParallelChart extends Vue {
 
     const height = this.height;
     const width = this.width;
+    const margin = this.margin;
     d3.csv('/mock/ath2.csv').then(function (data) {
       const keys = data.map((x) => x.line!);
       console.log(keys);
@@ -77,17 +78,6 @@ export default class ParallelChart extends Vue {
         const name = keys[i];
         athlete[name] += +data[i].athlete!;
         rest[name] += +data[i].rest!;
-        // if(name === "age") {
-        //   athlete.age += +data[i].athlete!
-        // }
-        // else if (name === "height"){
-
-        // }
-        // else if (name === "weight"){
-
-        // }else if (name === "numberofmedals"){
-
-        // }
         const vals = data.map((x) => x[name]!);
         y[name] = d3
           .scaleLinear()
@@ -110,21 +100,6 @@ export default class ParallelChart extends Vue {
       console.log(athleteLine);
       // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
       const lineGenerator = d3.line();
-      // const path = (d: any) => {
-      //   return lineGenerator(
-      //     d.map((category: any) => {
-      //      lines[category.line].
-      //     })
-      //   );
-      // };
-      // function path(d: any) {
-      //   return d3.line()(
-      //     //@ts-ignore
-      //     keys.map(function (p) {
-      //       return [x(p), y[p](d[p])];
-      //     })
-      //   );
-      // }
 
       const athPath = (d: any) => {
         return lineGenerator(athleteLine);
@@ -173,7 +148,6 @@ export default class ParallelChart extends Vue {
         .append('g')
         // I translate this element to its right position on the x axis
         .attr('transform', function (d) {
-          console.log(d);
           return 'translate(' + x(d) + ')';
         })
         // And I build the axis with the call function
@@ -182,12 +156,18 @@ export default class ParallelChart extends Vue {
         })
         // Add axis title
         .append('text')
-        .style('text-anchor', 'middle')
-        .attr('y', -9)
+        .attr('text-anchor', 'end')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', -margin.left + 20)
+        .attr('x', -margin.top)
         .text(function (d) {
+          console.log(d);
           return d;
         })
         .style('fill', 'black');
+      // .style('text-anchor', 'middle')
+
+      // .style('fill', 'red');
     });
   }
 }

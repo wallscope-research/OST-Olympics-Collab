@@ -4,18 +4,16 @@ div
   p Age: {{ "age" }}
   p Medals: {{ "medals" }}
   .sport
-    p Sport: 
-    Tag(
-      tag-text='swimming'
-    )
+    p Sport:
+    Tag(tag-text='swimming')
 </template>
 
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Tag from '@/components/Tag.vue'
+import Tag from '@/components/Tag.vue';
 
-@Component({components: { Tag }})
+@Component({ components: { Tag } })
 export default class InfoBox extends Vue {}
 </script>
 

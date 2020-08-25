@@ -1,23 +1,27 @@
 <template lang="pug">
-.container(:title="'search for '+ tagText")
+.container(:title='"search for " + tagText')
   .tag
-    p {{ tagText }}
+    p(@click='sportClicked') {{ tagText }}
 </template>
 
 
 <script lang="ts">
-import { Component, Vue, Prop} from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class Tag extends Vue {
   @Prop() tagText!: string;
+  sportClicked() {
+    console.log('clicked');
+    this.$router.push({ name: 'sport' });
+  }
 }
 </script>
 
 
 <style lang="scss">
 .container {
-  width:fit-content;
+  width: fit-content;
 }
 .tag {
   cursor: pointer;
