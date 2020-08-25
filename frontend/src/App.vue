@@ -60,7 +60,6 @@ p, h1, h2, h3, h4, h5, h6 {
   font-size: 18px;
   margin-bottom: 20px;
 }
-
 .home {
   padding: 12px 50px 60px 50px;
   .title-page {
@@ -98,6 +97,13 @@ p, h1, h2, h3, h4, h5, h6 {
 .athletsList {
   >div {
     margin-bottom: 10px;
+  }
+}
+@media only screen and (max-width: 768px ) {
+  .echarts {
+    max-width: 100% !important;
+    width: 450px !important;
+    height: 350px !important;
   }
 }
 @media only screen and (min-width: 1301px) {
