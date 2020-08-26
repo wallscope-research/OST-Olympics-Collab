@@ -10,6 +10,7 @@ import {
 import { 
   faGlobeEurope as fasGlobeEurope,
   faUser as fasUser,
+  faChevronDoubleUp as fasCheveronDoubleUp,
 
 } from '@fortawesome/pro-solid-svg-icons';
 
@@ -22,4 +23,5 @@ library.add(
   //solid
   fasGlobeEurope,
   fasUser,
+  fasCheveronDoubleUp,
 );

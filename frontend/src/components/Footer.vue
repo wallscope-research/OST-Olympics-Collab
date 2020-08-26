@@ -30,6 +30,9 @@ export default class Footer extends Vue {}
   min-height: 100px;
   padding: 20px 50px 40px 50px;
   align-items: flex-end;
+  @media only screen and (max-width: 768px ) {
+    padding: 20px 25px 40px 25px;
+  }
   a {
     text-decoration: none;
     max-width: auto;
@@ -39,6 +42,7 @@ export default class Footer extends Vue {}
     align-items: center;
     margin-bottom: 5px;
     padding: 3px;
+    margin-top:-6.5px;
     &:hover {
       background: #515f8b;
       transition: all 0.2s;
@@ -56,6 +60,9 @@ export default class Footer extends Vue {}
       font-family: Arial, Helvetica, sans-serif;
       font-weight: bold;
       font-size: 22.5px;
+      @media only screen and (max-width: 768px ) {
+        font-size: 19px;
+      }
     }
   }
   img {
@@ -63,9 +70,15 @@ export default class Footer extends Vue {}
     margin-right: 3px;
     background: transparent;
     padding: 3px;
+    @media only screen and (max-width: 768px ) {
+      height: 22px;
+    }
     &.second {
       height: 38px;
       margin-right: 0;
+      @media only screen and (max-width: 768px ) {
+        height: 31px;
+      }
     }
     &:hover {
       background: #515f8b;

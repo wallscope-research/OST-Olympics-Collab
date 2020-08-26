@@ -2,7 +2,9 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import AthleteView from '../views/AthleteView.vue';
 import SportView from '../views/SportView.vue';
+import BackToTop from 'vue-backtotop'
 
+Vue.use(BackToTop);
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -12,7 +14,7 @@ const routes: Array<RouteConfig> = [
     component: AthleteView,
   },
   {
-    path: '/sport',
+    path: '/sport/',
     name: 'Sport',
     component: SportView,
   },

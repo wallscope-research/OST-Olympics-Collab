@@ -223,7 +223,7 @@ export default class SearchBar extends Vue {}
 }
 #searchBar {
   background: var(--grey-search-bar);
-  box-shadow: 9px 8px 10px #00000017;
+  box-shadow: 3px 6px 10px #0000002b;
   min-height: 50px;
   padding: 8px 15px 10px 20px;
   display: grid;
@@ -284,7 +284,7 @@ export default class SearchBar extends Vue {}
     }
   }
 }
-@media only screen and (min-width:769px) and (max-width:1300px){
+@media only screen and (min-width:769px) and (max-width:1400px){
   #searchBar {
     padding: 8px 50px 10px 50px;
   }

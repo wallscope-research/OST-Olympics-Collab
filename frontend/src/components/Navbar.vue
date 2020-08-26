@@ -26,8 +26,23 @@ export default class Navbar extends Vue {}
   grid-gap: 10px;
   align-items: center;
   padding: 40px 50px 20px 50px;
+  .button, .pageTitle {
+    cursor: pointer;
+  }
+  .button {
+    padding: 0 10px;
+    p {
+      border-bottom: 3px solid transparent;
+    }
+    &:hover {
+      p {
+        border-bottom: 3px solid #142f65;
+      }
+      // background: #3d4e88;
+    }
+  }
   p {
-    font-size: 22px;
+    font-size: 26px;
     color: white;
   }
   > div {
@@ -35,7 +50,7 @@ export default class Navbar extends Vue {}
     &:nth-child(2) {
       justify-content: flex-end;
       p {
-        font-size: 20px;
+        font-size: 19px;
       }
     }
   }

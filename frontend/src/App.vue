@@ -1,18 +1,21 @@
 <template lang="pug">
-  #app
-    .navbar-group
-      Navbar
-      SearchBar
-    router-view
-    Footer
+  #container
+    #app
+      ArrowUp
+      .navbar-group#top
+        Navbar
+        SearchBar
+      router-view
+      Footer
 </template>
 
 <script lang="ts">
+  import { Component, Vue } from 'vue-property-decorator';
   import Footer from '@/components/Footer.vue';
   import Navbar from '@/components/Navbar.vue';
   import SearchBar from '@/components/SearchBar.vue';
-  import { Component, Vue } from 'vue-property-decorator';
-  @Component({ components: { Footer, Navbar, SearchBar } })
+  import ArrowUp from '@/components/ArrowUp.vue'
+  @Component({ components: { Footer, Navbar, SearchBar, ArrowUp } })
   export default class App extends Vue {}
 </script>
 
@@ -87,7 +90,7 @@ p, h1, h2, h3, h4, h5, h6 {
     >div {
       background: white;
       padding: 14px 20px;
-      box-shadow: 9px 8px 10px #00000017;
+      box-shadow: 7px 5px 4px #0000000d;
     }
   }
   @media only screen and (max-width: 768px ) {
@@ -106,7 +109,7 @@ p, h1, h2, h3, h4, h5, h6 {
     height: 350px !important;
   }
 }
-@media only screen and (min-width: 1301px) {
+@media only screen and (min-width: 1400px) {
   .navbar-group {
     width: 100%;
     display: grid;
