@@ -94,7 +94,7 @@ p, h1, h2, h3, h4, h5, h6 {
     }
   }
   @media only screen and (max-width: 768px ) {
-    padding: 12px 25px 60px 25px;
+    padding: 20px 25px 60px 25px;
   }
 }
 .athletsList {

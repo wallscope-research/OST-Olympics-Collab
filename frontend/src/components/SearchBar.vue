@@ -20,10 +20,17 @@
         icon(:icon="['fas', 'globe-europe']")
         p continent
       .termType
-        OlympicTorch(
-          icon-width = 28
-          icon-height = 40
-        )
+        .small
+          OlympicTorch(
+            icon-width = 22
+            icon-height = 34
+          )
+        .large
+          OlympicTorch(
+            icon-width = 28
+            icon-height = 40
+          )
+        
         p sport
       .termType
         icon(:icon="['fas', 'user']")
@@ -272,16 +279,29 @@ export default class SearchBar extends Vue {}
     }
   }
 }
+.small {
+  display: none;
+}
 @media only screen and (max-width: 768px ) {
+  .small {
+    display: block !important;
+  }
+  .large {
+    display: none;
+  }
   #searchBar {
-    padding: 8px 25px 20px 25px;
+    padding: 25px 25px 30px 25px;
     grid-template-columns: 1fr;
-    grid-gap: 10px;
+    box-shadow: 5px 7px 10px #0000002b;
+    grid-gap: 4px;
     > div {
       &:nth-child(2){
         grid-row: 1/2;
       }
     }
+  }
+  #searchBar > div:nth-child(2) > div:nth-child(2) .termType svg {
+    font-size: 20px;
   }
 }
 @media only screen and (min-width:769px) and (max-width:1400px){

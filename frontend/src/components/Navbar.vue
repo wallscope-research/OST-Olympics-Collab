@@ -1,7 +1,7 @@
 <template lang="pug">
   #topBar
     .pageTitle
-      p OST Olympics Data Visualiser
+      h2 OST Olympics Data Visualiser
     .button
       p About
 </template>
@@ -32,6 +32,7 @@ export default class Navbar extends Vue {}
   .button {
     padding: 0 10px;
     p {
+      color: white;
       border-bottom: 3px solid transparent;
     }
     &:hover {
@@ -41,9 +42,10 @@ export default class Navbar extends Vue {}
       // background: #3d4e88;
     }
   }
-  p {
+  h2 {
     font-size: 26px;
     color: white;
+    font-weight: normal;
   }
   > div {
     display: flex;
@@ -55,7 +57,20 @@ export default class Navbar extends Vue {}
     }
   }
   @media only screen and (max-width: 768px ) {
-    padding: 20px 25px 20px 25px;
+    .button {
+      p {
+        border-bottom: 3px solid #142f65;
+      }
+    }
+    padding: 15px 25px 15px 25px;
+    h2 {
+      font-size: 24px;
+      line-height: 30px;
+      padding:0;
+    }
+    div.button {
+      padding: 0;
+    }
   }
 }
 </style>
