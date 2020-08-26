@@ -247,7 +247,7 @@ export default class SearchBar extends Vue {}
           p {
             font-size: 15px;
             padding:0;
-            color: #635b75;
+            color: #444444;
           }
         }
         &:nth-child(2){
@@ -259,7 +259,7 @@ export default class SearchBar extends Vue {}
             align-items: center;
             p {
               font-size: 15px;
-              color: #635b75;
+              color: #444444;
             }
             img {
               width: 24px;
