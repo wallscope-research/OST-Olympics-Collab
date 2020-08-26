@@ -2,17 +2,21 @@
   #topBar
     .pageTitle
       h2 OST Olympics Data Visualiser
-    .button
+    .button(id="show-modal" @click="showModal = true")
       p About
+    Modal(v-if="showModal" @close="showModal = false")
 </template>
 
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import Modal from '@/components/Modal.vue'
 
 
-@Component
-export default class Navbar extends Vue {}
+@Component({ components: { Modal}})
+export default class Navbar extends Vue {
+  showModal= false;
+}
 </script>
 
 
@@ -59,7 +63,11 @@ export default class Navbar extends Vue {}
   @media only screen and (max-width: 768px ) {
     .button {
       p {
-        border-bottom: 3px solid #142f65;
+        padding: 0;
+        border:none;
+        &:hover {
+          border:none;
+        }
       }
     }
     padding: 15px 25px 15px 25px;
@@ -71,6 +79,9 @@ export default class Navbar extends Vue {}
     div.button {
       padding: 0;
     }
+  }
+  @media only screen and (min-width:769px) and (max-width:1400px){
+    padding: 20px 50px 20px 50px;
   }
 }
 </style>

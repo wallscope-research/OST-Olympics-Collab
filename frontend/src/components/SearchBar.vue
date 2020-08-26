@@ -73,7 +73,7 @@ export default class SearchBar extends Vue {}
   transition: box-shadow .4s ease, background .4s ease;
   border: 0;
   border-radius: 26px;
-  box-shadow: inset 0 0 0 2.5px #9c9c9c;
+  box-shadow: inset 0 0 0 2.5px #a0a5b7;
   background: #FFFFFF !important;
   padding: 0;
   padding-right: 41px;

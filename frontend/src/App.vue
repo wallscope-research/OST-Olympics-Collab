@@ -42,8 +42,8 @@
 
 :root {
   --violet: #566598;
-  --grey-page: #E8E8E8;
-  --grey-search-bar: #F6F4F4;
+  --grey-page: #dee0e6;
+  --grey-search-bar: #e8ebf6;
   --active-color: #022FCC;
 }
 
