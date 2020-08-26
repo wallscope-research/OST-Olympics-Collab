@@ -10,12 +10,16 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'Home',
+    redirect: '/athlete'
+  },
+  {
+    path: '/athlete',
+    name: 'athlete',
     component: AthleteView,
   },
   {
-    path: '/sport/',
-    name: 'Sport',
+    path: '/sport',
+    name: 'sport',
     component: SportView,
   },
   // {
