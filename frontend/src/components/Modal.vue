@@ -70,42 +70,55 @@ export default class Modal extends Vue {
 <style lang="scss" scoped>
 .links {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto auto 1fr;
   grid-gap: 70px;
-  @media only screen and (max-width: 768px ) {
+  @media only screen and (max-width: 925px) {
     grid-template-columns: 1fr;
+    grid-gap: 20px;
+    img.medium {
+      margin-top:10px !important;
+    }
+    > div:nth-child(2) {
+      padding-left: 0 !important;
+      border-left: none !important;
+    }
   }
   >div {
     &:nth-child(2){
-      align-items: center;
       display: flex;
+      border-left: 2px solid lightgray;
       flex-direction: column;
+      padding-left: 50px;
       div {
         display: grid;
         grid-template-columns: auto 1fr;
         grid-gap:30px;
         align-items: center;
+        @media only screen and (max-width: 768px ) {
+          grid-template-columns: 1fr;
+          grid-gap: 10px;
+        }
       }
     }
   }
   p {
     color: black;
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
   }
   img {
-    height: 25px;
+    height: 20px;
     margin-right: 3px;
     background: transparent;
     padding: 3px;
     &.second{
-      height: 70px;
+      height: 80px;
       margin-right: 0;
     }
     &.wallscope {
-      height: 90px;
+      height: 95px;
     }
     &.medium {
-      margin-top: 40px;
+      margin-top: 50px;
     }
   }
 }
@@ -139,7 +152,6 @@ export default class Modal extends Vue {
 }
 .modal-container {
   width: 80vw;
-  height: 70vh;
   margin: 0 auto;
   padding: 30px 40px;
   background-color: #fff;
@@ -165,7 +177,7 @@ export default class Modal extends Vue {
   }
 }
 .modal-body {
-  padding-top:40px;
+  padding-top:20px;
   margin: 10px 0 10px 0;
   p {
     font-size: 18px;

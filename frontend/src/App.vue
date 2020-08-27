@@ -110,11 +110,11 @@ p, h1, h2, h3, h4, h5, h6 {
   }
 }
 @media only screen and (max-width: 768px ) {
-  .echarts {
-    max-width: 100% !important;
-    width: 450px !important;
-    height: 350px !important;
-  }
+  // .echarts {
+  //   max-width: 100% !important;
+  //   width: 450px !important;
+  //   height: 350px !important;
+  // }
 }
 @media only screen and (min-width: 1400px) {
   .navbar-group {
