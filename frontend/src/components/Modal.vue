@@ -170,7 +170,7 @@ export default class Modal extends Vue {
   p {
     font-size: 18px;
     line-height: 28px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
   .about-text{
     a {

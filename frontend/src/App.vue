@@ -102,6 +102,13 @@ p, h1, h2, h3, h4, h5, h6 {
     margin-bottom: 10px;
   }
 }
+.echarts {
+  width: unset !important;
+  height: 400px;
+  >div {
+    width: unset !important;
+  }
+}
 @media only screen and (max-width: 768px ) {
   .echarts {
     max-width: 100% !important;
