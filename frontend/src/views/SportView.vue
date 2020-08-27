@@ -13,13 +13,13 @@
     .four
       News
     .five
-      MedalsContinent
+      SportsBar
     .six
-      MultipleLines(:propOptions='ageTime')
+      MultipleLines(:propOptions='ageTime', :title='ageTitle')
     .seven
-      MultipleLines(:propOptions='heightTime')
+      MultipleLines(:propOptions='heightTime', :title='heightTitle')
     .eight
-      MultipleLines(:propOptions='weightTime')
+      MultipleLines(:propOptions='weightTime', :title='weightTitle')
 </template>
 
 <script lang="ts">
@@ -31,8 +31,7 @@ import TopMaleAthletes from '@/components/TopMaleAthletes.vue';
 import TopFemaleAthletes from '@/components/TopFemaleAthletes.vue';
 import OlympicTorch from '@/components/OlympicTorch.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
-import MedalsContinent from '@/components/MedalsContinent.vue';
-import VuePapaParse from 'vue-papa-parse';
+import SportsBar from '@/components/SportsBar.vue';
 import { curveMonotoneX } from 'd3';
 @Component({
   components: {
@@ -40,9 +39,9 @@ import { curveMonotoneX } from 'd3';
     News,
     TopFemaleAthletes,
     TopMaleAthletes,
-    MedalsContinent,
     OlympicTorch,
     MultipleLines,
+    SportsBar,
   },
 })
 export default class SportView extends Vue {
@@ -70,6 +69,9 @@ export default class SportView extends Vue {
     '2018': { mAge: 24, mHeight: 195, mWeight: 76, fAge: 22, fHeight: 174, fWeight: 64 },
   };
 
+  ageTitle = 'Average Age of Athletes Over Time';
+  heightTitle = 'Average Height of Athletes Over Time';
+  weightTitle = 'Average Weight of Athletes Over Time';
   get ageTime() {
     const data = Object.keys(this.overTime);
     const series = [];

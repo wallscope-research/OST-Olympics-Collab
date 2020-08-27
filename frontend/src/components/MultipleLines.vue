@@ -1,5 +1,7 @@
 <template lang="pug">
-chart(:options='line', ref='line', autoresize)
+#multipleLines
+  h1 {{ title }}
+  chart(:options='line', ref='line', autoresize)
 </template>
 
 
@@ -23,13 +25,16 @@ export default class MutipleLines extends Vue {
       type: string;
     }[];
   };
-
+  @Prop() title!: string;
   line = {
     title: {
       text: 'Ages over time',
     },
     tooltip: {
       trigger: 'axis',
+      axisPointer: {
+        type: 'shadow',
+      },
     },
     grid: {
       left: '3%',
