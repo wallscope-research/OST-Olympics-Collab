@@ -72,22 +72,35 @@ export default class ParallelChart extends Vue {
         numberofmedals: 0,
       };
 
-      console.log(data);
+      for (var i = 0; i < keys.length; i++) {
+        const name = keys[i];
+        athlete[name] += +data[i].athlete!;
+        rest[name] += +data[i].rest!;
+      }
+      let minAth = 1000000;
+      let maxAth = 0;
+      let minRest = 1000000000;
+      let maxRest = 0;
+
+      Object.values(athlete).forEach((ath) => {
+        if (ath < minAth) minAth = ath;
+        if (ath > maxAth) maxAth = ath;
+      });
+      Object.values(rest).forEach((rest) => {
+        if (rest < minRest) minRest = rest;
+        if (rest > maxRest) maxRest = rest;
+      });
+
+      const min = Math.min(minAth, minRest);
+      const max = Math.max(maxAth, maxRest);
+      console.log(min, max);
       const y: { [name: string]: any } = {};
       for (var i = 0; i < keys.length; i++) {
         const name = keys[i];
         athlete[name] += +data[i].athlete!;
         rest[name] += +data[i].rest!;
         const vals = data.map((x) => x[name]!);
-        y[name] = d3
-          .scaleLinear()
-          .domain(
-            //@ts-ignore
-            d3.extent(data, function (d) {
-              return +d[name]!;
-            })
-          )
-          .range([height, 0]);
+        y[name] = d3.scaleLinear().domain([0, max]).range([max, 0]);
       }
 
       const x = d3.scalePoint().range([0, width]).padding(1).domain(keys);
@@ -116,6 +129,7 @@ export default class ParallelChart extends Vue {
         .attr('d', athPath)
         .style('fill', 'none')
         .style('stroke', '#69b3a2')
+        .style('stroke-width', '8px')
         .style('opacity', 0.8);
 
       container
@@ -126,6 +140,7 @@ export default class ParallelChart extends Vue {
         .attr('d', restPath)
         .style('fill', 'none')
         .style('stroke', '#000000')
+        .style('stroke-width', '8px')
         .style('opacity', 0.8);
 
       // Draw the lines
@@ -164,7 +179,8 @@ export default class ParallelChart extends Vue {
           console.log(d);
           return d;
         })
-        .style('fill', 'black');
+        .style('fill', 'black')
+        .style('font-size', '16px');
       // .style('text-anchor', 'middle')
 
       // .style('fill', 'red');

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+
 /* FontAwesome */
 import '@/utils/imports/font-awesome';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
