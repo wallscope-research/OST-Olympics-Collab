@@ -1,6 +1,6 @@
 <template lang="pug">
 #multipleLines
-  h1 {{ title }}
+  h2.chart-title {{ title }}
   chart(:options='line', ref='line', autoresize)
 </template>
 

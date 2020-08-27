@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  h1 Medals Per Continent
+  h2.chart-title Medals Per Continent
   #bar-container
     chart(:options='bar')
 </template>

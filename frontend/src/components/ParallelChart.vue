@@ -35,156 +35,105 @@ export default class ParallelChart extends Vue {
       .attr('width', this.width)
       .attr('height', this.height);
 
-    // for (var i = 0; i < 4; i++) {
-    //   container
-    //     .append('line')
-    //     .attr('x1', 20 + this.verticalSpacer * i)
-    //     .attr('y1', 30)
-    //     .attr('x2', 20 + this.verticalSpacer * i)
-    //     .attr('y2', this.lineHeight)
-    //     .attr('stroke-width', 2)
-    //     .attr('stroke', 'black');
-
-    //   container
-    //     .append('text')
-    //     .attr('transform', 'translate(' + this.verticalSpacer * i + ',' + 15 + ')')
-    //     .attr('text-anchor', 'center')
-    //     .style('fill', 'steelblue')
-    //     .text(this.categories[i]);
-    // }
-
     const height = this.height;
     const width = this.width;
     const margin = this.margin;
-    d3.csv('/mock/ath2.csv').then(function (data) {
-      const keys = data.map((x) => x.line!);
-      console.log(keys);
-      const athlete: { [key: string]: number } = {
-        age: 0,
-        height: 0,
-        weight: 0,
-        numberofmedals: 0,
-      };
-      const rest: { [key: string]: number } = {
-        age: 0,
-        height: 0,
-        weight: 0,
-        numberofmedals: 0,
-      };
+    const lines: { [key: string]: any } = {
+      age: { athlete: 22, rest: 26 },
+      height: { athlete: 176, rest: 170 },
+      weight: { athlete: 75, rest: 83 },
+      numberofmedals: { athlete: 6, rest: 3 },
+    };
+    const keys = Object.keys(lines);
 
-      for (var i = 0; i < keys.length; i++) {
-        const name = keys[i];
-        athlete[name] += +data[i].athlete!;
-        rest[name] += +data[i].rest!;
-      }
-      let minAth = 1000000;
-      let maxAth = 0;
-      let minRest = 1000000000;
-      let maxRest = 0;
+    var y: { [key: string]: any } = {};
+    keys.forEach((k: string) => {
+      const max = Math.max(lines[k].athelte, lines[k].rest);
 
-      Object.values(athlete).forEach((ath) => {
-        if (ath < minAth) minAth = ath;
-        if (ath > maxAth) maxAth = ath;
-      });
-      Object.values(rest).forEach((rest) => {
-        if (rest < minRest) minRest = rest;
-        if (rest > maxRest) maxRest = rest;
-      });
-
-      const min = Math.min(minAth, minRest);
-      const max = Math.max(maxAth, maxRest);
-      console.log(min, max);
-      const y: { [name: string]: any } = {};
-      for (var i = 0; i < keys.length; i++) {
-        const name = keys[i];
-        athlete[name] += +data[i].athlete!;
-        rest[name] += +data[i].rest!;
-        const vals = data.map((x) => x[name]!);
-        y[name] = d3.scaleLinear().domain([0, max]).range([max, 0]);
-      }
-
-      const x = d3.scalePoint().range([0, width]).padding(1).domain(keys);
-      const athleteLine: [number, number][] = keys.map(function (k) {
-        return [x(k)!, athlete[k]!];
-      });
-      const restLine: [number, number][] = keys.map(function (k) {
-        return [x(k)!, rest[k]];
-      });
-      console.log(athleteLine);
-      // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
-      const lineGenerator = d3.line();
-
-      const athPath = (d: any) => {
-        return lineGenerator(athleteLine);
-      };
-
-      const restPath = (d: any) => {
-        return lineGenerator(restLine);
-      };
-      container
-        .selectAll('athleteLine')
-        .data(data)
-        .enter()
-        .append('path')
-        .attr('d', athPath)
-        .style('fill', 'none')
-        .style('stroke', '#69b3a2')
-        .style('stroke-width', '8px')
-        .style('opacity', 0.8);
-
-      container
-        .selectAll('restLine')
-        .data(data)
-        .enter()
-        .append('path')
-        .attr('d', restPath)
-        .style('fill', 'none')
-        .style('stroke', '#000000')
-        .style('stroke-width', '8px')
-        .style('opacity', 0.8);
-
-      // Draw the lines
-      // container
-      //   .selectAll('myPath')
-      //   .data(data)
-      //   .enter()
-      //   .append('path')
-      //   .attr('d', path)
-      //   .style('fill', 'none')
-      //   .style('stroke', '#69b3a2')
-      //   .style('opacity', 0.5);
-
-      // Draw the axis:
-      container
-        .selectAll('myAxis')
-        // For each dimension of the dataset I add a 'g' element:
-        .data(keys)
-        .enter()
-        .append('g')
-        // I translate this element to its right position on the x axis
-        .attr('transform', function (d) {
-          return 'translate(' + x(d) + ')';
-        })
-        // And I build the axis with the call function
-        .each(function (d) {
-          d3.select(this).call(d3.axisLeft(y[d]));
-        })
-        // Add axis title
-        .append('text')
-        .attr('text-anchor', 'end')
-        .attr('transform', 'rotate(-90)')
-        .attr('y', -margin.left + 20)
-        .attr('x', -margin.top)
-        .text(function (d) {
-          console.log(d);
-          return d;
-        })
-        .style('fill', 'black')
-        .style('font-size', '16px');
-      // .style('text-anchor', 'middle')
-
-      // .style('fill', 'red');
+      y[k] = d3.scaleLinear().domain([0, max]).range([max, 0]);
     });
+
+    const x = d3.scalePoint().range([0, width]).padding(1).domain(keys);
+
+    const athleteLine: [number, number][] = [];
+    Object.keys(lines).forEach((key) => {
+      athleteLine.push([x(key)!, lines[key].athlete]);
+    });
+    const restLine: [number, number][] = [];
+    Object.keys(lines).forEach((key) => {
+      restLine.push([x(key)!, lines[key].rest]);
+    });
+    console.log(athleteLine);
+    // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
+    const lineGenerator = d3.line();
+
+    const athPath = (d: any) => {
+      return lineGenerator(athleteLine);
+    };
+
+    const restPath = (d: any) => {
+      return lineGenerator(restLine);
+    };
+    container
+      .selectAll('athleteLine')
+      .data(Object.values(lines))
+      .enter()
+      .append('path')
+      .attr('d', athPath)
+      .style('fill', 'none')
+      .style('stroke', '#69b3a2')
+      .style('stroke-width', '4px')
+      .style('opacity', 0.8);
+
+    container
+      .selectAll('restLine')
+      .data(Object.values(lines))
+      .enter()
+      .append('path')
+      .attr('d', restPath)
+      .style('fill', 'none')
+      .style('stroke', '#000000')
+      .style('stroke-width', '4px')
+      .style('opacity', 0.8);
+
+    // Draw the lines
+    // container
+    //   .selectAll('myPath')
+    //   .data(data)
+    //   .enter()
+    //   .append('path')
+    //   .attr('d', path)
+    //   .style('fill', 'none')
+    //   .style('stroke', '#69b3a2')
+    //   .style('opacity', 0.5);
+
+    // Draw the axis:
+    container
+      .selectAll('myAxis')
+      // For each dimension of the dataset I add a 'g' element:
+      .data(keys)
+      .enter()
+      .append('g')
+      // I translate this element to its right position on the x axis
+      .attr('transform', function (d) {
+        return 'translate(' + x(d) + ')';
+      })
+      // And I build the axis with the call function
+      .each(function (d) {
+        d3.select(this).call(d3.axisLeft(y[d]));
+      })
+      // Add axis title
+      .append('text')
+      .attr('text-anchor', 'end')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', -margin.left + 20)
+      .attr('x', -margin.top)
+      .text(function (d) {
+        console.log(d);
+        return d;
+      })
+      .style('fill', 'black')
+      .style('font-size', '16px');
   }
 }
 </script>
