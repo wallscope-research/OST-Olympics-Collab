@@ -1,22 +1,14 @@
 <template lang="pug">
 div 
   h2.chart-title Statistic comparison
-  #parallel
+  #parallel-athlete
 </template>
 
 
 <script lang="ts">
-// export class y {
-//   name: string;
-//   val: number;
-
-//   constructor(name: string, val: number) {
-//     this.name = name;
-//     this.val = val;
-//   }
-// }
 import { Component, Vue } from 'vue-property-decorator';
 import * as d3 from 'd3';
+
 @Component
 export default class ParallelChart extends Vue {
   margin = { top: 20, right: 20, bottom: 30, left: 50 };
@@ -30,7 +22,7 @@ export default class ParallelChart extends Vue {
 
   mounted() {
     const container = d3
-      .select('#parallel')
+      .select('#parallel-athlete')
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height);
@@ -38,7 +30,7 @@ export default class ParallelChart extends Vue {
     const height = this.height;
     const width = this.width;
     const margin = this.margin;
-    const lines: { [key: string]: any } = {
+    const lines: { [key: string]: { athlete: number; rest: number } } = {
       age: { athlete: 22, rest: 26 },
       height: { athlete: 176, rest: 170 },
       weight: { athlete: 75, rest: 83 },
@@ -48,11 +40,16 @@ export default class ParallelChart extends Vue {
 
     var y: { [key: string]: any } = {};
     keys.forEach((k: string) => {
-      const max = Math.max(lines[k].athelte, lines[k].rest);
+      // const max = Math.max(lines[k].athlete, lines[k].rest);
+      const arr = [lines[k].athlete, lines[k].rest];
 
-      y[k] = d3.scaleLinear().domain([0, max]).range([max, 0]);
+      y[k] = d3
+        .scaleLinear()
+        //@ts-ignore
+        .domain(d3.extent(arr))
+        .range([height + margin.top, 0]);
     });
-
+    console.log(y);
     const x = d3.scalePoint().range([0, width]).padding(1).domain(keys);
 
     const athleteLine: [number, number][] = [];
@@ -65,47 +62,61 @@ export default class ParallelChart extends Vue {
     });
     console.log(athleteLine);
     // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
-    const lineGenerator = d3.line();
-
-    const athPath = (d: any) => {
-      return lineGenerator(athleteLine);
+    const path = (d: any) => {
+      console.log(d);
+      return d3.line()(
+        //@ts-ignore
+        keys.map((key) => {
+          console.log(x(key), y[key](d.rest));
+          const ret = [x(key)!, y[key](d[key])];
+          return ret;
+        })
+      );
     };
 
-    const restPath = (d: any) => {
-      return lineGenerator(restLine);
-    };
+    // const athPath = (d: any) => {
+    //   return lineGenerator(athleteLine);
+    // };
+
+    // const restPath = (d: any) => {
+    //   return lineGenerator(restLine);
+    // };
+
     container
-      .selectAll('athleteLine')
+      .selectAll('myPath')
       .data(Object.values(lines))
       .enter()
       .append('path')
-      .attr('d', athPath)
+      //@ts-ignore
+      .attr('d', path)
       .style('fill', 'none')
-      .style('stroke', '#69b3a2')
-      .style('stroke-width', '4px')
-      .style('opacity', 0.8);
-
-    container
-      .selectAll('restLine')
-      .data(Object.values(lines))
-      .enter()
-      .append('path')
-      .attr('d', restPath)
-      .style('fill', 'none')
-      .style('stroke', '#000000')
-      .style('stroke-width', '4px')
-      .style('opacity', 0.8);
-
-    // Draw the lines
+      .style('stroke', function (d) {
+        console.log(d);
+        return '#000000';
+      })
+      .style('opacity', 0.5)
+      .style('stroke-width', '4px');
     // container
-    //   .selectAll('myPath')
-    //   .data(data)
+    //   .selectAll('athleteLine')
+    //   .data(Object.values(lines))
     //   .enter()
     //   .append('path')
-    //   .attr('d', path)
+    //   .attr('d', athPath)
     //   .style('fill', 'none')
     //   .style('stroke', '#69b3a2')
-    //   .style('opacity', 0.5);
+    //   .style('stroke-width', '4px')
+    //   .style('opacity', 0.8);
+
+    // container
+    //   .selectAll('restLine')
+    //   .data(Object.values(lines))
+    //   .enter()
+    //   .append('path')
+    //   .attr('d', restPath)
+    //   .style('fill', 'none')
+    //   .style('stroke', '#404080')
+    //   .style('stroke-width', '4px')
+    //   .style('opacity', 0.8);
 
     // Draw the axis:
     container
@@ -126,14 +137,41 @@ export default class ParallelChart extends Vue {
       .append('text')
       .attr('text-anchor', 'end')
       .attr('transform', 'rotate(-90)')
-      .attr('y', -margin.left + 20)
+      .attr('y', -margin.left - 20)
       .attr('x', -margin.top)
       .text(function (d) {
-        console.log(d);
         return d;
       })
       .style('fill', 'black')
       .style('font-size', '16px');
+
+    container
+      .append('circle')
+      .attr('cx', 10)
+      .attr('cy', 130)
+      .attr('r', 6)
+
+      .style('fill', '#69b3a2');
+    container
+      .append('circle')
+      .attr('r', 6)
+      .attr('cy', 160)
+      .attr('cx', 10)
+      .style('fill', '#404080');
+    container
+      .append('text')
+      .text('Athlete Stats')
+      .attr('y', 130)
+      .attr('x', 20)
+      .style('font-size', '15px')
+      .attr('alignment-baseline', 'middle');
+    container
+      .append('text')
+      .attr('y', 160)
+      .attr('x', 20)
+      .text('Average Stats')
+      .style('font-size', '15px')
+      .attr('alignment-baseline', 'middle');
   }
 }
 </script>

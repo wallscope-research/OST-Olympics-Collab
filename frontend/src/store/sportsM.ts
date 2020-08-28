@@ -12,6 +12,6 @@ import store from "@/store";
 
 
 @Module({ dynamic: true, namespaced: true, name: "countriesM", store })
-class AthletesModule extends VuexModule { }
+class SportsModule extends VuexModule { }
 
-export default getModule(AthletesModule);
+export default getModule(SportsModule);

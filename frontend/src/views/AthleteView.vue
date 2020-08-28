@@ -1,7 +1,7 @@
 <template lang="pug">
 .home
   .title-page
-    icon(:icon="['fas', 'user']")
+    icon(:icon='["fas", "user"]')
     h3 Michael Fred Phelps II
   .charts
     .one
@@ -9,7 +9,7 @@
     .two
       MedalsAtAge
     .three
-      ParallelChart
+      AthleteParallelChart
     .four
       News
 </template>
@@ -19,31 +19,32 @@ import { Component, Vue } from 'vue-property-decorator';
 import InfoBox from '@/components/InfoBox.vue';
 import News from '@/components/News.vue';
 import MedalsAtAge from '@/components/MedalsAtAge.vue';
-import ParallelChart from '@/components/ParallelChart.vue';
-@Component({ components: { InfoBox, News, MedalsAtAge, ParallelChart } })
+import AthleteParallelChart from '@/components/AthleteParallelChart.vue';
+@Component({ components: { InfoBox, News, MedalsAtAge, AthleteParallelChart } })
 export default class AthleteView extends Vue {}
 </script>
 
 
 <style lang="scss" scoped>
-
-@media only screen and (max-width: 768px ) {
+@media only screen and (max-width: 768px) {
   .home {
     .charts {
       grid-template-columns: 1fr;
     }
   }
 }
-@media only screen and (min-width:769px) and (max-width:1300px){
+@media only screen and (min-width: 769px) and (max-width: 1300px) {
   .home {
-    .charts { grid-template-columns: 1fr; }
+    .charts {
+      grid-template-columns: 1fr;
+    }
   }
 }
 @media only screen and (min-width: 1301px) {
   .home {
     .charts {
       grid-template-columns: 0.4fr 0.6fr 1fr;
-      >div {
+      > div {
         &.four {
           grid-row: 1/3;
           grid-column: 3/4;

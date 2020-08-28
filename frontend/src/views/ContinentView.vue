@@ -9,7 +9,7 @@
     .two
       MultipleLines(:propOptions='getOptions', :title='title')
     .three
-
+      ContinentParallelChart
     .four
       News
 </template>
@@ -19,7 +19,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import InfoBox from '@/components/InfoBox.vue';
 import News from '@/components/News.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
-@Component({ components: { InfoBox, News, MultipleLines } })
+import ContinentParallelChart from '@/components/ContinentParallelChart.vue';
+@Component({ components: { InfoBox, News, MultipleLines, ContinentParallelChart } })
 export default class ContinentView extends Vue {
   medals = {
     2000: { numOfAtheltes: 1358, numOfMedals: 416 },
