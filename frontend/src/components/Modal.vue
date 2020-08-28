@@ -10,12 +10,50 @@
               icon(:icon="['far','times']")
           .modal-body
             slot(name='body')
-              p 
-                | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                | ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                | laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                | velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-                | sunt in culpa qui officia deserunt mollit anim id est laborum.
+              .about-text
+                p 
+                  | Data management and integration has always been a huge problem with floods
+                  |  of new documents (health records, contracts, spreadsheets with columns titled ‘CY3’
+                  |  and a Word document naturally stored somewhere else telling you what ‘CY3’ means), financial
+                  |  transactions, social media mentions, staff payroll updates, website traffic tracking data, and the list goes on…
+                p 
+                  | Handling all of this data 
+                  b as it comes in live 
+                  | and assimilating it with existing information is a challenge for businesses of every size. 
+                  | This challenge cannot go ignored either - especially in the current climate. Efficiently utilising this unified data in real-time could
+                  | help the public sector control budget cuts, large businesses retain their staff, and small businesses survive.
+                p 
+                  | To imitate the disparity in data sources within organisations, we have brought together a few different data sources and built this demo.
+                  | You can 
+                  a(href="https://medium.com/" target="_blank" alt="link to the Medium blog article") read about 
+                  | how this was all created and feel free to get in touch with 
+                  a(href="https://wallscope.co.uk" target="_blank" alt="link to the Wallscope website") Wallscope 
+                  | and 
+                  a(href="https://www.oxfordsemantic.tech/" target="_blank" alt="link to the Oxford Semantic Technologies website") Oxford Semantic Technologies
+              .links
+                div
+                  p Read more on:
+                  a(href="https://medium.com/" target="_blank")
+                    img.medium(
+                      src="@/assets/Wordmark_Black.png" 
+                      alt="Medium Logo"
+                    )
+                div
+                  p Get in touch:
+                  div
+                    a(href="https://wallscope.co.uk" target="_blank")
+                        img.wallscope(src="@/assets/Wallscope-logo-on-white.png"
+                        alt="Wallscope Logo"
+                      )
+                    a(href="https://www.oxfordsemantic.tech/product" target="_blank")
+                      img.second(
+                        src="@/assets/Oxford-Semantic-Technologies_black.png" 
+                        alt="Oxford Semantic Technology Logo"
+                      )
+                  
+
+
+
               
 </template>
 
@@ -30,6 +68,60 @@ export default class Modal extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.links {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  grid-gap: 70px;
+  @media only screen and (max-width: 925px) {
+    grid-template-columns: 1fr;
+    grid-gap: 20px;
+    img.medium {
+      margin-top:10px !important;
+    }
+    > div:nth-child(2) {
+      padding-left: 0 !important;
+      border-left: none !important;
+    }
+  }
+  >div {
+    &:nth-child(2){
+      display: flex;
+      border-left: 2px solid lightgray;
+      flex-direction: column;
+      padding-left: 50px;
+      div {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-gap:30px;
+        align-items: center;
+        @media only screen and (max-width: 768px ) {
+          grid-template-columns: 1fr;
+          grid-gap: 10px;
+        }
+      }
+    }
+  }
+  p {
+    color: black;
+    margin-bottom: 10px !important;
+  }
+  img {
+    height: 20px;
+    margin-right: 3px;
+    background: transparent;
+    padding: 3px;
+    &.second{
+      height: 80px;
+      margin-right: 0;
+    }
+    &.wallscope {
+      height: 95px;
+    }
+    &.medium {
+      margin-top: 50px;
+    }
+  }
+}
 .modal-header {
   display: flex;
   button {
@@ -37,7 +129,6 @@ export default class Modal extends Vue {
   }
   h3 {
     font-size: 20px;
-    font-weight: normal;
   }
 }
 .modal-mask {
@@ -61,9 +152,8 @@ export default class Modal extends Vue {
 }
 .modal-container {
   width: 80vw;
-  height: 70vh;
   margin: 0 auto;
-  padding: 20px 30px;
+  padding: 30px 40px;
   background-color: #fff;
   max-height: 100vh;
   max-width: 1000px;
@@ -87,7 +177,24 @@ export default class Modal extends Vue {
   }
 }
 .modal-body {
+  padding-top:20px;
   margin: 10px 0 10px 0;
+  p {
+    font-size: 18px;
+    line-height: 28px;
+    margin-bottom: 15px;
+  }
+  .about-text{
+    a {
+      color: var(--active-color);
+      text-decoration: none;
+      border-bottom: 1.5px solid transparent;
+      &:hover {
+        border-bottom: 1.5px solid var(--active-color);
+        transition: all 0.2s;
+      }
+    }
+  }
 }
 .modal-default-button {
   float: right;
