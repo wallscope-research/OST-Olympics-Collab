@@ -1,0 +1,23 @@
+# Return mean number of medals an athlete has, that represents a countrly in the selected {{continent}}.
+# This can be compared by {{sex}} and {{sport}}. Filters chosen by user on interface.
+# NOTE IN QUERY COMMENTS
+
+PREFIX wso: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX wSport: <http://wallscope.co.uk/resource/olympics/sport/>
+PREFIX wSex: <http://wallscope.co.uk/resource/olympics/gender/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+SELECT (AVG(?medalCount) as ?avgMedals)
+WHERE {
+  ?instance wso:athlete ?ath ;
+            wso:event ?event .
+  
+  ?event rdfs:subClassOf wSport:Swimming . # This should be a variable by default! When user selects "Swimming", variable is set to wSport:Swimming.
+  
+  ?ath wso:totalMedalCount ?medalCount ;
+       foaf:gender wSex:F ;           # This should be a variable by default! When user selects "Female", variable is set to "wSex:F" (M when Male is selected).
+       wso:hasContinent dbr:Africa .  # This should be a variable by default! When user selects "Africa", variable is set to dbr:Africa.
+  FILTER (?medalCount > 0)            # Average medal count of those with with medals (excludes athletes without medals).
+}

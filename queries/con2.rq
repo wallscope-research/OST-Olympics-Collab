@@ -1,3 +1,23 @@
 # Number of medals and athletes over time. Can see a regions rise to dominance in a sport using sport filters.
-# Return total number of athletes and medals (could report medals per athlete too?). This is filtered when given a {{sport}}
-# Essentially, this chart will show a {{continents}} spread of sports e.g. focus on snowsports.
+# Return total number of athletes and medals. This is filtered when given a {{sport}}.
+# NOTE COMMENTS IN QUERY.
+
+PREFIX wso: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX wSport: <http://wallscope.co.uk/resource/olympics/sport/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+SELECT ?year (COUNT(DISTINCT ?athlete) AS ?numAthletes) (SUM(?mc) AS ?numMedals) {
+  ?ptcp a wso:Participation ;
+        wso:hasAthlete ?athlete ;
+        wso:hasYear ?year ;
+        wso:hasInstance ?inst .
+                                               
+  ?athlete wso:hasContinent dbr:Africa ; # This is for the continent view so replace "Africa" with selected continent.
+           wso:totalMedalCount ?mc .
+  
+  ?inst wso:event ?event .
+  ?event rdfs:subClassOf wSport:Swimming . # By default, this should be a variable, replace with selected sport - Using Swimming here as an example.  
+}
+GROUP BY ?year
+ORDER BY ?year

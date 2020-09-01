@@ -18,6 +18,9 @@ sport4.rq - Populate the Sport view infobox, given a {{sport}}.
 
 ## Continent View
 
-con1.rq -  
-con2.rq -  
-con3.rq - 
+con1a.rq - Return all athlete stats (age, height, weight).  
+con1b.rq - Return all athlete stats (age, height, weight) for the selected {{continent}}.  
+con1c.rq - Return mean number of medals an athlete has globally.  
+con1d.rq - Return mean number of medals an athlete has, that represents a countrly in the selected {{continent}}.  
+con2.rq - Number of medals and athletes over time. Given a {{sport}}, we can see a regions rise to dominance in said sport.  
+con3.rq - Populate the Continent view infobox, given a {{continent}}.  
