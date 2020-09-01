@@ -1,0 +1,11 @@
+# Returns ages with the average number of medals that athletes of each age has.
+
+PREFIX walls: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT (YEAR(?date) - ?birthYear AS ?age) ?avgMedalCount
+WHERE {
+  BIND(xsd:dateTime(NOW()) AS ?date)
+  ?birthYear walls:yearHasAverageMedals ?avgMedalCount .
+}
+ORDER BY ?age

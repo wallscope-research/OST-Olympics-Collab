@@ -1,1 +1,33 @@
-# News. Essentially a gossip column about selected athlete mentioning other athletes, sports, and countries.
+# This query should return {{athletes}} stats and info for charts and infobox.
+# NOTE IN QUERY COMMENTS
+
+PREFIX wso: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX wSport: <http://wallscope.co.uk/resource/olympics/sport/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT DISTINCT ?name ?sport (YEAR(?date) - ?birthYear AS ?age) ?weight ?height ?medalCount ?sex ?team ?continent
+WHERE {
+  BIND(xsd:dateTime(NOW()) AS ?date)
+  
+  ?instance wso:athlete <http://wallscope.co.uk/resource/olympics/athlete/JessicaPhyllisEnnisHill> ; # Replace Jessica Ennis-Hill with requested athlete.
+            wso:event ?event .
+  
+  ?event rdfs:subClassOf ?sportENT .
+  
+  <http://wallscope.co.uk/resource/olympics/athlete/JessicaPhyllisEnnisHill> wso:totalMedalCount ?medalCount ; # Replace Jessica Ennis-Hill with requested athlete.
+       wso:hasContinent ?continent ;
+       rdfs:label ?name ;
+       wso:birthYear ?birthYear ;
+       dbo:weight ?weight ;
+       dbo:height ?height ;
+       foaf:gender ?sexENT ;
+       dbo:team ?teamENT .
+  
+  ?sportENT rdfs:label ?sport .
+  ?teamENT rdfs:label ?team .
+  ?sexENT rdfs:label ?sex .
+}

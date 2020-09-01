@@ -1,0 +1,19 @@
+# Stats (age, height, weight) of all athletes but allow selection of continent and sport to compare.
+# This query should return AVG stats of all athletes. (Default view - NOTE COMMENTS IN QUERY)
+# Users can filter this by {{continent}} and {{sport}}.
+
+PREFIX wso: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX wSport: <http://wallscope.co.uk/resource/olympics/sport/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+SELECT (((AVG(?mWeight) + AVG(?fWeight))/2) AS ?avgWeight) (((AVG(?mHeight) + AVG(?fHeight))/2) AS ?avgHeight) (((AVG(?mAge) + AVG(?fAge))/2) AS ?avgAge)
+WHERE {
+  ?cis wso:continentInSportAverageMaleWeight ?mWeight ;
+       wso:continentInSportAverageMaleHeight ?mHeight ;
+       wso:continentInSportAverageMaleAge ?mAge ;
+       wso:continentInSportAverageFemaleWeight ?fWeight ;
+       wso:continentInSportAverageFemaleHeight ?fHeight ;
+       wso:continentInSportAverageFemaleAge ?fAge ;
+       wso:hasContinent dbr:Africa ;  # This should be a variable by default! When user selects "Africa", variable is set to dbr:Africa.
+       wso:hasSport wSport:Swimming . # This should be a variable by default! When user selects "Swimming", variable is set to wSport:Swimming.
+}

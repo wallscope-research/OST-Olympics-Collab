@@ -1,1 +1,18 @@
 # Top athletes in {{sport}} (based on medal count) per sex.
+# Using Swimming in this example.
+PREFIX walls: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX wgender: <http://wallscope.co.uk/resource/olympics/gender/>
+PREFIX sport: <http://wallscope.co.uk/resource/olympics/sport/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+SELECT ?athlete WHERE {
+    ?instance walls:event ?event ;
+              walls:athlete ?athlete ;
+              walls:medal ?medal .
+
+    ?event rdfs:SubClassOf <http://wallscope.co.uk/resource/olympics/sport/Swimming> .
+    ?athlete foaf:gender wgender:M .
+}
+# GROUP BY ?athlete
+# ORDER BY DESC(?noOfMedals)
