@@ -1,1 +1,20 @@
-# News. This would be news about the selected sport regarding athletes and continents
+# Populate the Sport view infobox, given a {{sport}}.
+
+PREFIX wso: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX wSport: <http://wallscope.co.uk/resource/olympics/sport/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?season (COUNT(DISTINCT ?athlete) AS ?numAthletes) (SUM(?mc) AS ?numMedals) (COUNT(DISTINCT ?event) AS ?numEvents) {
+  ?ptcp a wso:Participation ;
+        wso:hasGames ?games ;
+        wso:hasAthlete ?athlete ;
+        wso:hasInstance ?inst .
+  
+  ?athlete wso:totalMedalCount ?mc .
+  ?games wso:season ?seasonENT .
+  ?seasonENT rdfs:label ?season .
+  
+  ?inst wso:event ?event .
+  ?event rdfs:subClassOf wSport:Swimming . # Replace "Swimming" with selected sport - Using Swimming as an example.  
+}
+GROUP BY ?season
