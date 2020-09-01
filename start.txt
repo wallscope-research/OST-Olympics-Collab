@@ -51,7 +51,7 @@ import  AbstractSport.dlog #e.g. Asia_Boxing_1980 \
         continentInSportAverageFemaleMinAge.dlog \
         continentInSportAverageMaleMinAge.dlog \
         continentInSportAverageFemaleHeight.dlog \
-        continentInSportAverageMaleHeight \
+        continentInSportAverageMaleHeight.dlog \
         continentInSportAverageFemaleWeight.dlog \
         continentInSportAverageMaleWeight.dlog
 
