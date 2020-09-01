@@ -1,18 +1,20 @@
-# Top athletes in {{sport}} (based on medal count) per sex.
-# Using Swimming in this example.
-PREFIX walls: <http://wallscope.co.uk/ontology/olympics/>
-PREFIX wgender: <http://wallscope.co.uk/resource/olympics/gender/>
-PREFIX sport: <http://wallscope.co.uk/resource/olympics/sport/>
+# Top 5 athletes in {{sport}} (based on medal count) per sex.
+# NOTE IN QUERY COMMENTS.
+PREFIX wso: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX wSex: <http://wallscope.co.uk/resource/olympics/gender/>
+PREFIX wSport: <http://wallscope.co.uk/resource/olympics/sport/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
-SELECT ?athlete WHERE {
-    ?instance walls:event ?event ;
-              walls:athlete ?athlete ;
-              walls:medal ?medal .
+SELECT DISTINCT ?name ?mc WHERE {
+    ?instance wso:event ?event ;
+              wso:athlete ?athlete .
 
-    ?event rdfs:SubClassOf <http://wallscope.co.uk/resource/olympics/sport/Swimming> .
-    ?athlete foaf:gender wgender:M .
+    ?event rdfs:subClassOf wSport:Swimming . # Replace "Swimming" with selected sport - Using Swimming as an example.
+  
+    ?athlete foaf:gender wSex:F ; # This returns top 5 female athletes! Switch "F" for "M" to get male athletes.
+             wso:totalMedalCount ?mc ;
+             rdfs:label ?name .
 }
-# GROUP BY ?athlete
-# ORDER BY DESC(?noOfMedals)
+ORDER BY DESC(?mc)
+LIMIT 5

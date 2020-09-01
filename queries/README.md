@@ -11,9 +11,9 @@ ath3.rq - Returns info about selected athlete. This populates infobox and charts
 
 ## Sport View
 
-sport1.rq -  
+sport1.rq - Number of medals and athletes per continent over time, given a {{sport}}.  
 sport2.rq - Returns AVG athlete stats (age, height, weight) per sex over time, given a {{sport}}.  
-sport3.rq -  
+sport3.rq - Returns top 5 athletes in {{sport}} (based on medal count) per sex.  
 
 ## Continent View
 
