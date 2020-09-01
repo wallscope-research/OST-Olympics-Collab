@@ -1,5 +1,6 @@
 # Average athlete stats (age, height, weight) per sex over time, given a {{sport}}.
 # We could see e.g. shotput athletes getting younger and heavier over time.
+# NOTE IN QUERY COMMENTS.
 
 PREFIX walls: <http://wallscope.co.uk/ontology/olympics/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
