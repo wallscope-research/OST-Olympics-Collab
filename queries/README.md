@@ -1,0 +1,22 @@
+# Queries
+
+Just a quick list of the query files and descriptions.
+
+## Athlete View
+
+ath1a.rq - Returns ages with the average number of medals that athletes of each age has.
+ath2a.rq - Returns AVG weight, height, and age of all athletes (can be filtered by sport and continent).
+ath2b.rq - Returns AVG number of medals of all athletes (can be filtered by sport and continent).
+ath3.rq - Returns info about selected athlete. This populates infobox and charts!
+
+## Sport View
+
+sport1.rq - 
+sport2.rq - 
+sport3.rq - 
+
+## Continent View
+
+con1.rq - 
+con2.rq - 
+con3.rq - 
