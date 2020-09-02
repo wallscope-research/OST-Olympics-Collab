@@ -42,81 +42,39 @@ export default class ParallelChart extends Vue {
     keys.forEach((k: string) => {
       // const max = Math.max(lines[k].athlete, lines[k].rest);
       const arr = [lines[k].athlete, lines[k].rest];
-
+      console.log(arr);
       y[k] = d3
         .scaleLinear()
         //@ts-ignore
         .domain(d3.extent(arr))
-        .range([height + margin.top, 0]);
+        .range([height - 20, 5]);
     });
     console.log(y);
     const x = d3.scalePoint().range([0, width]).padding(1).domain(keys);
 
     const athleteLine: [number, number][] = [];
     Object.keys(lines).forEach((key) => {
-      athleteLine.push([x(key)!, lines[key].athlete]);
+      athleteLine.push([x(key)!, y[key](lines[key].athlete)]);
     });
     const restLine: [number, number][] = [];
     Object.keys(lines).forEach((key) => {
-      restLine.push([x(key)!, lines[key].rest]);
+      restLine.push([x(key)!, y[key](lines[key].rest)]);
     });
-    console.log(athleteLine);
-    // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
-    const path = (d: any) => {
-      console.log(d);
-      return d3.line()(
-        //@ts-ignore
-        keys.map((key) => {
-          console.log(x(key), y[key](d.rest));
-          const ret = [x(key)!, y[key](d[key])];
-          return ret;
-        })
-      );
+
+    console.log(athleteLine, restLine);
+
+    const makeAthLine = (d: any) => {
+      return d3.line()(athleteLine);
     };
 
-    // const athPath = (d: any) => {
-    //   return lineGenerator(athleteLine);
-    // };
+    const makeRestLine = (d: any) => {
+      console.log(d);
+      return d3.line()(restLine);
+    };
 
     // const restPath = (d: any) => {
-    //   return lineGenerator(restLine);
+    //   return d3.line()(restLine);
     // };
-
-    container
-      .selectAll('myPath')
-      .data(Object.values(lines))
-      .enter()
-      .append('path')
-      //@ts-ignore
-      .attr('d', path)
-      .style('fill', 'none')
-      .style('stroke', function (d) {
-        console.log(d);
-        return '#000000';
-      })
-      .style('opacity', 0.5)
-      .style('stroke-width', '4px');
-    // container
-    //   .selectAll('athleteLine')
-    //   .data(Object.values(lines))
-    //   .enter()
-    //   .append('path')
-    //   .attr('d', athPath)
-    //   .style('fill', 'none')
-    //   .style('stroke', '#69b3a2')
-    //   .style('stroke-width', '4px')
-    //   .style('opacity', 0.8);
-
-    // container
-    //   .selectAll('restLine')
-    //   .data(Object.values(lines))
-    //   .enter()
-    //   .append('path')
-    //   .attr('d', restPath)
-    //   .style('fill', 'none')
-    //   .style('stroke', '#404080')
-    //   .style('stroke-width', '4px')
-    //   .style('opacity', 0.8);
 
     // Draw the axis:
     container
@@ -144,6 +102,27 @@ export default class ParallelChart extends Vue {
       })
       .style('fill', 'black')
       .style('font-size', '16px');
+
+    container
+      .selectAll('athleteLine')
+      .data(Object.values(lines))
+      .enter()
+      .append('path')
+      .attr('d', makeAthLine)
+      .style('fill', 'none')
+      .style('stroke', '#69b3a2')
+      .style('stroke-width', '2px')
+      .style('opacity', 0.8);
+    container
+      .selectAll('athleteLine')
+      .data(Object.values(lines))
+      .enter()
+      .append('path')
+      .attr('d', makeRestLine)
+      .style('fill', 'none')
+      .style('stroke', '#000000')
+      .style('stroke-width', '2px')
+      .style('opacity', 0.8);
 
     container
       .append('circle')
