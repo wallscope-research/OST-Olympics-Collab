@@ -2,14 +2,23 @@
 div 
   h2.chart-title Statistic comparison
   #parallel-athlete
+  #dropdowns
+    #continent-dropdown
+      h3.chart-subtitle Compare by continent
+      v-select(:options='["Canada", "United States"]', :placeholder='"Continent"')
+    #sport-dropdown
+      h3.chart-subtitle Compare by sport
+      v-select(:options='["Tennis", "Football"]', :placeholder='"Sport"')
 </template>
 
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
 import * as d3 from 'd3';
 
-@Component
+@Component({ components: { 'v-select': vSelect } })
 export default class ParallelChart extends Vue {
   margin = { top: 20, right: 20, bottom: 30, left: 50 };
   width = 960 - this.margin.left - this.margin.right;
@@ -36,20 +45,27 @@ export default class ParallelChart extends Vue {
       weight: { athlete: 75, rest: 83 },
       numberofmedals: { athlete: 6, rest: 3 },
     };
+    const limits: { [key: string]: { min: number; max: number } } = {
+      height: { min: 127, max: 226 },
+      weight: { min: 25, max: 214 },
+      age: { min: 10, max: 97 },
+      numberofmedals: { min: 0, max: 28 },
+    };
     const keys = Object.keys(lines);
 
     var y: { [key: string]: any } = {};
     keys.forEach((k: string) => {
-      // const max = Math.max(lines[k].athlete, lines[k].rest);
-      const arr = [lines[k].athlete, lines[k].rest];
-      console.log(arr);
+      const max = limits[k].max;
+      const min = limits[k].min;
+      const arr = [min - 5, max + 5];
+
       y[k] = d3
         .scaleLinear()
         //@ts-ignore
         .domain(d3.extent(arr))
         .range([height - 20, 5]);
     });
-    console.log(y);
+
     const x = d3.scalePoint().range([0, width]).padding(1).domain(keys);
 
     const athleteLine: [number, number][] = [];
@@ -61,14 +77,11 @@ export default class ParallelChart extends Vue {
       restLine.push([x(key)!, y[key](lines[key].rest)]);
     });
 
-    console.log(athleteLine, restLine);
-
     const makeAthLine = (d: any) => {
       return d3.line()(athleteLine);
     };
 
     const makeRestLine = (d: any) => {
-      console.log(d);
       return d3.line()(restLine);
     };
 
@@ -161,5 +174,22 @@ export default class ParallelChart extends Vue {
   margin: 10px;
   display: flex;
   justify-content: center;
+}
+
+#dropdowns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#continent-dropdown,
+#sport-dropdown {
+  margin: 5px;
+}
+#continent-dropdown {
+  grid-column: 1;
+}
+
+#sport-dropdown {
+  grid-column: 2;
 }
 </style>

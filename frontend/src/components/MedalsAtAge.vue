@@ -1,8 +1,7 @@
 <template lang="pug">
 #medalsContainer
   h2.chart-title Medals By Age
-  .chart
-    chart(:options='bar', ref='bar', theme='ovilia-green', autoresize)
+  chart(:options='bar', ref='bar')
 </template>
 
 
@@ -10,7 +9,8 @@
 import { Component, Vue } from 'vue-property-decorator';
 import ECharts from 'vue-echarts'; // refers to components/ECharts.vue in webpack
 import 'echarts/lib/chart/bar';
-
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
 @Component({
   components: {
     chart: ECharts,
@@ -83,8 +83,5 @@ export default class MedalsAtAge extends Vue {
   display: grid;
   grid-template-columns: 1fr;
   align-content: center;
-  .chart {
-    justify-self: center;
-  }
 }
 </style>

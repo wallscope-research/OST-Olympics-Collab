@@ -18,8 +18,6 @@ export default class Continent extends Vue {
   verticalSpacer = this.width / 4;
   categories = ['Age', 'Height', 'Weight', '# Of Medals'];
 
-  parseCSV() {}
-
   mounted() {
     const container = d3
       .select('#parallel-continent')
@@ -37,61 +35,37 @@ export default class Continent extends Vue {
       numberofmedals: { continent: 6, rest: 3 },
     };
     const keys = Object.keys(lines);
-
     var y: { [key: string]: any } = {};
     keys.forEach((k: string) => {
-      // const max = Math.max(lines[k].continent, lines[k].rest);
-      const arr = [lines[k].continent, lines[k].rest];
+      const max = Math.max(lines[k].continent, lines[k].rest);
+      const min = Math.min(lines[k].continent, lines[k].rest);
+      const arr = [min - 5, max + 5];
 
       y[k] = d3
         .scaleLinear()
         //@ts-ignore
         .domain(d3.extent(arr))
-        .range([height + margin.top, 0]);
+        .range([height - 20, 5]);
     });
     console.log(y);
     const x = d3.scalePoint().range([0, width]).padding(1).domain(keys);
 
     const continentLine: [number, number][] = [];
     Object.keys(lines).forEach((key) => {
-      continentLine.push([x(key)!, lines[key].continent]);
+      continentLine.push([x(key)!, y[key](lines[key].continent)]);
     });
     const restLine: [number, number][] = [];
     Object.keys(lines).forEach((key) => {
-      restLine.push([x(key)!, lines[key].rest]);
+      restLine.push([x(key)!, y[key](lines[key].rest)]);
     });
-    console.log(continentLine);
-    // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
-    const lineGenerator = d3.line();
 
-    const athPath = (d: any) => {
-      return lineGenerator(continentLine);
+    const makeContLine = (d: any) => {
+      return d3.line()(continentLine);
     };
 
-    const restPath = (d: any) => {
-      return lineGenerator(restLine);
+    const makeRestLine = (d: any) => {
+      return d3.line()(restLine);
     };
-    container
-      .selectAll('continentLine')
-      .data(Object.values(lines))
-      .enter()
-      .append('path')
-      .attr('d', athPath)
-      .style('fill', 'none')
-      .style('stroke', '#69b3a2')
-      .style('stroke-width', '4px')
-      .style('opacity', 0.8);
-
-    container
-      .selectAll('restLine')
-      .data(Object.values(lines))
-      .enter()
-      .append('path')
-      .attr('d', restPath)
-      .style('fill', 'none')
-      .style('stroke', '#404080')
-      .style('stroke-width', '4px')
-      .style('opacity', 0.8);
 
     // Draw the axis:
     container
@@ -121,6 +95,27 @@ export default class Continent extends Vue {
       .style('font-size', '16px');
 
     container
+      .selectAll('athleteLine')
+      .data(Object.values(lines))
+      .enter()
+      .append('path')
+      .attr('d', makeContLine)
+      .style('fill', 'none')
+      .style('stroke', '#69b3a2')
+      .style('stroke-width', '2px')
+      .style('opacity', 0.8);
+    container
+      .selectAll('athleteLine')
+      .data(Object.values(lines))
+      .enter()
+      .append('path')
+      .attr('d', makeRestLine)
+      .style('fill', 'none')
+      .style('stroke', '#000000')
+      .style('stroke-width', '2px')
+      .style('opacity', 0.8);
+
+    container
       .append('circle')
       .attr('cx', 10)
       .attr('cy', 130)
@@ -144,7 +139,7 @@ export default class Continent extends Vue {
       .append('text')
       .attr('y', 160)
       .attr('x', 20)
-      .text('Continent Stats')
+      .text('Average Stats')
       .style('font-size', '15px')
       .attr('alignment-baseline', 'middle');
   }

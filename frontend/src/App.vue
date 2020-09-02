@@ -1,22 +1,22 @@
 <template lang="pug">
-  #container
-    #app
-      ArrowUp
-      .navbar-group#top
-        Navbar
-        SearchBar
-      router-view
-      Footer
+#container
+  #app
+    ArrowUp
+    #top.navbar-group
+      Navbar
+      SearchBar
+    router-view
+    Footer
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator';
-  import Footer from '@/components/Footer.vue';
-  import Navbar from '@/components/Navbar.vue';
-  import SearchBar from '@/components/SearchBar.vue';
-  import ArrowUp from '@/components/ArrowUp.vue'
-  @Component({ components: { Footer, Navbar, SearchBar, ArrowUp } })
-  export default class App extends Vue {}
+import { Component, Vue } from 'vue-property-decorator';
+import Footer from '@/components/Footer.vue';
+import Navbar from '@/components/Navbar.vue';
+import SearchBar from '@/components/SearchBar.vue';
+import ArrowUp from '@/components/ArrowUp.vue';
+@Component({ components: { Footer, Navbar, SearchBar, ArrowUp } })
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">
@@ -44,24 +44,36 @@
   --violet: #566598;
   --grey-page: #dee0e6;
   --grey-search-bar: #e8ebf6;
-  --active-color: #022FCC;
+  --active-color: #022fcc;
 }
 
 body {
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
   background: var(--grey-page);
 }
 
-p, h1, h2, h3, h4, h5, h6 {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   padding: 5px 0;
-  margin:0;
+  margin: 0;
 }
 
 .chart-title {
   color: var(--violet);
   font-size: 18px;
   margin-bottom: 20px;
+}
+
+.chart-subtitle {
+  color: var(--violet);
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 .home {
   padding: 12px 50px 60px 50px;
@@ -79,7 +91,7 @@ p, h1, h2, h3, h4, h5, h6 {
       color: var(--violet);
       font-weight: normal;
     }
-    @media only screen and (max-width: 1301px ) {
+    @media only screen and (max-width: 1301px) {
       margin-bottom: 15px;
       margin-top: 5px;
     }
@@ -87,29 +99,29 @@ p, h1, h2, h3, h4, h5, h6 {
   .charts {
     display: grid;
     grid-gap: 25px;
-    >div {
+    > div {
       background: white;
       padding: 14px 20px;
       box-shadow: 7px 5px 4px #0000000d;
     }
   }
-  @media only screen and (max-width: 768px ) {
+  @media only screen and (max-width: 768px) {
     padding: 20px 25px 60px 25px;
   }
 }
 .athletsList {
-  >div {
+  > div {
     margin-bottom: 10px;
   }
 }
 .echarts {
   width: unset !important;
   height: 400px;
-  >div {
+  > div {
     width: unset !important;
   }
 }
-@media only screen and (max-width: 768px ) {
+@media only screen and (max-width: 768px) {
   // .echarts {
   //   max-width: 100% !important;
   //   width: 450px !important;
@@ -123,11 +135,11 @@ p, h1, h2, h3, h4, h5, h6 {
     grid-template-columns: 0.8fr 1.5fr 0.5fr;
     grid-template-rows: 30px 60px 30px;
     > div {
-      &:nth-child(1){
+      &:nth-child(1) {
         grid-column: 1/4;
         grid-row: 1/3;
       }
-      &:nth-child(2){
+      &:nth-child(2) {
         grid-column: 2/3;
         grid-row: 2/4;
       }
