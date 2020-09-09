@@ -4,7 +4,7 @@ Just a quick list of the query files and descriptions.
 
 ## Athlete View
 
-ath1a.rq - Returns ages with the average number of medals that athletes at each age has. This populates the bar chart.  
+ath1.rq - Returns ages with the average number of medals that athletes at each age has. This populates the bar chart.  
 ath2 (a and b) - Populates the parallel coordinates plot (with sport and continent dropdowns). Athlete stats come from `ath3.rq`.  
 ath2a.rq - Returns AVG weight, height, and age of all athletes (can be filtered by sport and continent with dropdowns).  
 ath2b.rq - Returns AVG number of medals of all athletes (can be filtered by sport and continent with dropdowns).  
