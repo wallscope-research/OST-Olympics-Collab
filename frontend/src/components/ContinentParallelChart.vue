@@ -3,13 +3,26 @@
 div 
   h2.chart-title Statistic comparison
   #parallel-continent
+  #dropdowns
+    #sport-dropdown
+      h3.chart-subtitle Compare by sport
+      v-select(:options='["Tennis", "Football"]', :placeholder='"Sport"')
+    #sex-dropdown
+      h3.chart-subtitle Compare by sex
+      v-select(:options='["Male", "Female"]', :placeholder='"Sex"')
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
 import * as d3 from 'd3';
 
-@Component
+@Component({
+  components: {
+    'v-select': vSelect,
+  },
+})
 export default class Continent extends Vue {
   margin = { top: 20, right: 20, bottom: 30, left: 50 };
   width = 960 - this.margin.left - this.margin.right;
@@ -148,4 +161,20 @@ export default class Continent extends Vue {
 
 
 <style lang="scss">
+#dropdowns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#sex-dropdown,
+#sport-dropdown {
+  margin: 5px;
+}
+#sex-dropdown {
+  grid-column: 2;
+}
+
+#sport-dropdown {
+  grid-column: 1;
+}
 </style>

@@ -11,6 +11,15 @@ import Vue from "vue";
 import store from "@/store";
 
 
+export class Sport {
+
+  name: string
+
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+
 @Module({ dynamic: true, namespaced: true, name: "countriesM", store })
 class SportsModule extends VuexModule { }
 

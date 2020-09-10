@@ -10,12 +10,16 @@
 </template>
 
 <script lang="ts">
+import 'vue-loading-overlay/dist/vue-loading.css';
 import { Component, Vue } from 'vue-property-decorator';
 import Footer from '@/components/Footer.vue';
 import Navbar from '@/components/Navbar.vue';
 import SearchBar from '@/components/SearchBar.vue';
 import ArrowUp from '@/components/ArrowUp.vue';
-@Component({ components: { Footer, Navbar, SearchBar, ArrowUp } })
+import athleteM from '@/store/athletesM';
+import Loading from 'vue-loading-overlay';
+import axios from 'axios';
+@Component({ components: { Footer, Navbar, SearchBar, ArrowUp, Loading } })
 export default class App extends Vue {}
 </script>
 

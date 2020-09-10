@@ -2,7 +2,7 @@
 .home
   .title-page
     icon(:icon='["fas", "user"]')
-    h3 Michael Fred Phelps II
+    h3 {{ athlete.name }}
   .charts
     .one
       InfoBox
@@ -20,8 +20,22 @@ import InfoBox from '@/components/InfoBox.vue';
 import News from '@/components/News.vue';
 import MedalsAtAge from '@/components/MedalsAtAge.vue';
 import AthleteParallelChart from '@/components/AthleteParallelChart.vue';
+import athleteM, { Athlete } from '@/store/athletesM';
+import { api } from '@/utils/api';
+import { makeURI } from '@/utils/hiccupConnector';
+import axios from 'axios';
+
 @Component({ components: { InfoBox, News, MedalsAtAge, AthleteParallelChart } })
-export default class AthleteView extends Vue {}
+export default class AthleteView extends Vue {
+  athlete: Athlete = { name: 'Pick a name' };
+  info: any;
+  async mounted() {
+    if (this.athlete.name === 'Pick a name') this.athlete = athleteM.getAthlete;
+    await athleteM.fetchAthleteInfo({ name: this.athlete!.name });
+    // this.info = athleteM.getAthleteInfo;
+    // console.log(this.info);
+  }
+}
 </script>
 
 
