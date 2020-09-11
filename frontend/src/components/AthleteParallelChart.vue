@@ -5,31 +5,52 @@ div
   #dropdowns
     #continent-dropdown
       h3.chart-subtitle Compare by continent
-      v-select(:options='["Canada", "United States"]', :placeholder='"Continent"')
+      v-select(
+        v-model='selectedContinent',
+        :options='continents',
+        :placeholder='"Select a continent"'
+      )
     #sport-dropdown
       h3.chart-subtitle Compare by sport
-      v-select(:options='["Tennis", "Football"]', :placeholder='"Sport"')
+      v-select(:options='["Tennis", "Football"]', :placeholder='"Select a sport"')
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 import * as d3 from 'd3';
+import athletesM, { Athlete } from '@/store/athletesM';
+import continentsM, { continentMap } from '@/store/continentsM';
 
 @Component({ components: { 'v-select': vSelect } })
 export default class ParallelChart extends Vue {
+  @Prop({ required: true }) athlete!: Athlete;
   margin = { top: 20, right: 20, bottom: 30, left: 50 };
   width = 960 - this.margin.left - this.margin.right;
   height = 500 - this.margin.top - this.margin.bottom;
   lineHeight = this.height + 30;
   verticalSpacer = this.width / 4;
   categories = ['Age', 'Height', 'Weight', '# Of Medals'];
+  selectedContinent: string = '';
 
-  parseCSV() {}
+  limits: { [key: string]: { min: number; max: number } } = {
+    height: { min: 127, max: 226 },
+    weight: { min: 25, max: 214 },
+    age: { min: 10, max: 97 },
+    'Number of medals': { min: 0, max: 28 },
+  };
+  rest: any = null;
 
-  mounted() {
+  get continents() {
+    const arr = Object.keys(continentMap);
+    const ret = arr.concat('All continents');
+    return ret;
+  }
+
+  async draw() {
+    await athletesM.fetchAverageStats({});
     const container = d3
       .select('#parallel-athlete')
       .append('svg')
@@ -39,24 +60,21 @@ export default class ParallelChart extends Vue {
     const height = this.height;
     const width = this.width;
     const margin = this.margin;
+    const averages = athletesM.getAverateStats;
+
     const lines: { [key: string]: { athlete: number; rest: number } } = {
-      age: { athlete: 22, rest: 26 },
-      height: { athlete: 176, rest: 170 },
-      weight: { athlete: 75, rest: 83 },
-      numberofmedals: { athlete: 6, rest: 3 },
+      age: { athlete: this.athlete.age!, rest: averages.age },
+      height: { athlete: this.athlete.height!, rest: averages.height },
+      weight: { athlete: this.athlete.weight!, rest: averages.weight },
+      'Number of medals': { athlete: this.athlete.medals!, rest: averages.medals },
     };
-    const limits: { [key: string]: { min: number; max: number } } = {
-      height: { min: 127, max: 226 },
-      weight: { min: 25, max: 214 },
-      age: { min: 10, max: 97 },
-      numberofmedals: { min: 0, max: 28 },
-    };
+
     const keys = Object.keys(lines);
 
     var y: { [key: string]: any } = {};
     keys.forEach((k: string) => {
-      const max = limits[k].max;
-      const min = limits[k].min;
+      const max = this.limits[k].max;
+      const min = this.limits[k].min;
       const arr = [min - 5, max + 5];
 
       y[k] = d3
@@ -84,10 +102,6 @@ export default class ParallelChart extends Vue {
     const makeRestLine = (d: any) => {
       return d3.line()(restLine);
     };
-
-    // const restPath = (d: any) => {
-    //   return d3.line()(restLine);
-    // };
 
     // Draw the axis:
     container
@@ -121,16 +135,21 @@ export default class ParallelChart extends Vue {
       .data(Object.values(lines))
       .enter()
       .append('path')
+      .attr('class', 'athleteline')
       .attr('d', makeAthLine)
+      // .transition()
+      // .duration(750)
       .style('fill', 'none')
       .style('stroke', '#69b3a2')
       .style('stroke-width', '2px')
       .style('opacity', 0.8);
-    container
-      .selectAll('athleteLine')
+
+    this.rest = container
+      .selectAll('restLine')
       .data(Object.values(lines))
       .enter()
       .append('path')
+      .attr('class', 'restline')
       .attr('d', makeRestLine)
       .style('fill', 'none')
       .style('stroke', '#000000')
@@ -164,6 +183,78 @@ export default class ParallelChart extends Vue {
       .text('Average Stats')
       .style('font-size', '15px')
       .attr('alignment-baseline', 'middle');
+  }
+
+  async reDraw() {
+    console.log(athletesM.getAverateStats);
+    await athletesM.fetchAverageStats({ continent: continentMap[this.selectedContinent] });
+    const averages = athletesM.getAverateStats;
+    console.log(averages);
+    // const averages = {
+    //   age: 35,
+    //   height: 200,
+    //   weight: 110,
+    //   medals: 6,
+    // };
+
+    const height = this.height;
+    const width = this.width;
+    const margin = this.margin;
+
+    //get data again
+    const lines: { [key: string]: { athlete: number; rest: number } } = {
+      age: { athlete: this.athlete.age!, rest: averages.age },
+      height: { athlete: this.athlete.height!, rest: averages.height },
+      weight: { athlete: this.athlete.weight!, rest: averages.weight },
+      'Number of medals': { athlete: this.athlete.medals!, rest: averages.medals },
+    };
+
+    const keys = Object.keys(lines);
+
+    //rescale x and y
+    const x = d3.scalePoint().range([0, width]).padding(1).domain(keys);
+
+    var y: { [key: string]: any } = {};
+    keys.forEach((k: string) => {
+      const max = this.limits[k].max;
+      const min = this.limits[k].min;
+      const arr = [min - 5, max + 5];
+
+      y[k] = d3
+        .scaleLinear()
+        //@ts-ignore
+        .domain(d3.extent(arr))
+        .range([height - 20, 5]);
+    });
+
+    //get two lines.
+    const athleteLine: [number, number][] = [];
+    Object.keys(lines).forEach((key) => {
+      athleteLine.push([x(key)!, y[key](lines[key].athlete)]);
+    });
+    const restLine: [number, number][] = [];
+    Object.keys(lines).forEach((key) => {
+      restLine.push([x(key)!, y[key](lines[key].rest)]);
+    });
+
+    const makeAthLine = (d: any) => {
+      return d3.line()(athleteLine);
+    };
+
+    const makeRestLine = (d: any) => {
+      return d3.line()(restLine);
+    };
+
+    this.rest.attr('d', makeRestLine);
+  }
+  mounted() {
+    this.draw();
+  }
+
+  @Watch('selectedContinent')
+  doSomething() {
+    console.log(this.selectedContinent);
+    this.reDraw();
   }
 }
 </script>

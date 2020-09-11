@@ -1,20 +1,30 @@
 <template lang="pug">
 div
   h2.chart-title Athlete Info
-  p Age: {{ "age" }}
-  p Medals: {{ "medals" }}
+  p Age: {{ age }}
+  p Medals: {{ medals }}
   .sport
     p Sport:
-    Tag(tag-text='swimming')
+    Tag(:tag-text='sport.name')
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import Tag from '@/components/Tag.vue';
+import { Sport } from '@/store/sportsM';
 
 @Component({ components: { Tag } })
-export default class InfoBox extends Vue {}
+export default class InfoBox extends Vue {
+  @Prop({ default: 'None Provided' }) age!: number;
+  @Prop() medals!: number;
+  @Prop({
+    default: function () {
+      return new Sport('None specified');
+    },
+  })
+  sport!: Sport;
+}
 </script>
 
 

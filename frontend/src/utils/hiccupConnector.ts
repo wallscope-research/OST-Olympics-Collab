@@ -1,24 +1,16 @@
 import axios from "axios"
 
-export interface parameters {
-  text?: string;
-  s?: string;
-  o?: string;
-  p?: string;
-  s2?: string;
-  o2?: string;
-  p2?: string;
-}
+
 
 //ADD VALID RECIPE NAMES HERE!
-const recipes = ["related", "medals-per-age", "athlete/info", "average-stats"]
+const recipes = ["related", "medals-per-age", "athlete/info", "average/stats", "athlete/medals", "text/related"]
 
 
 export function makeURI(name: string, type: "athlete" | "sport" | "continent") {
   const uriMap = {
     "athlete": "http://wallscope.co.uk/resource/olympics/athlete/",
-    "sport": "<http://wallscope.co.uk/resource/olympics/continent/",
-    "continent": "<http://wallscope.co.uk/resource/olympics/sport/"
+    "sport": "http://wallscope.co.uk/resource/olympics/continent/",
+    "continent": "http://wallscope.co.uk/resource/olympics/sport/"
   }
 
   const fixedName = name.replace(/-|\s/g, "");
@@ -28,11 +20,12 @@ export function makeURI(name: string, type: "athlete" | "sport" | "continent") {
   return ret;
 }
 
-export async function useRecipe(recipe: string, payload: parameters) {
+export async function useRecipe(recipe: string, payload: any) {
 
   if (!recipes.includes(recipe)) {
     throw new Error("Recipe name not valid. Please check again!")
   }
+  console.log("payload is", payload)
   const { data } = await axios.get(
     'api/enhance/' + recipe,
     {

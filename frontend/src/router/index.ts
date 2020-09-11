@@ -8,34 +8,31 @@ import BackToTop from 'vue-backtotop'
 Vue.use(BackToTop);
 Vue.use(VueRouter);
 
+const defaultAthleteURI = 'JessicaPhyllisEnnisHill';
+
+
 const routes: Array<RouteConfig> = [
   {
-    path: '/',
-    redirect: '/athlete'
+    path: "/",
+    redirect: `athlete/${defaultAthleteURI}`
   },
   {
-    path: '/athlete',
-    name: 'athlete',
+    path: '/athlete/:athlete1',
     component: AthleteView,
+    props: true,
   },
   {
-    path: '/sport',
+    path: '/sport/:sport1',
     name: 'sport',
     component: SportView,
+    props: true,
   },
   {
-    path: '/continent',
-    name: 'continent',
+    path: '/continent/:continent1',
+
     component: ContinentView,
+    props: true,
   },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-  // },
 ];
 
 const router = new VueRouter({

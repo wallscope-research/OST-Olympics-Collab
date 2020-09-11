@@ -5,17 +5,17 @@
     h3 {{ athlete.name }}
   .charts
     .one
-      InfoBox
+      InfoBox(:age='athlete.age', :medals='athlete.medals', :sport='athlete.sport')
     .two
       MedalsAtAge
     .three
-      AthleteParallelChart
+      AthleteParallelChart(:athlete='athlete')
     .four
-      News
+      News(:param='athlete.name')
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Prop, Component, Vue } from 'vue-property-decorator';
 import InfoBox from '@/components/InfoBox.vue';
 import News from '@/components/News.vue';
 import MedalsAtAge from '@/components/MedalsAtAge.vue';
@@ -27,13 +27,17 @@ import axios from 'axios';
 
 @Component({ components: { InfoBox, News, MedalsAtAge, AthleteParallelChart } })
 export default class AthleteView extends Vue {
+  @Prop({ required: true }) athlete1!: string;
+  uri = `http://wallscope.co.uk/resource/olympics/athlete/${this.athlete1}`;
   athlete: Athlete = { name: 'Pick a name' };
   info: any;
   async mounted() {
-    if (this.athlete.name === 'Pick a name') this.athlete = athleteM.getAthlete;
-    await athleteM.fetchAthleteInfo({ name: this.athlete!.name });
-    // this.info = athleteM.getAthleteInfo;
-    // console.log(this.info);
+    if (this.athlete.name === 'Pick a name') {
+      await athleteM.fetchAthleteInfo({
+        uri: 'http://wallscope.co.uk/resource/olympics/athlete/JessicaPhyllisEnnisHill',
+      });
+      this.athlete = athleteM.getAthlete;
+    }
   }
 }
 </script>

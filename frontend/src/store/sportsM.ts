@@ -20,7 +20,7 @@ export class Sport {
   }
 }
 
-@Module({ dynamic: true, namespaced: true, name: "countriesM", store })
+@Module({ dynamic: true, namespaced: true, name: "sportsM", store })
 class SportsModule extends VuexModule { }
 
 export default getModule(SportsModule);

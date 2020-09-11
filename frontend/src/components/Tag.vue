@@ -13,7 +13,7 @@ export default class Tag extends Vue {
   @Prop() tagText!: string;
   sportClicked() {
     console.log('clicked');
-    this.$router.push({ name: 'sport' });
+    this.$router.push({ name: 'sport/' + this.tagText.toLowerCase() });
   }
 }
 </script>
