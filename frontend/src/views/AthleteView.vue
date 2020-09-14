@@ -29,7 +29,6 @@ import AthleteParallelChart from '@/components/AthleteParallelChart.vue';
 import athleteM, { Athlete, Averages } from '@/store/athletesM';
 import continentsM, { continentMap } from '@/store/continentsM';
 import sportsM, { sportsMap } from '@/store/sportsM';
-import { api } from '@/utils/api';
 import { makeURI } from '@/utils/hiccupConnector';
 import axios from 'axios';
 
