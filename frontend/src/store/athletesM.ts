@@ -128,6 +128,8 @@ class AthletesModule extends VuexModule {
     return this.averageMedalsPerAge
   }
 
+
+
   @Mutation
   setAthlete(athlete: Athlete) {
     this.athlete = athlete
@@ -149,6 +151,30 @@ class AthletesModule extends VuexModule {
     const store = new n3.Store(quadArr)
     this.averageStats = Averages.fromRDF(store)
   }
+
+  @Mutation
+  setMedalsAtAge(quadArr: n3.Quad[]) {
+    const defaultG = new n3.DefaultGraph();
+    const store = new n3.Store(quadArr)
+    const avgMedalsPerAge: { [key: number]: number } = {};
+    const subjs = store.getSubjects("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://wallscope.co.uk/ontology/olympics/MedalsPerAge", defaultG)
+
+    subjs.forEach(subj => {
+      const age = +store.getObjects(subj, "http://wallscope.co.uk/ontology/olympics/age", defaultG).find(x => !!x)!.value
+      const medals = +store.getObjects(subj, "http://wallscope.co.uk/ontology/olympics/medals", defaultG).find(x => !!x)!.value
+      avgMedalsPerAge[age] = medals
+    })
+    this.averageMedalsPerAge = avgMedalsPerAge
+  }
+
+  @Action
+  async fetchMedalsAtAge() {
+    const resp = await useRecipe('medals-per-age', {})
+    const parser = new n3.Parser();
+    const quadArr = parser.parse(resp);
+    this.setMedalsAtAge(quadArr)
+  }
+
   @Action({ rawError: true })
   async fetchAverageStats({ sport, continent, gender }: { sport?: string, gender?: string, continent?: string } = {}) {
     const params: { [key: string]: string } = {}

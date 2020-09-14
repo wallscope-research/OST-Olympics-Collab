@@ -7,8 +7,8 @@
   .charts
     .one(v-if='athlete')
       InfoBox(:age='athlete.age', :medals='athlete.medals', :sport='athlete.sport')
-    .two
-      MedalsAtAge
+    .two(v-if='athlete')
+      MedalsAtAge(:averageMedalsPerAge='averageMedalsPerAge', :athleteAge='athlete.age')
     .three(v-if='athlete && averages')
       AthleteParallelChart(
         :athlete='athlete',
@@ -41,6 +41,7 @@ export default class AthleteView extends Vue {
   sports = sportsMap;
   selectedContinent: string | undefined;
   selectedSport: string | undefined;
+  averageMedalsPerAge: { [key: number]: number } = {};
 
   @Watch('athleteID')
   athleteChanged(val: string) {
@@ -59,8 +60,13 @@ export default class AthleteView extends Vue {
     });
     this.averages = athleteM.getAverateStats;
   }
+
+  async fetchMedalsAtAge() {
+    await athleteM.fetchMedalsAtAge();
+    this.averageMedalsPerAge = athleteM.getAverageMedalsPerAge;
+  }
   async mounted() {
-    await Promise.all([this.fetchAthlete(), this.fetchAverages()]);
+    await Promise.all([this.fetchAthlete(), this.fetchAverages(), this.fetchMedalsAtAge()]);
   }
 }
 </script>
