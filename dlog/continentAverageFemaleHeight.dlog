@@ -1,0 +1,9 @@
+[?continent, wso:continentAverageFemaleHeight, ?avg]
+:-
+AGGREGATE(
+    [?athlete, dbo:height, ?h],
+    [?athlete, wso:hasContinent, ?continent],
+    [?athlete, foaf:gender, wsr:gender\/F]
+    ON ?continent
+    BIND AVG(?h) AS ?avg
+) .

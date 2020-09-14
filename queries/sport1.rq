@@ -1,2 +1,22 @@
-# Number of medals and athletes and medals per continent over time, given a {{sport}}.
+# Number of medals and athletes per continent over time, given a {{sport}}.
 # Essentially, this chart will show which regions dominate a given {{sport}}.
+# NOTE IN QUERY COMMENTS
+
+PREFIX wso: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX wSport: <http://wallscope.co.uk/resource/olympics/sport/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?year ?continent (COUNT(DISTINCT ?athlete) AS ?numAthletes) (SUM(?mc) AS ?numMedals) {
+  ?ptcp a wso:Participation ;
+        wso:hasAthlete ?athlete ;
+        wso:hasYear ?year ;
+        wso:hasInstance ?inst .
+                                               
+  ?athlete wso:hasContinent ?continent ;
+           wso:totalMedalCount ?mc .
+  
+  ?inst wso:event ?event .
+  ?event rdfs:subClassOf wSport:Swimming . # Replace "Swimming" with selected sport - Using Swimming as an example.  
+}
+GROUP BY ?year ?continent
+ORDER BY ?year

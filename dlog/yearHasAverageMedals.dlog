@@ -1,0 +1,7 @@
+[?year, wso:yearHasAverageMedals, ?avg]
+:-
+AGGREGATE(
+    [?ath, wso:birthYear, ?year],
+    [?ath, wso:totalMedalCount, ?tot]
+    ON ?year BIND AVG(?tot) AS ?avg
+) .

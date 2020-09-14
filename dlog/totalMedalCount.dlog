@@ -1,0 +1,15 @@
+[?ath, wso:totalMedalCount, ?mc]
+:-
+AGGREGATE(
+    [?part, wso:hasAthlete, ?ath],
+    [?part, wso:medalsAtGames, ?meds]
+    ON ?ath
+    BIND SUM(?meds) AS ?mc
+) .
+
+[?ath, wso:totalMedalCount, 0]
+:-
+[?ath, a, foaf:Person],
+NOT EXIST ?meds, ?part IN (
+    [?part, wso:hasAthlete, ?ath],
+    [?part, wso:medalsAtGames, ?meds] ) .

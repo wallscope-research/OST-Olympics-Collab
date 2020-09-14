@@ -3,3 +3,6 @@
 [?country, dbo:ground, ?team],
 [?athlete, dbo:team, ?team],
 [?athlete, wso:athleteInGames, ?games].
+#Notice we are not using hasCountry.dlog.
+#Imagine if X from Soviet competed in 1988 and 1996, first with the USSR, then Russia.
+#Then we don't want to see the USSR in 1996.

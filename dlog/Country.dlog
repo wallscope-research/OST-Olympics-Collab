@@ -1,0 +1,1 @@
+[?ctry, a, dbo:Country] :- [?ctry, dbo:ground, ?team] .

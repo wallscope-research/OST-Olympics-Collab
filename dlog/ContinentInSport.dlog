@@ -1,0 +1,19 @@
+[?continentInSport, a, wso:ContinentInSport],
+[?continentInSport, wso:hasContinent, ?cont],
+[?continentInSport, wso:hasSport, ?sport],
+[?continentInSport, wso:hasYear, ?yr],
+[?continentInSport, wso:hasAthlete, ?ath]
+:-
+[?part, wso:hasInstance, ?ins],
+[?part, wso:hasCountry, ?ctry],
+[?part, wso:hasYear, ?yr],
+[?ins, wso:event, ?e],
+[?ins, wso:athlete, ?ath],
+[?e, rdfs:subClassOf, ?sport],
+[?ctry, dbo:continent, ?cont],
+BIND(IRI(CONCAT(STR(wso:),"ContinentInSport/",
+    REPLACE(STR(?cont),"http://dbpedia.org/resource/",""),
+    "_",
+    REPLACE(STR(?sport),STR(wsr:sport\/),""),
+    "_",
+    STR(?yr))) AS ?continentInSport) .
