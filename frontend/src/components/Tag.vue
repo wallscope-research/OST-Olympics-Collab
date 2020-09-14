@@ -1,7 +1,7 @@
 <template lang="pug">
-.container(:title='"search for " + tagText')
+.container(:title='"search for " + text', @click.stop='$emit("click")')
   .tag
-    p(@click='sportClicked') {{ tagText }}
+    p {{ text }}
 </template>
 
 
@@ -9,12 +9,8 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
-export default class Tag extends Vue {
-  @Prop() tagText!: string;
-  sportClicked() {
-    console.log('clicked');
-    this.$router.push({ name: 'sport/' + this.tagText.toLowerCase() });
-  }
+export default class TagC extends Vue {
+  @Prop() text!: string;
 }
 </script>
 

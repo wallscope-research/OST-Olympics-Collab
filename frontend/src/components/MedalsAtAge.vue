@@ -11,7 +11,6 @@ import ECharts from 'vue-echarts'; // refers to components/ECharts.vue in webpac
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
-import athletesM from '@/store/athletesM';
 @Component({
   components: {
     chart: ECharts,

@@ -22,18 +22,14 @@ import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 import * as d3 from 'd3';
 import { Athlete } from '@/store/athletesM';
+import { Averages } from '../store/athletesM';
 
 @Component({ components: { 'v-select': vSelect } })
 export default class ParallelChart extends Vue {
   @Prop({ required: true }) athlete!: Athlete;
   @Prop({ required: true }) continentMap!: { [key: string]: string };
   @Prop({ required: true }) sportsMap!: { [key: string]: string };
-  @Prop({ required: true }) averages: {
-    age: number;
-    height: number;
-    weight: number;
-    medals: number;
-  };
+  @Prop({ required: true }) averages: Averages;
   margin = { top: 20, right: 20, bottom: 30, left: 50 };
   width = 960 - this.margin.left - this.margin.right;
   height = 500 - this.margin.top - this.margin.bottom;

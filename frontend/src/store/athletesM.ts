@@ -10,6 +10,7 @@ import Vue from "vue";
 // import { api } from "@/utils/api";
 import store from "@/store";
 import { Sport } from "@/store/sportsM"
+import { DataArticle } from "@/components/Article.vue"
 import { useRecipe, makeURI } from "@/utils/hiccupConnector"
 import * as n3 from "n3";
 
@@ -107,6 +108,8 @@ class AthletesModule extends VuexModule {
     medals: 0,
   }
 
+  articles: DataArticle[] = []
+
   averageMedalsPerAge: { [key: number]: number } = {}
   get getGraph() {
     return this.graph;
@@ -128,7 +131,9 @@ class AthletesModule extends VuexModule {
     return this.averageMedalsPerAge
   }
 
-
+  get getArticles() {
+    return this.articles
+  }
 
   @Mutation
   setAthlete(athlete: Athlete) {
@@ -167,6 +172,31 @@ class AthletesModule extends VuexModule {
     this.averageMedalsPerAge = avgMedalsPerAge
   }
 
+  @Mutation
+  setAthleteArticles(quads: n3.Quad[]) {
+    const defaultG = new n3.DefaultGraph();
+    const store = new n3.Store(quads)
+    this.articles = store.getSubjects("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://wallscope.co.uk/ontology/File", defaultG).map(f => {
+      const title = store.getObjects(f, "http://schema.org/text", defaultG).find(x => !!x)!.value
+      const url = store.getObjects(f, "http://schema.org/url", defaultG).find(x => !!x)!.value
+      const tags = store.getObjects(f, "http://purl.org/dc/terms/subject", defaultG).flatMap(s => {
+        return store.getObjects(s, "dct:relation", defaultG).map(r => {
+          const label = store.getObjects(r, "rdfs:label", defaultG).find(x => !!x)!.value
+          return { uri: r, text: label }
+        })
+      })
+      // <file://home/antero/Wallscope/DATA/news/reddit/results-sm/olympic-rs-2016-08-10784.txt
+      // extract date from filename
+      const dateStr = f.id.split("olympic-rs-").pop()?.split(".txt")?.pop()
+      const split = dateStr?.split("-")
+      const year = split?.[0];
+      const month = split?.[1];
+      const date = year && month? new Date(`${year}-${month}`): null;
+      return { title, url, date, tags }
+    })
+
+  }
+
   @Action
   async fetchMedalsAtAge() {
     const resp = await useRecipe('medals-per-age', {})
@@ -175,7 +205,7 @@ class AthletesModule extends VuexModule {
     this.setMedalsAtAge(quadArr)
   }
 
-  @Action({ rawError: true })
+  @Action
   async fetchAverageStats({ sport, continent, gender }: { sport?: string, gender?: string, continent?: string } = {}) {
     const params: { [key: string]: string } = {}
     if (continent) { params["o"] = `<${continent}>` }
@@ -197,6 +227,16 @@ class AthletesModule extends VuexModule {
     const parser = new n3.Parser();
     const quadArr = parser.parse(resp);
     this.setAthleteInfo(quadArr);
+  }
+
+  @Action({rawError:true})
+  async fetchAthleteArticles() {
+    const names = this.athlete.name.split(" ")
+    const payload = { o: `${names.shift()} ${names.pop()}` };
+    const resp = await useRecipe("text/related", payload);
+    const parser = new n3.Parser();
+    const quadArr = parser.parse(resp);
+    this.setAthleteArticles(quadArr);
   }
 
 }

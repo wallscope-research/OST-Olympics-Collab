@@ -1,25 +1,24 @@
 <template lang="pug">
-  .article-group
-    .article-link
-      p {{ articleDate }}
-      h4 {{ articleTitle }}
-    .tag-group
-      Tag(
-        tag-text="Europe"
-      )
-      Tag(
-        tag-text='swimming'
-      )
+.article-group
+  .article-link
+    p {{ article.date }}
+    h4 {{ article.title }}
+  .tag-group
+    Tag(text='Europe')
+    Tag(text='swimming')
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop} from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import Tag from '@/components/Tag.vue';
 
-@Component({components: { Tag }})
+export type DataTag = { uri: string; text: string };
+export type DataArticle = { date: Date; title: string, url: string, tags: DataTag[] };
+
+@Component({ components: { Tag } })
 export default class Article extends Vue {
-  @Prop() articleTitle!: string;
-  @Prop() articleDate!: string;
+  @Prop() article!: DataArticle
+  format = { year: 'numeric', month: 'long' };
 }
 </script>
 
@@ -33,12 +32,13 @@ export default class Article extends Vue {
   .article-link {
     cursor: pointer;
     &:hover {
-      h4, svg {
+      h4,
+      svg {
         color: var(--active-color);
       }
     }
     h4 {
-      padding:0;
+      padding: 0;
       padding-bottom: 5px;
       line-height: 22px;
     }
@@ -46,7 +46,7 @@ export default class Article extends Vue {
   .tag-group {
     display: flex;
     justify-content: flex-end;
-    >div {
+    > div {
       margin-left: 8px;
     }
   }

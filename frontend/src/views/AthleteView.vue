@@ -16,8 +16,8 @@
         :continentMap='continents',
         :sportsMap='sports'
       )
-    .four(v-if='athlete')
-      News(:param='athlete.name')
+    .four(v-if='articles')
+      News(:articles='articles')
 </template>
 
 <script lang="ts">
@@ -31,12 +31,14 @@ import continentsM, { continentMap } from '@/store/continentsM';
 import sportsM, { sportsMap } from '@/store/sportsM';
 import { makeURI } from '@/utils/hiccupConnector';
 import axios from 'axios';
+import { DataArticle } from '@/components/Article.vue';
 
 @Component({ components: { InfoBox, News, MedalsAtAge, AthleteParallelChart } })
 export default class AthleteView extends Vue {
   @Prop({ required: false }) readonly athleteID: string | undefined;
   athlete: Athlete | null = null;
   averages: Averages | null = null;
+  articles: DataArticle[] | null = null;
   continents = continentMap;
   sports = sportsMap;
   selectedContinent: string | undefined;
@@ -44,8 +46,9 @@ export default class AthleteView extends Vue {
   averageMedalsPerAge: { [key: number]: number } = {};
 
   @Watch('athleteID')
-  athleteChanged(val: string) {
-    this.fetchAthlete();
+  async athleteChanged(val: string) {
+    await Promise.all([this.fetchAthlete(), this.fetchAverages(), this.fetchMedalsAtAge()]);
+    await this.fetchNews();
   }
   async fetchAthlete() {
     await athleteM.fetchAthleteInfo({
@@ -65,8 +68,17 @@ export default class AthleteView extends Vue {
     await athleteM.fetchMedalsAtAge();
     this.averageMedalsPerAge = athleteM.getAverageMedalsPerAge;
   }
+
+  async fetchNews() {
+    await athleteM.fetchAthleteArticles();
+    this.articles = athleteM.getArticles;
+  }
+
   async mounted() {
     await Promise.all([this.fetchAthlete(), this.fetchAverages(), this.fetchMedalsAtAge()]);
+    Vue.nextTick(async () => {
+      await this.fetchNews();
+    });
   }
 }
 </script>
