@@ -76,6 +76,8 @@ class AthletesModule extends VuexModule {
     weight: 0,
     medals: 0,
   }
+
+  averageMedalsPerAge: { [key: number]: number } = {}
   get getGraph() {
     return this.graph;
   }
@@ -92,6 +94,10 @@ class AthletesModule extends VuexModule {
     return this.athleteInfo
   }
 
+  get getAverageMedalsPerAge() {
+    return this.averageMedalsPerAge
+  }
+
   @Mutation
   setAthlete(athlete: Athlete) {
     this.athlete = athlete
@@ -100,7 +106,6 @@ class AthletesModule extends VuexModule {
   @Mutation
   setGraph(quads: n3.Quad[]) {
     this.graph = new n3.Store(quads)
-    console.log(this.graph)
   }
 
   @Mutation
@@ -131,6 +136,29 @@ class AthletesModule extends VuexModule {
       medals: medals
     }
   }
+
+  @Mutation
+  setMedalsAtAge(quadArr: n3.Quad[]) {
+    const defaultG = new n3.DefaultGraph();
+    const store = new n3.Store(quadArr)
+    const avgMedalsPerAge: { [key: number]: number } = {};
+    const subjs = store.getSubjects("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://wallscope.co.uk/ontology/olympics/MedalsPerAge", defaultG)
+
+    subjs.forEach(subj => {
+      const age = +store.getObjects(subj, "http://wallscope.co.uk/ontology/olympics/age", defaultG).find(x => !!x)!.value
+      const medals = +store.getObjects(subj, "http://wallscope.co.uk/ontology/olympics/medals", defaultG).find(x => !!x)!.value
+      avgMedalsPerAge[age] = medals
+    })
+    this.averageMedalsPerAge = avgMedalsPerAge
+  }
+
+  @Action
+  async fetchMedalsAtAge() {
+    const resp = await useRecipe('average/medals-per-age', {})
+    const parser = new n3.Parser();
+    const quadArr = parser.parse(resp);
+    this.setMedalsAtAge(quadArr)
+  }
   @Action
   async fetchAverageStats({ sport, continent }: { sport?: string, continent?: string }) {
     if (continent && continent.length > 0) {
@@ -152,7 +180,6 @@ class AthletesModule extends VuexModule {
       const quadArr1 = parser.parse(resp);
       const quadArr2 = parser.parse(resp2)
       const allQuads = quadArr1.concat(quadArr2)
-      console.log(allQuads);
       this.setAverageStats(allQuads);
     }
 

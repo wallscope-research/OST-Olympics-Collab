@@ -7,7 +7,7 @@
     .one
       InfoBox(:age='athlete.age', :medals='athlete.medals', :sport='athlete.sport')
     .two
-      MedalsAtAge
+      MedalsAtAge(:averageMedalsPerAge='averageMedalsPerAge', :athleteAge='athlete.age')
     .three
       AthleteParallelChart(:athlete='athlete')
     .four
@@ -31,12 +31,15 @@ export default class AthleteView extends Vue {
   uri = `http://wallscope.co.uk/resource/olympics/athlete/${this.athlete1}`;
   athlete: Athlete = { name: 'Pick a name' };
   info: any;
+  averageMedalsPerAge: { [key: number]: number } = {};
   async mounted() {
     if (this.athlete.name === 'Pick a name') {
       await athleteM.fetchAthleteInfo({
         uri: 'http://wallscope.co.uk/resource/olympics/athlete/JessicaPhyllisEnnisHill',
       });
       this.athlete = athleteM.getAthlete;
+      await athleteM.fetchMedalsAtAge();
+      this.averageMedalsPerAge = athleteM.getAverageMedalsPerAge;
     }
   }
 }
