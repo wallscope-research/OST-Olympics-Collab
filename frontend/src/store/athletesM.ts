@@ -135,8 +135,8 @@ class AthletesModule extends VuexModule {
   async fetchAverageStats({ sport, continent }: { sport?: string, continent?: string }) {
     if (continent && continent.length > 0) {
       console.log("continent")
-      const resp = await useRecipe("average/stats", { o: continent })
-      const resp2 = await useRecipe("athlete/medals", { o: continent })
+      const resp = await useRecipe("average/stats", { o: continent, p: 'http://wallscope.co.uk/ontology/olympics/hasContinent' })
+      const resp2 = await useRecipe("athlete/medals", { o: continent, p: 'http://wallscope.co.uk/ontology/olympics/hasContinent' })
       const parser = new n3.Parser();
 
       const quadArr1 = parser.parse(resp);

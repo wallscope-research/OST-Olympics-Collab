@@ -187,7 +187,9 @@ export default class ParallelChart extends Vue {
 
   async reDraw() {
     console.log(athletesM.getAverateStats);
-    await athletesM.fetchAverageStats({ continent: continentMap[this.selectedContinent] });
+    if (!continentMap[this.selectedContinent]) await athletesM.fetchAverageStats({});
+    else
+      await athletesM.fetchAverageStats({ continent: continentMap[this.selectedContinent] });
     const averages = athletesM.getAverateStats;
     console.log(averages);
     // const averages = {
