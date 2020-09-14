@@ -21,12 +21,19 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 import * as d3 from 'd3';
-import athletesM, { Athlete } from '@/store/athletesM';
-import continentsM, { continentMap } from '@/store/continentsM';
+import { Athlete } from '@/store/athletesM';
 
 @Component({ components: { 'v-select': vSelect } })
 export default class ParallelChart extends Vue {
   @Prop({ required: true }) athlete!: Athlete;
+  @Prop({ required: true }) continentMap!: { [key: string]: string };
+  @Prop({ required: true }) sportsMap!: { [key: string]: string };
+  @Prop({ required: true }) averages: {
+    age: number;
+    height: number;
+    weight: number;
+    medals: number;
+  };
   margin = { top: 20, right: 20, bottom: 30, left: 50 };
   width = 960 - this.margin.left - this.margin.right;
   height = 500 - this.margin.top - this.margin.bottom;
@@ -44,13 +51,12 @@ export default class ParallelChart extends Vue {
   rest: any = null;
 
   get continents() {
-    const arr = Object.keys(continentMap);
+    const arr = Object.keys(this.continentMap);
     const ret = arr.concat('All continents');
     return ret;
   }
 
   async draw() {
-    await athletesM.fetchAverageStats({});
     const container = d3
       .select('#parallel-athlete')
       .append('svg')
@@ -60,13 +66,12 @@ export default class ParallelChart extends Vue {
     const height = this.height;
     const width = this.width;
     const margin = this.margin;
-    const averages = athletesM.getAverateStats;
 
     const lines: { [key: string]: { athlete: number; rest: number } } = {
-      age: { athlete: this.athlete.age!, rest: averages.age },
-      height: { athlete: this.athlete.height!, rest: averages.height },
-      weight: { athlete: this.athlete.weight!, rest: averages.weight },
-      'Number of medals': { athlete: this.athlete.medals!, rest: averages.medals },
+      age: { athlete: this.athlete.age!, rest: this.averages.age },
+      height: { athlete: this.athlete.height!, rest: this.averages.height },
+      weight: { athlete: this.athlete.weight!, rest: this.averages.weight },
+      'Number of medals': { athlete: this.athlete.medals!, rest: this.averages.medals },
     };
 
     const keys = Object.keys(lines);
@@ -186,18 +191,6 @@ export default class ParallelChart extends Vue {
   }
 
   async reDraw() {
-    console.log(athletesM.getAverateStats);
-    if (!continentMap[this.selectedContinent]) await athletesM.fetchAverageStats({});
-    else
-      await athletesM.fetchAverageStats({ continent: continentMap[this.selectedContinent] });
-    const averages = athletesM.getAverateStats;
-    console.log(averages);
-    // const averages = {
-    //   age: 35,
-    //   height: 200,
-    //   weight: 110,
-    //   medals: 6,
-    // };
 
     const height = this.height;
     const width = this.width;
@@ -205,10 +198,10 @@ export default class ParallelChart extends Vue {
 
     //get data again
     const lines: { [key: string]: { athlete: number; rest: number } } = {
-      age: { athlete: this.athlete.age!, rest: averages.age },
-      height: { athlete: this.athlete.height!, rest: averages.height },
-      weight: { athlete: this.athlete.weight!, rest: averages.weight },
-      'Number of medals': { athlete: this.athlete.medals!, rest: averages.medals },
+      age: { athlete: this.athlete.age!, rest: this.averages.age },
+      height: { athlete: this.athlete.height!, rest: this.averages.height },
+      weight: { athlete: this.athlete.weight!, rest: this.averages.weight },
+      'Number of medals': { athlete: this.athlete.medals!, rest: this.averages.medals },
     };
 
     const keys = Object.keys(lines);
@@ -255,7 +248,23 @@ export default class ParallelChart extends Vue {
 
   @Watch('selectedContinent')
   doSomething() {
-    console.log(this.selectedContinent);
+    this.$emit('continent-selected', this.selectedContinent);
+  }
+
+  @Watch('averages')
+  averageWatcher(){
+    this.reDraw();
+  }
+  @Watch('athlete')
+  athleteWatcher(){
+    this.reDraw();
+  }
+  @Watch('continentMap')
+  continentWatcher(){
+    this.reDraw();
+  }
+  @Watch('sportsMap')
+  sportsWatcher(){
     this.reDraw();
   }
 }

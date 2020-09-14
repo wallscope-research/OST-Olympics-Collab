@@ -61,6 +61,36 @@ export class Athlete {
   }
 }
 
+export class Averages {
+  height?: number;
+  weight?: number;
+  medals?: number;
+  age?: number;
+
+  constructor(height?: number, weight?: number, medals?: number, age?: number) {
+    this.height = height;
+    this.weight = weight;
+    this.medals = medals;
+    this.age = age;
+  }
+
+  static fromRDF(store: n3.Store) {
+    const defaultG = new n3.DefaultGraph();
+    const avgs = {
+      "weight": "http://wallscope.co.uk/ontology/olympics/averageWeight",
+      "height": "http://wallscope.co.uk/ontology/olympics/averageHeight",
+      "age": "http://wallscope.co.uk/ontology/olympics/averageAge",
+      "medals": "http://wallscope.co.uk/ontology/olympics/averageMedals"
+    }
+
+    const weight = Math.round(+store.getObjects(null, avgs.weight, defaultG).find(x => !!x)!.value);
+    const age = Math.round(+store.getObjects(null, avgs.age, defaultG).find(x => !!x)!.value);
+    const height = Math.round(+store.getObjects(null, avgs.height, defaultG).find(x => !!x)!.value);
+    const medals = Math.round(+store.getObjects(null, avgs.medals, defaultG).find(x => !!x)!.value);
+    return new Averages(height, weight, medals, age)
+  }
+}
+
 
 @Module({ dynamic: true, namespaced: true, name: "atheleteM", store })
 class AthletesModule extends VuexModule {
@@ -70,7 +100,7 @@ class AthletesModule extends VuexModule {
   athleteInfo: n3.Quad[] = []
 
 
-  averageStats = {
+  averageStats: Averages = {
     age: 0,
     height: 0,
     weight: 0,
@@ -116,73 +146,22 @@ class AthletesModule extends VuexModule {
   }
   @Mutation
   setAverageStats(quadArr: n3.Quad[]) {
-    const defaultG = new n3.DefaultGraph();
     const store = new n3.Store(quadArr)
-    const avgs = {
-      "weight": "http://wallscope.co.uk/ontology/olympics/totalAverageWeight",
-      "height": "http://wallscope.co.uk/ontology/olympics/totalAverageHeight",
-      "age": "http://wallscope.co.uk/ontology/olympics/totalAverageAge",
-      "medals": "http://wallscope.co.uk/ontology/olympics/averageMedals"
-    }
-
-    const weight = Math.round(+store.getObjects(null, avgs.weight, defaultG).find(x => !!x)!.value);
-    const age = Math.round(+store.getObjects(null, avgs.age, defaultG).find(x => !!x)!.value);
-    const height = Math.round(+store.getObjects(null, avgs.height, defaultG).find(x => !!x)!.value);
-    const medals = Math.round(+store.getObjects(null, avgs.medals, defaultG).find(x => !!x)!.value);
-    this.averageStats = {
-      age: age,
-      height: height,
-      weight: weight,
-      medals: medals
-    }
+    this.averageStats = Averages.fromRDF(store)
   }
+  @Action({ rawError: true })
+  async fetchAverageStats({ sport, continent, gender }: { sport?: string, gender?: string, continent?: string } = {}) {
+    const params: { [key: string]: string } = {}
+    if (continent) { params["o"] = `<${continent}>` }
+    if (sport) { params["s"] = `<${sport}>` }
+    if (gender) { params["p"] = `<${gender}>` }
 
-  @Mutation
-  setMedalsAtAge(quadArr: n3.Quad[]) {
-    const defaultG = new n3.DefaultGraph();
-    const store = new n3.Store(quadArr)
-    const avgMedalsPerAge: { [key: number]: number } = {};
-    const subjs = store.getSubjects("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://wallscope.co.uk/ontology/olympics/MedalsPerAge", defaultG)
-
-    subjs.forEach(subj => {
-      const age = +store.getObjects(subj, "http://wallscope.co.uk/ontology/olympics/age", defaultG).find(x => !!x)!.value
-      const medals = +store.getObjects(subj, "http://wallscope.co.uk/ontology/olympics/medals", defaultG).find(x => !!x)!.value
-      avgMedalsPerAge[age] = medals
-    })
-    this.averageMedalsPerAge = avgMedalsPerAge
-  }
-
-  @Action
-  async fetchMedalsAtAge() {
-    const resp = await useRecipe('average/medals-per-age', {})
+    const [statsRDF, medalsRDF] = await Promise.all([useRecipe("stats", params), useRecipe("medals", params)])
     const parser = new n3.Parser();
-    const quadArr = parser.parse(resp);
-    this.setMedalsAtAge(quadArr)
-  }
-  @Action
-  async fetchAverageStats({ sport, continent }: { sport?: string, continent?: string }) {
-    if (continent && continent.length > 0) {
-      console.log("continent")
-      const resp = await useRecipe("average/stats", { o: continent, p: 'http://wallscope.co.uk/ontology/olympics/hasContinent' })
-      const resp2 = await useRecipe("athlete/medals", { o: continent, p: 'http://wallscope.co.uk/ontology/olympics/hasContinent' })
-      const parser = new n3.Parser();
-
-      const quadArr1 = parser.parse(resp);
-      const quadArr2 = parser.parse(resp2)
-      const allQuads = quadArr1.concat(quadArr2)
-      console.log(allQuads);
-      this.setAverageStats(allQuads);
-    } else {
-      const resp = await useRecipe("average/stats", {})
-      const resp2 = await useRecipe("athlete/medals", {})
-      const parser = new n3.Parser();
-
-      const quadArr1 = parser.parse(resp);
-      const quadArr2 = parser.parse(resp2)
-      const allQuads = quadArr1.concat(quadArr2)
-      this.setAverageStats(allQuads);
-    }
-
+    const quadArr1 = parser.parse(statsRDF);
+    const quadArr2 = parser.parse(medalsRDF)
+    const allQuads = quadArr1.concat(quadArr2)
+    this.setAverageStats(allQuads);
   }
 
   @Action
@@ -191,7 +170,6 @@ class AthletesModule extends VuexModule {
     const resp = await useRecipe("athlete/info", payload);
     const parser = new n3.Parser();
     const quadArr = parser.parse(resp);
-    console.log(quadArr)
     this.setAthleteInfo(quadArr);
   }
 

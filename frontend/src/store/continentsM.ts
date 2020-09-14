@@ -13,7 +13,7 @@ import store from "@/store";
 export const continentMap: { [key: string]: string } = {
   Africa: "http://dbpedia.org/resource/Africa",
   Asia: "http://dbpedia.org/resource/Asia",
-  "North America": "<http://dbpedia.org/resource/NorthAmerica>",
+  "North America": "http://dbpedia.org/resource/NorthAmerica",
   "South America": "http://dbpedia.org/resource/SouthAmerica",
   "Europe": "http://dbpedia.org/resource/Europe",
 }
