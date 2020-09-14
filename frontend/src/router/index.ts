@@ -10,14 +10,16 @@ Vue.use(VueRouter);
 
 const defaultAthleteURI = 'JessicaPhyllisEnnisHill';
 
-
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    redirect: `athlete/${defaultAthleteURI}`
+    beforeEnter: async (to, from, next) => {
+      const name = await fetchRandomAthlete()
+      next(`/athlete/${name}`)
+    }
   },
   {
-    path: '/athlete/:athlete1',
+    path: '/athlete/:athleteID',
     component: AthleteView,
     props: true,
   },
@@ -38,5 +40,15 @@ const routes: Array<RouteConfig> = [
 const router = new VueRouter({
   routes,
 });
+
+async function fetchRandomAthlete(){
+  const uris = [
+    "http://wallscope.co.uk/resource/olympics/athlete/UsainStLeoBolt",
+    "http://wallscope.co.uk/resource/olympics/athlete/JessicaPhyllisEnnisHill",
+    "http://wallscope.co.uk/resource/olympics/athlete/VanessadeSousaFernandes"
+  ];
+  const uri = uris[Math.floor(Math.random() * uris.length)]
+  return uri.split("/").pop()
+}
 
 export default router;
