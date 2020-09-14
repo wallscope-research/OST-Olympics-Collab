@@ -12,7 +12,7 @@ div
       )
     #sport-dropdown
       h3.chart-subtitle Compare by sport
-      v-select(:options='["Tennis", "Football"]', :placeholder='"Select a sport"')
+      v-select(v-model='selectedSport', :options='sports', :placeholder='"Select a sport"')
 </template>
 
 
@@ -41,6 +41,7 @@ export default class ParallelChart extends Vue {
   verticalSpacer = this.width / 4;
   categories = ['Age', 'Height', 'Weight', '# Of Medals'];
   selectedContinent: string = '';
+  selectedSport: string = '';
 
   limits: { [key: string]: { min: number; max: number } } = {
     height: { min: 127, max: 226 },
@@ -55,6 +56,48 @@ export default class ParallelChart extends Vue {
     const ret = arr.concat('All continents');
     return ret;
   }
+
+  get sports() {
+    const arr = Object.keys(this.sportsMap);
+    const ret = arr.concat('All sports');
+    return ret;
+  }
+
+  mounted() {
+    this.draw();
+  }
+
+  @Watch('selectedContinent')
+  continentSelected() {
+    const uri = this.continentMap[this.selectedContinent];
+    this.$emit('continent-selected', uri);
+  }
+
+  @Watch('selectedSport')
+  sportSelected() {
+    const uri = this.sportsMap[this.selectedSport];
+    this.$emit('sport-selected', uri);
+  }
+
+  @Watch('averages')
+  averageWatcher() {
+    this.reDraw();
+  }
+  @Watch('athlete')
+  athleteWatcher() {
+    this.reDraw();
+  }
+  @Watch('continentMap')
+  continentWatcher() {
+    this.reDraw();
+  }
+  @Watch('sportsMap')
+  sportsWatcher() {
+    this.reDraw();
+  }
+
+  // Below this point it's all D3 stuff.
+  // Proceed at your own risk
 
   async draw() {
     const container = d3
@@ -191,7 +234,6 @@ export default class ParallelChart extends Vue {
   }
 
   async reDraw() {
-
     const height = this.height;
     const width = this.width;
     const margin = this.margin;
@@ -241,31 +283,6 @@ export default class ParallelChart extends Vue {
     };
 
     this.rest.attr('d', makeRestLine);
-  }
-  mounted() {
-    this.draw();
-  }
-
-  @Watch('selectedContinent')
-  doSomething() {
-    this.$emit('continent-selected', this.selectedContinent);
-  }
-
-  @Watch('averages')
-  averageWatcher(){
-    this.reDraw();
-  }
-  @Watch('athlete')
-  athleteWatcher(){
-    this.reDraw();
-  }
-  @Watch('continentMap')
-  continentWatcher(){
-    this.reDraw();
-  }
-  @Watch('sportsMap')
-  sportsWatcher(){
-    this.reDraw();
   }
 }
 </script>
