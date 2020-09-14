@@ -1,0 +1,3 @@
+[?instance, a, wso:Instance]
+:-
+[?instance, wso:athlete, ?athlete] .

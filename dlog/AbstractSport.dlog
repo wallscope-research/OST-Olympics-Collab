@@ -1,0 +1,4 @@
+[?abstract, a, wso:AbstractSport]
+:-
+[?sportEvent, rdfs:subClassOf, ?abstract],
+[?sportEvent, a, dbo:SportsEvent] .

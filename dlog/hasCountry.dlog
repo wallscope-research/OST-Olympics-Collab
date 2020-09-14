@@ -1,0 +1,4 @@
+[?athlete, wso:hasCountry, ?ctry]
+:-
+[?athlete, dbo:team, ?t],
+[?ctry, dbo:ground, ?t] .

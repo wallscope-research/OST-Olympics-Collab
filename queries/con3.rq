@@ -1,1 +1,13 @@
-# News - this would be sport news with sports and athletes within the selected {{continent}}. 
+# Populate the Continent view infobox, given a {{continent}}.
+
+PREFIX wso: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT (COUNT(DISTINCT ?noc) AS ?numTeams) (COUNT(DISTINCT ?athlete) AS ?numAthletes) (SUM(?mc) AS ?numMedals) {
+  ?noc dbo:continent dbr:Africa ;
+       dbo:ground ?team .
+  
+  ?athlete wso:totalMedalCount ?mc ;
+           dbo:team ?team .
+}

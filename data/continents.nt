@@ -233,9 +233,9 @@
 <http://dbpedia.org/resource/North_America> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/Continent> .
 <http://dbpedia.org/resource/Oceania> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/Continent> .
 <http://dbpedia.org/resource/South_America> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/Continent> .
-<http://dbpedia.org/resource/Africa> <http://www.w3.org/2000/01/rdf-schema#> "Africa"@en .
-<http://dbpedia.org/resource/Asia> <http://www.w3.org/2000/01/rdf-schema#> "Asia"@en .
-<http://dbpedia.org/resource/Europe> <http://www.w3.org/2000/01/rdf-schema#> "Europe"@en .
-<http://dbpedia.org/resource/North_America> <http://www.w3.org/2000/01/rdf-schema#> "North America"@en .
-<http://dbpedia.org/resource/Oceania> <http://www.w3.org/2000/01/rdf-schema#> "Oceania"@en .
-<http://dbpedia.org/resource/South_America> <http://www.w3.org/2000/01/rdf-schema#> "South America"@en .
+<http://dbpedia.org/resource/Africa> <http://www.w3.org/2000/01/rdf-schema#label> "Africa"@en .
+<http://dbpedia.org/resource/Asia> <http://www.w3.org/2000/01/rdf-schema#label> "Asia"@en .
+<http://dbpedia.org/resource/Europe> <http://www.w3.org/2000/01/rdf-schema#label> "Europe"@en .
+<http://dbpedia.org/resource/North_America> <http://www.w3.org/2000/01/rdf-schema#label> "North America"@en .
+<http://dbpedia.org/resource/Oceania> <http://www.w3.org/2000/01/rdf-schema#label> "Oceania"@en .
+<http://dbpedia.org/resource/South_America> <http://www.w3.org/2000/01/rdf-schema#label> "South America"@en .

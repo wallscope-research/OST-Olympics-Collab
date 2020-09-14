@@ -1,0 +1,20 @@
+# Stats (number of medals) of all athletes but allow selection of continent and sport to compare.
+# This query should return AVG stats of all athletes. (Default view - NOTE COMMENTS IN QUERY)
+# Users can filter this by {{continent}} and {{sport}}.
+
+PREFIX wso: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX wSport: <http://wallscope.co.uk/resource/olympics/sport/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT (AVG(?medalCount) as ?avgMedals)
+WHERE {
+  ?instance wso:athlete ?ath ;
+            wso:event ?event .
+  
+  ?event rdfs:subClassOf wSport:Swimming . # This should be a variable by default! When user selects "Swimming", variable is set to wSport:Swimming.
+  
+  ?ath wso:totalMedalCount ?medalCount ;
+       wso:hasContinent dbr:Africa .  # This should be a variable by default! When user selects "Africa", variable is set to dbr:Africa.
+  FILTER (?medalCount > 0) # Average medal count of those with with medals (excludes athletes without medals).
+}
