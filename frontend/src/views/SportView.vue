@@ -11,7 +11,8 @@
     .three
       TopMaleAthletes
     .four
-      News
+      h2.chart-title News
+      //- Article(v-for='a in articles', :article="a", @tag-clicked="navigate")
     .five
       SportsBar
     .six
@@ -26,7 +27,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import InfoBox from '@/components/InfoBox.vue';
-import News from '@/components/News.vue';
+import Article from '@/components/Article.vue';
 import TopMaleAthletes from '@/components/TopMaleAthletes.vue';
 import TopFemaleAthletes from '@/components/TopFemaleAthletes.vue';
 import OlympicTorch from '@/components/OlympicTorch.vue';
@@ -36,7 +37,7 @@ import { curveMonotoneX } from 'd3';
 @Component({
   components: {
     InfoBox,
-    News,
+    Article,
     TopFemaleAthletes,
     TopMaleAthletes,
     OlympicTorch,

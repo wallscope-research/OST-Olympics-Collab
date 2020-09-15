@@ -1,7 +1,7 @@
 <template lang="pug">
 .container(:title='"search for " + text', @click.stop='$emit("click")')
   .tag
-    p {{ text }}
+    p {{text}}
 </template>
 
 
