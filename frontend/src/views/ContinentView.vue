@@ -11,16 +11,17 @@
     .three
       ContinentParallelChart
     .four
-      News
+      h2.chart-title News
+      //- Article(v-for='a in articles', :article="a", @tag-clicked="navigate")
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import InfoBox from '@/components/InfoBox.vue';
-import News from '@/components/News.vue';
+import Article from '@/components/Article.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
 import ContinentParallelChart from '@/components/ContinentParallelChart.vue';
-@Component({ components: { InfoBox, News, MultipleLines, ContinentParallelChart } })
+@Component({ components: { InfoBox, Article, MultipleLines, ContinentParallelChart } })
 export default class ContinentView extends Vue {
   medals = {
     2000: { numOfAtheltes: 1358, numOfMedals: 416 },

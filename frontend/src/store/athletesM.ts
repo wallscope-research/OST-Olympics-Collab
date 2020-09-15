@@ -10,7 +10,6 @@ import Vue from "vue";
 // import { api } from "@/utils/api";
 import store from "@/store";
 import { Sport } from "@/store/sportsM"
-import { DataArticle } from "@/components/Article"
 import { useRecipe, makeURI } from "@/utils/hiccupConnector"
 import * as n3 from "n3";
 
@@ -92,6 +91,8 @@ export class Averages {
   }
 }
 
+export type DataTag = { uri: string; text: string };
+export type DataArticle = { date: Date; title: string; url: string; tags: DataTag[] };
 
 @Module({ dynamic: true, namespaced: true, name: "atheleteM", store })
 class AthletesModule extends VuexModule {
@@ -180,14 +181,14 @@ class AthletesModule extends VuexModule {
       const title = store.getObjects(f, "http://schema.org/text", defaultG).find(x => !!x)!.value
       const url = store.getObjects(f, "http://schema.org/url", defaultG).find(x => !!x)!.value
       const tags = store.getObjects(f, "http://purl.org/dc/terms/subject", defaultG).flatMap(s => {
-        return store.getObjects(s, "dct:relation", defaultG).map(r => {
-          const label = store.getObjects(r, "rdfs:label", defaultG).find(x => !!x)!.value
-          return { uri: r, text: label }
+        return store.getObjects(s, "http://purl.org/dc/terms/relation", defaultG).map(r => {
+          const label = store.getObjects(r, "http://www.w3.org/2000/01/rdf-schema#label", defaultG).find(x => !!x)!.value
+          return { uri: r.id, text: label }
         })
       })
       // <file://home/antero/Wallscope/DATA/news/reddit/results-sm/olympic-rs-2016-08-10784.txt
       // extract date from filename
-      const dateStr = f.id.split("olympic-rs-").pop()?.split(".txt")?.pop()
+      const dateStr = f.id.split("olympic-rs-").pop()?.split(".txt")?.shift()
       const split = dateStr?.split("-")
       const year = split?.[0];
       const month = split?.[1];

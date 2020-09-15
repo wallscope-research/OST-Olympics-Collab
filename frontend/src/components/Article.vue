@@ -1,24 +1,29 @@
 <template lang="pug">
 .article-group
   .article-link
-    p {{ article.date }}
-    h4 {{ article.title }}
+    p {{ formattedDate }}
+    a(:href='article.url', target='_blank')
+      h4(v-html='escapedTitle')
   .tag-group
-    Tag(text='Europe')
-    Tag(text='swimming')
+    Tag(v-for='t in article.tags', @click='$emit("tag-clicked", t.uri)', :text='t.text')
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import Tag from '@/components/Tag.vue';
-
-export type DataTag = { uri: string; text: string };
-export type DataArticle = { date: Date; title: string, url: string, tags: DataTag[] };
+import { DataArticle } from '@/store/athletesM';
 
 @Component({ components: { Tag } })
 export default class Article extends Vue {
-  @Prop() article!: DataArticle
+  @Prop() article!: DataArticle;
   format = { year: 'numeric', month: 'long' };
+  get formattedDate() {
+    if (!this.article.date) return 'No Date';
+    return this.article.date.toLocaleDateString('en-GB', this.format);
+  }
+  get escapedTitle() {
+    return this.article.title;
+  }
 }
 </script>
 

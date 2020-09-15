@@ -19,13 +19,14 @@
         @sport-selected='sportSelected'
       )
     .four(v-if='articles')
-      News(:articles='articles')
+      h2.chart-title News
+      Article(v-for='a in articles', :article="a", @tag-clicked="navigate")
 </template>
 
 <script lang="ts">
 import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
 import InfoBox from '@/components/InfoBox.vue';
-import News from '@/components/News.vue';
+import Article from '@/components/Article.vue';
 import MedalsAtAge from '@/components/MedalsAtAge.vue';
 import AthleteParallelChart from '@/components/AthleteParallelChart.vue';
 import athleteM, { Athlete, Averages } from '@/store/athletesM';
@@ -33,9 +34,9 @@ import continentsM, { continentMap } from '@/store/continentsM';
 import sportsM, { sportsMap } from '@/store/sportsM';
 import { makeURI } from '@/utils/hiccupConnector';
 import axios from 'axios';
-import { DataArticle } from '@/components/Article.vue';
+import { DataArticle } from '@/store/athletesM';
 
-@Component({ components: { InfoBox, News, MedalsAtAge, AthleteParallelChart } })
+@Component({ components: { InfoBox, Article, MedalsAtAge, AthleteParallelChart } })
 export default class AthleteView extends Vue {
   @Prop({ required: false }) readonly athleteID: string | undefined;
   athlete: Athlete | null = null;
@@ -83,6 +84,10 @@ export default class AthleteView extends Vue {
   async fetchNews() {
     await athleteM.fetchAthleteArticles();
     this.articles = athleteM.getArticles;
+  }
+
+  navigate(uri:string){
+    this.$router.push(uri.replace("http://wallscope.co.uk/resource/olympics",""))
   }
 
   async mounted() {
