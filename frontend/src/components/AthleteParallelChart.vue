@@ -29,7 +29,7 @@ export default class ParallelChart extends Vue {
   @Prop({ required: true }) athlete!: Athlete;
   @Prop({ required: true }) continentMap!: { [key: string]: string };
   @Prop({ required: true }) sportsMap!: { [key: string]: string };
-  @Prop({ required: true }) averages: Averages;
+  @Prop({ required: true }) averages!: Averages;
   margin = { top: 20, right: 20, bottom: 30, left: 50 };
   width = 960 - this.margin.left - this.margin.right;
   height = 500 - this.margin.top - this.margin.bottom;
@@ -77,6 +77,7 @@ export default class ParallelChart extends Vue {
 
   @Watch('averages')
   averageWatcher() {
+    console.log('averages changed');
     this.reDraw();
   }
   @Watch('athlete')
@@ -107,10 +108,10 @@ export default class ParallelChart extends Vue {
     const margin = this.margin;
 
     const lines: { [key: string]: { athlete: number; rest: number } } = {
-      age: { athlete: this.athlete.age!, rest: this.averages.age },
-      height: { athlete: this.athlete.height!, rest: this.averages.height },
-      weight: { athlete: this.athlete.weight!, rest: this.averages.weight },
-      'Number of medals': { athlete: this.athlete.medals!, rest: this.averages.medals },
+      age: { athlete: this.athlete.age!, rest: this.averages.age! },
+      height: { athlete: this.athlete.height!, rest: this.averages.height! },
+      weight: { athlete: this.athlete.weight!, rest: this.averages.weight! },
+      'Number of medals': { athlete: this.athlete.medals!, rest: this.averages.medals! },
     };
 
     const keys = Object.keys(lines);
@@ -236,10 +237,10 @@ export default class ParallelChart extends Vue {
 
     //get data again
     const lines: { [key: string]: { athlete: number; rest: number } } = {
-      age: { athlete: this.athlete.age!, rest: this.averages.age },
-      height: { athlete: this.athlete.height!, rest: this.averages.height },
-      weight: { athlete: this.athlete.weight!, rest: this.averages.weight },
-      'Number of medals': { athlete: this.athlete.medals!, rest: this.averages.medals },
+      age: { athlete: this.athlete.age!, rest: this.averages.age! },
+      height: { athlete: this.athlete.height!, rest: this.averages.height! },
+      weight: { athlete: this.athlete.weight!, rest: this.averages.weight! },
+      'Number of medals': { athlete: this.athlete.medals!, rest: this.averages.medals! },
     };
 
     const keys = Object.keys(lines);

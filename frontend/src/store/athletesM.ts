@@ -10,7 +10,7 @@ import Vue from "vue";
 // import { api } from "@/utils/api";
 import store from "@/store";
 import { Sport } from "@/store/sportsM"
-import { DataArticle } from "@/components/Article.vue"
+import { DataArticle } from "@/components/Article"
 import { useRecipe, makeURI } from "@/utils/hiccupConnector"
 import * as n3 from "n3";
 
@@ -191,7 +191,7 @@ class AthletesModule extends VuexModule {
       const split = dateStr?.split("-")
       const year = split?.[0];
       const month = split?.[1];
-      const date = year && month? new Date(`${year}-${month}`): null;
+      const date = year && month ? new Date(`${year}-${month}`) : null;
       return { title, url, date, tags }
     })
 
@@ -229,7 +229,7 @@ class AthletesModule extends VuexModule {
     this.setAthleteInfo(quadArr);
   }
 
-  @Action({rawError:true})
+  @Action({ rawError: true })
   async fetchAthleteArticles() {
     const names = this.athlete.name.split(" ")
     const payload = { o: `${names.shift()} ${names.pop()}` };

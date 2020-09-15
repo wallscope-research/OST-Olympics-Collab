@@ -14,7 +14,9 @@
         :athlete='athlete',
         :averages='averages',
         :continentMap='continents',
-        :sportsMap='sports'
+        :sportsMap='sports',
+        @continent-selected='continentSelected',
+        @sport-selected='sportSelected'
       )
     .four(v-if='articles')
       News(:articles='articles')
@@ -64,6 +66,15 @@ export default class AthleteView extends Vue {
     this.averages = athleteM.getAverateStats;
   }
 
+  sportSelected(uri: string) {
+    this.selectedSport = uri;
+    this.fetchAverages();
+  }
+
+  continentSelected(uri: string) {
+    this.selectedContinent = uri;
+    this.fetchAverages();
+  }
   async fetchMedalsAtAge() {
     await athleteM.fetchMedalsAtAge();
     this.averageMedalsPerAge = athleteM.getAverageMedalsPerAge;
