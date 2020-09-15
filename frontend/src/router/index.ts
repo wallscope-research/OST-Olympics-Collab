@@ -4,6 +4,7 @@ import AthleteView from '../views/AthleteView.vue';
 import SportView from '../views/SportView.vue';
 import ContinentView from '../views/ContinentView.vue';
 import BackToTop from 'vue-backtotop'
+import { starterAthletes } from '@/store/athletesM';
 
 Vue.use(BackToTop);
 Vue.use(VueRouter);
@@ -41,13 +42,8 @@ const router = new VueRouter({
   routes,
 });
 
-async function fetchRandomAthlete(){
-  const uris = [
-    "http://wallscope.co.uk/resource/olympics/athlete/UsainStLeoBolt",
-    "http://wallscope.co.uk/resource/olympics/athlete/JessicaPhyllisEnnisHill",
-    "http://wallscope.co.uk/resource/olympics/athlete/VanessadeSousaFernandes"
-  ];
-  const uri = uris[Math.floor(Math.random() * uris.length)]
+async function fetchRandomAthlete() {
+  const uri = starterAthletes[Math.floor(Math.random() * starterAthletes.length)]
   return uri.split("/").pop()
 }
 
