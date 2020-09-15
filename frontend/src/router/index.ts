@@ -31,7 +31,7 @@ const routes: Array<RouteConfig> = [
     props: true,
   },
   {
-    path: '/continent/:continent1',
+    path: '/continent/:continentID',
 
     component: ContinentView,
     props: true,

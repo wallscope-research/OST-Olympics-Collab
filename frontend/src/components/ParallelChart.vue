@@ -1,18 +1,21 @@
 <template lang="pug">
 div 
   h2.chart-title Statistic comparison
-  #parallel-athlete
+  #parallel-focus
   #dropdowns
     #continent-dropdown
-      h3.chart-subtitle Compare by continent
+      h3.chart-subtitle Filter by continent
       v-select(
         v-model='selectedContinent',
         :options='continents',
         :placeholder='"Select a continent"'
       )
     #sport-dropdown
-      h3.chart-subtitle Compare by sport
+      h3.chart-subtitle Filter by sport
       v-select(v-model='selectedSport', :options='sports', :placeholder='"Select a sport"')
+    #sport-dropdown
+      h3.chart-subtitle Filter by gender
+      v-select(v-model='selectedGender', :options='genders', :placeholder='"Select a gender"')
 </template>
 
 
@@ -21,15 +24,15 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 import * as d3 from 'd3';
-import { Athlete } from '@/store/athletesM';
-import { Averages } from '../store/athletesM';
+import { Averages, Athlete } from '@/store';
 
 @Component({ components: { 'v-select': vSelect } })
 export default class ParallelChart extends Vue {
-  @Prop({ required: true }) athlete!: Athlete;
+  @Prop({ required: true }) legend!: string;
+  @Prop({ required: true }) focus!: Averages;
+  @Prop({ required: true }) comparison!: Averages;
   @Prop({ required: true }) continentMap!: { [key: string]: string };
   @Prop({ required: true }) sportsMap!: { [key: string]: string };
-  @Prop({ required: true }) averages!: Averages;
   margin = { top: 20, right: 20, bottom: 30, left: 50 };
   width = 960 - this.margin.left - this.margin.right;
   height = 500 - this.margin.top - this.margin.bottom;
@@ -38,6 +41,12 @@ export default class ParallelChart extends Vue {
   categories = ['Age', 'Height', 'Weight', '# Of Medals'];
   selectedContinent: string = '';
   selectedSport: string = '';
+  selectedGender: string = '';
+
+  genderMap = {
+    'Male': "http://wallscope.co.uk/resource/olympics/gender/M",
+    'Female': "http://wallscope.co.uk/resource/olympics/gender/F"
+  }
 
   limits: { [key: string]: { min: number; max: number } } = {
     height: { min: 127, max: 226 },
@@ -48,15 +57,15 @@ export default class ParallelChart extends Vue {
   rest: any = null;
 
   get continents() {
-    const arr = Object.keys(this.continentMap);
-    const ret = arr.concat('All continents');
-    return ret;
+    return ['All continents', ...Object.keys(this.continentMap).sort()];
   }
 
   get sports() {
-    const arr = Object.keys(this.sportsMap);
-    const ret = arr.concat('All sports');
-    return ret;
+    return ['All sports', ...Object.keys(this.sportsMap).sort()];
+  }
+
+  get genders() {
+    return ['All Genders', 'Female', 'Male']
   }
 
   mounted() {
@@ -75,12 +84,18 @@ export default class ParallelChart extends Vue {
     this.$emit('sport-selected', uri);
   }
 
-  @Watch('averages')
+  @Watch('selectedGender')
+  genderSelected() {
+    const uri = this.genderMap[this.selectedGender];
+    this.$emit('gender-selected', uri);
+  }
+
+  @Watch('comparison')
   averageWatcher() {
     this.reDraw();
   }
-  @Watch('athlete')
-  athleteWatcher() {
+  @Watch('focus')
+  focusWatcher() {
     this.reDraw();
   }
   @Watch('continentMap')
@@ -97,7 +112,7 @@ export default class ParallelChart extends Vue {
 
   async draw() {
     const container = d3
-      .select('#parallel-athlete')
+      .select('#parallel-focus')
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height);
@@ -106,11 +121,11 @@ export default class ParallelChart extends Vue {
     const width = this.width;
     const margin = this.margin;
 
-    const lines: { [key: string]: { athlete: number; rest: number } } = {
-      age: { athlete: this.athlete.age!, rest: this.averages.age! },
-      height: { athlete: this.athlete.height!, rest: this.averages.height! },
-      weight: { athlete: this.athlete.weight!, rest: this.averages.weight! },
-      'Number of medals': { athlete: this.athlete.medals!, rest: this.averages.medals! },
+    const lines: { [key: string]: { focus: number; rest: number } } = {
+      age: { focus: this.focus.age!, rest: this.comparison.age! },
+      height: { focus: this.focus.height!, rest: this.comparison.height! },
+      weight: { focus: this.focus.weight!, rest: this.comparison.weight! },
+      'Number of medals': { focus: this.focus.medals!, rest: this.comparison.medals! },
     };
 
     const keys = Object.keys(lines);
@@ -132,7 +147,7 @@ export default class ParallelChart extends Vue {
 
     const athleteLine: [number, number][] = [];
     Object.keys(lines).forEach((key) => {
-      athleteLine.push([x(key)!, y[key](lines[key].athlete)]);
+      athleteLine.push([x(key)!, y[key](lines[key].focus)]);
     });
     const restLine: [number, number][] = [];
     Object.keys(lines).forEach((key) => {
@@ -215,7 +230,7 @@ export default class ParallelChart extends Vue {
       .style('fill', '#404080');
     container
       .append('text')
-      .text('Athlete Stats')
+      .text(this.legend)
       .attr('y', 130)
       .attr('x', 20)
       .style('font-size', '15px')
@@ -235,11 +250,11 @@ export default class ParallelChart extends Vue {
     const margin = this.margin;
 
     //get data again
-    const lines: { [key: string]: { athlete: number; rest: number } } = {
-      age: { athlete: this.athlete.age!, rest: this.averages.age! },
-      height: { athlete: this.athlete.height!, rest: this.averages.height! },
-      weight: { athlete: this.athlete.weight!, rest: this.averages.weight! },
-      'Number of medals': { athlete: this.athlete.medals!, rest: this.averages.medals! },
+    const lines: { [key: string]: { focus: number; rest: number } } = {
+      age: { focus: this.focus.age!, rest: this.comparison.age! },
+      height: { focus: this.focus.height!, rest: this.comparison.height! },
+      weight: { focus: this.focus.weight!, rest: this.comparison.weight! },
+      'Number of medals': { focus: this.focus.medals!, rest: this.comparison.medals! },
     };
 
     const keys = Object.keys(lines);
@@ -263,7 +278,7 @@ export default class ParallelChart extends Vue {
     //get two lines.
     const athleteLine: [number, number][] = [];
     Object.keys(lines).forEach((key) => {
-      athleteLine.push([x(key)!, y[key](lines[key].athlete)]);
+      athleteLine.push([x(key)!, y[key](lines[key].focus)]);
     });
     const restLine: [number, number][] = [];
     Object.keys(lines).forEach((key) => {

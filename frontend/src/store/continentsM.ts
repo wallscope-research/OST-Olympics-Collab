@@ -8,12 +8,29 @@ import {
 } from "vuex-module-decorators";
 import Vue from "vue";
 import * as n3 from "n3";
-import store from "@/store";
+import store, { Averages, DataArticle } from "@/store";
 import { useRecipe } from '@/utils/hiccupConnector';
 
 @Module({ dynamic: true, namespaced: true, name: "continentM", store })
 class ContinentsModule extends VuexModule {
   continentMap: { [key: string]: string } = {}
+  continentURI : string = ''
+  continentName : string = ''
+  articles: DataArticle[] = []
+  averageStats: Averages = {
+    age: 0,
+    height: 0,
+    weight: 0,
+    medals: 0,
+  }
+
+  get getAverateStats() {
+    return this.averageStats;
+  }
+
+  get getArticles() {
+    return this.articles
+  }
 
   @Mutation
   setContinents(quads: n3.Quad[]) {
@@ -26,6 +43,82 @@ class ContinentsModule extends VuexModule {
       }
     });
   }
+
+  @Mutation
+  setAverageStats(quadArr: n3.Quad[]) {
+    const store = new n3.Store(quadArr)
+    this.averageStats = Averages.fromRDF(store)
+  }
+
+  @Mutation
+  setContinentArticles(quads: n3.Quad[]) {
+    const defaultG = new n3.DefaultGraph();
+    const store = new n3.Store(quads)
+    this.articles = store.getSubjects("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://wallscope.co.uk/ontology/File", defaultG).map(f => {
+      const title = store.getObjects(f, "http://schema.org/text", defaultG).find(x => !!x)!.value
+      const url = store.getObjects(f, "http://schema.org/url", defaultG).find(x => !!x)!.value
+      const tags = store.getObjects(f, "http://purl.org/dc/terms/subject", defaultG).flatMap(s => {
+        return store.getObjects(s, "http://purl.org/dc/terms/relation", defaultG).map(r => {
+          const label = store.getObjects(r, "http://www.w3.org/2000/01/rdf-schema#label", defaultG).find(x => !!x)!.value
+          return { uri: r.id, text: label }
+        })
+      })
+      // <file://home/antero/Wallscope/DATA/news/reddit/results-sm/olympic-rs-2016-08-10784.txt
+      // extract date from filename
+      const dateStr = f.id.split("olympic-rs-").pop()?.split(".txt")?.shift()
+      const split = dateStr?.split("-")
+      const year = split?.[0];
+      const month = split?.[1];
+      const date = year && month ? new Date(`${year}-${month}`) : null;
+      return { title, url, date, tags }
+    })
+
+  }
+
+  @Mutation
+  setContinentURI(uri:string){
+    this.continentURI = uri
+  }
+
+  @Mutation
+  setContinentName(name:string | undefined){
+    if(name){
+      this.continentName = name
+    }else {
+      this.continentName = "Unknown";
+    }
+  }
+
+  @Action
+  setContinent(uri:string){
+    this.setContinentURI(uri)
+    this.setContinentName(uri.split("/").pop()?.replace("_", " "))
+  }
+
+  @Action
+  async fetchAverageStats({ sport, continent, gender }: { sport?: string, gender?: string, continent?: string } = {}) {
+    const params: { [key: string]: string } = {}
+    if (continent) { params["o"] = `<${continent}>` }
+    if (sport) { params["s"] = `<${sport}>` }
+    if (gender) { params["p"] = `<${gender}>` }
+
+    const [statsRDF, medalsRDF] = await Promise.all([useRecipe("stats", params), useRecipe("medals", params)])
+    const parser = new n3.Parser();
+    const quadArr1 = parser.parse(statsRDF);
+    const quadArr2 = parser.parse(medalsRDF)
+    const allQuads = quadArr1.concat(quadArr2)
+    this.setAverageStats(allQuads);
+  }
+
+  @Action
+  async fetchContinentArticles() {
+    const payload = { o: this.continentName };
+    const resp = await useRecipe("text/related", payload);
+    const parser = new n3.Parser();
+    const quadArr = parser.parse(resp);
+    this.setContinentArticles(quadArr);
+  }
+
   @Action
   async fetchContinents() {
     const payload = { p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: "<https://schema.org/Continent>" };
