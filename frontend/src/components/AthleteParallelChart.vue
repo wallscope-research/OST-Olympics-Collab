@@ -77,7 +77,6 @@ export default class ParallelChart extends Vue {
 
   @Watch('averages')
   averageWatcher() {
-    console.log('averages changed');
     this.reDraw();
   }
   @Watch('athlete')

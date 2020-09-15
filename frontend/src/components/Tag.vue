@@ -11,10 +11,6 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 @Component
 export default class TagC extends Vue {
   @Prop() text!: string;
-
-  mounted() {
-    console.log(this.text);
-  }
 }
 </script>
 

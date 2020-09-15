@@ -86,7 +86,6 @@ export default class SportView extends Vue {
       data: Object.values(this.overTime).map((x) => x.fAge),
       type: 'line',
     });
-    console.log({ data, series });
     return { data, series };
   }
 
@@ -103,7 +102,6 @@ export default class SportView extends Vue {
       data: Object.values(this.overTime).map((x) => x.fHeight),
       type: 'line',
     });
-    console.log({ data, series });
     return { data, series };
   }
 
@@ -120,7 +118,6 @@ export default class SportView extends Vue {
       data: Object.values(this.overTime).map((x) => x.fWeight),
       type: 'line',
     });
-    console.log({ data, series });
     return { data, series };
   }
 }

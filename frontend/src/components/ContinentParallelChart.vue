@@ -60,7 +60,6 @@ export default class Continent extends Vue {
         .domain(d3.extent(arr))
         .range([height - 20, 5]);
     });
-    console.log(y);
     const x = d3.scalePoint().range([0, width]).padding(1).domain(keys);
 
     const continentLine: [number, number][] = [];
