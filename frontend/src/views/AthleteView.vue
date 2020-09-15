@@ -50,6 +50,8 @@ export default class AthleteView extends Vue {
 
   @Watch('athleteID')
   async athleteChanged(val: string) {
+    this.selectedContinent = null;
+    this.selectedSport = null;
     await Promise.all([this.fetchAthlete(), this.fetchAverages(), this.fetchMedalsAtAge()]);
     await this.fetchNews();
   }

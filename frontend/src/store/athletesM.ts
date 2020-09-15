@@ -247,7 +247,10 @@ class AthletesModule extends VuexModule {
   async fetchAthleteArticles() {
     const names = this.athlete?.name.split(" ")
     if (!names) return;
-    const payload = { o: `${names.shift()} ${names.pop()}` };
+    const last = [...names].reverse().find(x => x.length > 2)
+    // This hack is Michael Phelps fault cause he has to have a ", II" after his name
+    // Actually, that's a posh name, it's posh people's fault
+    const payload = { o: `${names.shift()} ${last?.replace(",", "") || names.pop()}` };
     const resp = await useRecipe("text/related", payload);
     const parser = new n3.Parser();
     const quadArr = parser.parse(resp);
