@@ -13,6 +13,20 @@ import { Sport } from "@/store/sportsM"
 import { useRecipe, makeURI } from "@/utils/hiccupConnector"
 import * as n3 from "n3";
 
+const starterAthletes: { [keyL: string]: string } = {
+  "Bolt": "http://wallscope.co.uk/resource/olympics/athlete/UsainStLeoBolt",
+  "Ali": "http://wallscope.co.uk/resource/olympics/athlete/NabilMuhammadAliNosseir",
+  "Lewis": "http://wallscope.co.uk/resource/olympics/athlete/FrederickCarltonCarlLewis",
+  "Phelps": "http://wallscope.co.uk/resource/olympics/athlete/MichaelFredPhelpsII",
+  "Owens": "http://wallscope.co.uk/resource/olympics/athlete/JamesClevelandJesseOwens",
+  "Spitz": "http://wallscope.co.uk/resource/olympics/athlete/MarkAndrewSpitz",
+  "Nurmi": "http://wallscope.co.uk/resource/olympics/athlete/PaavoJohannesNurmi",
+  "Biles": "http://wallscope.co.uk/resource/olympics/athlete/SimoneArianneBiles",
+  "Hoy": "http://wallscope.co.uk/resource/olympics/athlete/ChristopherAndrewChrisHoy",
+  "Louganis": "http://wallscope.co.uk/resource/olympics/athlete/GregoryEfthimiosGregLouganis",
+
+}
+
 const predMap: { [key: string]: string } = {
   weight: "http://dbpedia.org/ontology/weight",
   continent: "http://wallscope.co.uk/ontology/olympics/hasContinent",
