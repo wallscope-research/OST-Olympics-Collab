@@ -5,7 +5,7 @@ div
   p Medals: {{ medals }}
   .sport
     p Sport:
-    Tag(:tag-text='sport.name')
+    Tag(v-if='sport', :tag-text='sport.name')
 </template>
 
 

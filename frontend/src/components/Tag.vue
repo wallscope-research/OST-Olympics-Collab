@@ -1,7 +1,7 @@
 <template lang="pug">
 .container(:title='"search for " + text', @click.stop='$emit("click")')
   .tag
-    p {{text}}
+    p {{ text }}
 </template>
 
 
@@ -11,6 +11,10 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 @Component
 export default class TagC extends Vue {
   @Prop() text!: string;
+
+  mounted() {
+    console.log(this.text);
+  }
 }
 </script>
 
