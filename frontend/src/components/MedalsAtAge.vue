@@ -39,6 +39,7 @@ export default class MedalsAtAge extends Vue {
       xAxis: { type: 'category', data: this.ages },
       // Declare Y axis, which is a value axis.
       yAxis: {},
+
       // Declare several series, each of them mapped to a
       // column of the dataset by default.
       series: [
@@ -56,8 +57,15 @@ export default class MedalsAtAge extends Vue {
   get medals() {
     return Object.keys(this.averageMedalsPerAge).map((x) => {
       if (+x === this.athleteAge) {
-        return { value: this.averageMedalsPerAge[+x], itemStyle: { color: '#69b3a2' } };
-      } else return { value: this.averageMedalsPerAge[+x], itemStyle: { color: '#404080' } };
+        return {
+          value: Math.round((this.averageMedalsPerAge[+x] + Number.EPSILON) * 100) / 100,
+          itemStyle: { color: '#69b3a2' },
+        };
+      } else
+        return {
+          value: Math.round((this.averageMedalsPerAge[+x] + Number.EPSILON) * 100) / 100,
+          itemStyle: { color: '#404080' },
+        };
     });
   }
 }
