@@ -7,19 +7,10 @@ import {
   Mutation
 } from "vuex-module-decorators";
 import Vue from "vue";
-// import { api } from "@/utils/api";
+import * as n3 from "n3";
 import store from "@/store";
+import { useRecipe } from '@/utils/hiccupConnector';
 
-export const sportsMap: { [key: string]: string } = {
-  "Wrestling": "http://wallscope.co.uk/resource/olympics/sport/Wrestling",
-  "Weightlifting": "http://wallscope.co.uk/resource/olympics/sport/Weightlifting",
-  "Water Polo": "http://wallscope.co.uk/resource/olympics/sport/WaterPolo",
-  "Volleyball": "http://wallscope.co.uk/resource/olympics/sport/Volleyball",
-  "Tug-Of-War": "http://wallscope.co.uk/resource/olympics/sport/TugOfWar",
-  "Triathlon": "http://wallscope.co.uk/resource/olympics/sport/Triathlon",
-  "Trampolining": "http://wallscope.co.uk/resource/olympics/sport/Trampolining",
-  "Tennis": "http://wallscope.co.uk/resource/olympics/sport/Tennis",
-}
 export class Sport {
 
   name: string
@@ -30,6 +21,32 @@ export class Sport {
 }
 
 @Module({ dynamic: true, namespaced: true, name: "sportsM", store })
-class SportsModule extends VuexModule { }
+class SportsModule extends VuexModule {
+  sportsMap: { [key: string]: string } = {}
+
+  @Mutation
+  setSports(quads: n3.Quad[]) {
+    const defaultG = new n3.DefaultGraph();
+    const store = new n3.Store(quads)
+    store.getSubjects("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://dbpedia.org/ontology/Sport", defaultG).forEach(c => {
+      const label = store.getObjects(c, "http://www.w3.org/2000/01/rdf-schema#label", defaultG).find(x => !!x)
+      if (label) {
+        this.sportsMap[label.value] = c.id
+      }
+    });
+  }
+  @Action
+  async fetchSports() {
+    const payload = { p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: "<http://dbpedia.org/ontology/Sport>" };
+    const resp = await useRecipe("list", payload);
+    const parser = new n3.Parser();
+    const quadArr = parser.parse(resp);
+    this.setSports(quadArr);
+  }
+
+  get sports() {
+    return this.sportsMap;
+  }
+}
 
 export default getModule(SportsModule);

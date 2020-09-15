@@ -92,12 +92,12 @@ export class Averages {
 }
 
 export type DataTag = { uri: string; text: string };
-export type DataArticle = { date: Date; title: string; url: string; tags: DataTag[] };
+export type DataArticle = { date: Date | null; title: string; url: string; tags: DataTag[] };
 
 @Module({ dynamic: true, namespaced: true, name: "atheleteM", store })
 class AthletesModule extends VuexModule {
 
-  athlete: Athlete = { name: makeURI("Jessica Phyllis Ennis-Hill", "athlete") };
+  athlete: Athlete | null = null;
   graph = new n3.Store();
   athleteInfo: n3.Quad[] = []
 
@@ -232,7 +232,8 @@ class AthletesModule extends VuexModule {
 
   @Action({ rawError: true })
   async fetchAthleteArticles() {
-    const names = this.athlete.name.split(" ")
+    const names = this.athlete?.name.split(" ")
+    if(!names) return;
     const payload = { o: `${names.shift()} ${names.pop()}` };
     const resp = await useRecipe("text/related", payload);
     const parser = new n3.Parser();

@@ -20,7 +20,7 @@
       )
     .four(v-if='articles')
       h2.chart-title News
-      Article(v-for='a in articles', :article="a", @tag-clicked="navigate")
+      Article(v-for='a in articles', :article='a', @tag-clicked='navigate')
 </template>
 
 <script lang="ts">
@@ -30,8 +30,8 @@ import Article from '@/components/Article.vue';
 import MedalsAtAge from '@/components/MedalsAtAge.vue';
 import AthleteParallelChart from '@/components/AthleteParallelChart.vue';
 import athleteM, { Athlete, Averages } from '@/store/athletesM';
-import continentsM, { continentMap } from '@/store/continentsM';
-import sportsM, { sportsMap } from '@/store/sportsM';
+import continentsM from '@/store/continentsM';
+import sportsM from '@/store/sportsM';
 import { makeURI } from '@/utils/hiccupConnector';
 import axios from 'axios';
 import { DataArticle } from '@/store/athletesM';
@@ -42,8 +42,8 @@ export default class AthleteView extends Vue {
   athlete: Athlete | null = null;
   averages: Averages | null = null;
   articles: DataArticle[] | null = null;
-  continents = continentMap;
-  sports = sportsMap;
+  continents = continentsM.continents;
+  sports = sportsM.sports;
   selectedContinent: string | undefined;
   selectedSport: string | undefined;
   averageMedalsPerAge: { [key: number]: number } = {};
@@ -67,6 +67,12 @@ export default class AthleteView extends Vue {
     this.averages = athleteM.getAverateStats;
   }
 
+  async fetchOptions() {
+    await Promise.all([continentsM.fetchContinents(), sportsM.fetchSports()]);
+    this.continents = continentsM.continents;
+    this.sports = sportsM.sports;
+  }
+
   sportSelected(uri: string) {
     this.selectedSport = uri;
     this.fetchAverages();
@@ -86,12 +92,17 @@ export default class AthleteView extends Vue {
     this.articles = athleteM.getArticles;
   }
 
-  navigate(uri:string){
-    this.$router.push(uri.replace("http://wallscope.co.uk/resource/olympics",""))
+  navigate(uri: string) {
+    this.$router.push(uri.replace('http://wallscope.co.uk/resource/olympics', ''));
   }
 
   async mounted() {
-    await Promise.all([this.fetchAthlete(), this.fetchAverages(), this.fetchMedalsAtAge()]);
+    await Promise.all([
+      this.fetchOptions(),
+      this.fetchAthlete(),
+      this.fetchAverages(),
+      this.fetchMedalsAtAge(),
+    ]);
     Vue.nextTick(async () => {
       await this.fetchNews();
     });
