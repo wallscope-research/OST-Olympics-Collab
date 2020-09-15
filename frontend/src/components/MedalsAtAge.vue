@@ -1,6 +1,13 @@
 <template lang="pug">
 #medalsContainer
   h2.chart-title Medals By Age
+  .legendContainer 
+    .athleteLegend
+      | &nbsp;
+    p.legend Athlete's Age
+    .restLegend
+      | &nbsp;
+    p.legend All other ages
   chart(:options='bar', ref='bar')
 </template>
 
@@ -77,5 +84,32 @@ export default class MedalsAtAge extends Vue {
   display: grid;
   grid-template-columns: 1fr;
   align-content: center;
+}
+
+.legend {
+  font-size: 12px;
+}
+
+.athleteLegend {
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+  margin-left: 5px;
+  background-color: #69b3a2;
+}
+
+.restLegend {
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+  margin-left: 5px;
+  background-color: #404080;
+}
+
+.legendContainer {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
 }
 </style>
