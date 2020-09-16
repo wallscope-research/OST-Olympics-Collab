@@ -130,13 +130,10 @@ class AthletesModule extends VuexModule {
     })
 
     this.topFemaleAthletes = fStore.getSubjects("http://www.w3.org/2000/01/rdf-schema#label", null, femaleG).map(s => {
-      console.log(s)
       const medals = +fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", femaleG).find(x => !!x)!.value
       const name = fStore.getObjects(s, "http://www.w3.org/2000/01/rdf-schema#label", femaleG).find(x => !!x)!.value
-      console.log(name, medals)
       return new Athlete(name, undefined, undefined, undefined, undefined, undefined, medals, undefined, undefined)
     })
-    console.log("hi")
   }
 
   @Mutation
