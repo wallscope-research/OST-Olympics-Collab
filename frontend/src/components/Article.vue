@@ -11,7 +11,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import Tag from '@/components/Tag.vue';
-import { DataArticle } from '@/store/athletesM';
+import { DataArticle } from '@/store/index';
 
 @Component({ components: { Tag } })
 export default class Article extends Vue {

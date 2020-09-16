@@ -138,6 +138,10 @@ export default class SportView extends Vue {
   get season() {
     return this.sport!.season;
   }
+
+  navigate(uri: string) {
+    console.log('navigate');
+  }
   @Watch('sportID')
   async athleteChanged(val: string) {
     // await Promise.all([this.fetchAthlete(), this.fetchAverages(), this.fetchMedalsAtAge()]);
@@ -160,17 +164,17 @@ export default class SportView extends Vue {
   }
 
   async fetchNews() {
-    await athleteM.fetchAthleteArticles();
-    this.articles = athleteM.getArticles;
+    await sportsM.fetchSportArticles();
+    this.articles = sportsM.getArticles;
   }
 
   async mounted() {
     await sportsM.fetchSports();
     await Promise.all([this.fetchTopAthletes(), this.fetchSportInfo()]);
+    this.sport = sportsM.getSport;
     Vue.nextTick(async () => {
       await this.fetchNews();
     });
-    this.sport = sportsM.getSport;
   }
 }
 </script>
