@@ -2,27 +2,42 @@
 .home
   .title-page
     icon(:icon='["fas", "globe-europe"]')
-    h3 Europe
+    h3(v-if='continentName') {{ continentName }}
+    h3(v-else) Loading...
   .charts
     .one
       InfoBox
     .two
       MultipleLines(:propOptions='getOptions', :title='title')
-    .three
-      ContinentParallelChart
+    .three(v-if='continentAverages && averages')
+      ParallelChart(
+        :legend='continentName + " Stats"',
+        :focus='continentAverages',
+        :comparison='averages',
+        :continentMap='continents',
+        :sportsMap='sports',
+        @continent-selected='continentSelected',
+        @sport-selected='sportSelected',
+        @gender-selected='genderSelected'
+      )
     .four
       h2.chart-title News
-      //- Article(v-for='a in articles', :article="a", @tag-clicked="navigate")
+      Article(v-for='a in articles', :article='a', @tag-clicked='navigate')
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import InfoBox from '@/components/InfoBox.vue';
 import Article from '@/components/Article.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
-import ContinentParallelChart from '@/components/ContinentParallelChart.vue';
-@Component({ components: { InfoBox, Article, MultipleLines, ContinentParallelChart } })
+import ParallelChart from '@/components/ParallelChart.vue';
+import continentsM from '@/store/continentsM';
+import sportsM from '@/store/sportsM';
+import { Averages, DataArticle } from '@/store';
+
+@Component({ components: { InfoBox, Article, MultipleLines, ParallelChart } })
 export default class ContinentView extends Vue {
+  @Prop({ required: false }) readonly continentID: string | undefined;
   medals = {
     2000: { numOfAtheltes: 1358, numOfMedals: 416 },
     2002: { numOfAtheltes: 1437, numOfMedals: 527 },
@@ -36,6 +51,28 @@ export default class ContinentView extends Vue {
     2016: { numOfAtheltes: 1577, numOfMedals: 428 },
     2018: { numOfAtheltes: 1622, numOfMedals: 489 },
   };
+  continentAverages: Averages | null = null;
+  continentName = continentsM.continentName;
+  averages: Averages | null = null;
+  articles: DataArticle[] | null = null;
+  continents = continentsM.continents;
+  sports = sportsM.sports;
+  selectedContinent: string | undefined;
+  selectedSport: string | undefined;
+  selectedGender: string | undefined;
+
+  @Watch('continentID')
+  async athleteChanged(val: string) {
+    this.selectedContinent = null;
+    this.selectedSport = null;
+    this.selectedGender = null;
+    continentsM.setContinent(`http://dbpedia.org/resource/${this.continentID}`);
+    await this.fetchOptions();
+    this.continentName = continentsM.continentName;
+    await this.fetchNews();
+    await this.fetchContinentAverages();
+    await this.fetchAverages();
+  }
 
   title = 'Number of athletes vs number of medals won';
   get getOptions() {
@@ -52,6 +89,61 @@ export default class ContinentView extends Vue {
       type: 'line',
     });
     return { data, series };
+  }
+
+  sportSelected(uri: string) {
+    this.selectedSport = uri;
+    this.fetchAverages();
+  }
+
+  continentSelected(uri: string) {
+    this.selectedContinent = uri;
+    this.fetchAverages();
+  }
+
+  genderSelected(uri: string) {
+    this.selectedGender = uri;
+    this.fetchAverages();
+  }
+
+  async fetchContinentAverages() {
+    await continentsM.fetchAverageStats({
+      continent: continentsM.continentURI,
+    });
+    this.continentAverages = continentsM.getAverateStats;
+  }
+
+  async fetchAverages() {
+    await continentsM.fetchAverageStats({
+      sport: this.selectedSport,
+      continent: this.selectedContinent,
+      gender: this.selectedGender,
+    });
+    this.averages = continentsM.getAverateStats;
+  }
+
+  async fetchOptions() {
+    await Promise.all([continentsM.fetchContinents(), sportsM.fetchSports()]);
+    this.continents = continentsM.continents;
+    this.sports = sportsM.sports;
+  }
+
+  async fetchNews() {
+    await continentsM.fetchContinentArticles();
+    this.articles = continentsM.getArticles;
+  }
+
+  navigate(uri: string) {
+    this.$router.push(uri.replace('http://wallscope.co.uk/resource/olympics', ''));
+  }
+
+  async mounted() {
+    continentsM.setContinent(`http://dbpedia.org/resource/${this.continentID}`);
+    await this.fetchOptions();
+    this.continentName = continentsM.continentName;
+    await this.fetchNews();
+    await this.fetchContinentAverages();
+    await this.fetchAverages();
   }
 }
 </script>

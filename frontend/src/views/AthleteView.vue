@@ -10,13 +10,15 @@
     .two(v-if='athlete')
       MedalsAtAge(:averageMedalsPerAge='averageMedalsPerAge', :athleteAge='athlete.age')
     .three(v-if='athlete && averages')
-      AthleteParallelChart(
-        :athlete='athlete',
-        :averages='averages',
+      ParallelChart(
+        legend='Athlete Stats',
+        :focus='avgFocus',
+        :comparison='averages',
         :continentMap='continents',
         :sportsMap='sports',
         @continent-selected='continentSelected',
-        @sport-selected='sportSelected'
+        @sport-selected='sportSelected',
+        @gender-selected='genderSelected'
       )
     .four(v-if='articles')
       h2.chart-title News
@@ -28,15 +30,16 @@ import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
 import InfoBox from '@/components/InfoBox.vue';
 import Article from '@/components/Article.vue';
 import MedalsAtAge from '@/components/MedalsAtAge.vue';
-import AthleteParallelChart from '@/components/AthleteParallelChart.vue';
-import athleteM, { Athlete, Averages } from '@/store/athletesM';
+import ParallelChart from '@/components/ParallelChart.vue';
+import athleteM from '@/store/athletesM';
+import { Averages, Athlete } from '@/store';
 import continentsM from '@/store/continentsM';
 import sportsM from '@/store/sportsM';
 import { makeURI } from '@/utils/hiccupConnector';
 import axios from 'axios';
 import { DataArticle } from '@/store/athletesM';
 
-@Component({ components: { InfoBox, Article, MedalsAtAge, AthleteParallelChart } })
+@Component({ components: { InfoBox, Article, MedalsAtAge, ParallelChart } })
 export default class AthleteView extends Vue {
   @Prop({ required: false }) readonly athleteID: string | undefined;
   athlete: Athlete | null = null;
@@ -46,12 +49,23 @@ export default class AthleteView extends Vue {
   sports = sportsM.sports;
   selectedContinent: string | undefined;
   selectedSport: string | undefined;
+  selectedGender: string | undefined;
   averageMedalsPerAge: { [key: number]: number } = {};
+
+  get avgFocus() {
+    return new Averages(
+      this.athlete.height,
+      this.athlete.weight,
+      this.athlete.medals,
+      this.athlete.age
+    );
+  }
 
   @Watch('athleteID')
   async athleteChanged(val: string) {
-    this.selectedContinent = undefined;
-    this.selectedSport = undefined;
+    this.selectedContinent = null;
+    this.selectedSport = null;
+    this.selectedGender = null;
     await Promise.all([this.fetchAthlete(), this.fetchAverages(), this.fetchMedalsAtAge()]);
     await this.fetchNews();
   }
@@ -65,6 +79,7 @@ export default class AthleteView extends Vue {
     await athleteM.fetchAverageStats({
       sport: this.selectedSport,
       continent: this.selectedContinent,
+      gender: this.selectedGender,
     });
     this.averages = athleteM.getAverateStats;
   }
@@ -84,6 +99,12 @@ export default class AthleteView extends Vue {
     this.selectedContinent = uri;
     this.fetchAverages();
   }
+
+  genderSelected(uri: string) {
+    this.selectedGender = uri;
+    this.fetchAverages();
+  }
+
   async fetchMedalsAtAge() {
     await athleteM.fetchMedalsAtAge();
     this.averageMedalsPerAge = athleteM.getAverageMedalsPerAge;
