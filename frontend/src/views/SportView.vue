@@ -34,8 +34,8 @@ import OlympicTorch from '@/components/OlympicTorch.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
 import SportsBar from '@/components/SportsBar.vue';
 import { curveMonotoneX } from 'd3';
-import athleteM, { Athlete, DataArticle } from '@/store/athletesM';
-import athletesM from '@/store/athletesM';
+import { Athlete, DataArticle } from '@/store/index';
+import athleteM from '@/store/athletesM';
 @Component({
   components: {
     SportInfoBox,
@@ -134,7 +134,7 @@ export default class SportView extends Vue {
   }
 
   async fetchTopAthletes() {
-    await athletesM.fetchTopAthletes({
+    await athleteM.fetchTopAthletes({
       sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
     });
     this.topMale = athleteM.getTopMaleAthletes;

@@ -37,7 +37,7 @@ import continentsM from '@/store/continentsM';
 import sportsM from '@/store/sportsM';
 import { makeURI } from '@/utils/hiccupConnector';
 import axios from 'axios';
-import { DataArticle } from '@/store/athletesM';
+import { DataArticle } from '@/store/index';
 
 @Component({ components: { InfoBox, Article, MedalsAtAge, ParallelChart } })
 export default class AthleteView extends Vue {
@@ -54,18 +54,18 @@ export default class AthleteView extends Vue {
 
   get avgFocus() {
     return new Averages(
-      this.athlete.height,
-      this.athlete.weight,
-      this.athlete.medals,
-      this.athlete.age
+      this.athlete!.height,
+      this.athlete!.weight,
+      this.athlete!.medals,
+      this.athlete!.age
     );
   }
 
   @Watch('athleteID')
   async athleteChanged(val: string) {
-    this.selectedContinent = null;
-    this.selectedSport = null;
-    this.selectedGender = null;
+    this.selectedContinent = undefined;
+    this.selectedSport = undefined;
+    this.selectedGender = undefined;
     await Promise.all([this.fetchAthlete(), this.fetchAverages(), this.fetchMedalsAtAge()]);
     await this.fetchNews();
   }

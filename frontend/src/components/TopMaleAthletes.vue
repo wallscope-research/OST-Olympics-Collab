@@ -9,7 +9,7 @@ div
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Tag from '@/components/Tag.vue';
-import { Athlete } from '@/store/athletesM';
+import { Athlete } from '@/store/index';
 
 @Component({ components: { Tag } })
 export default class TopMaleAthletes extends Vue {
