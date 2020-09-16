@@ -59,7 +59,7 @@ export class Athlete {
     this.age = age;
   }
 
-  static fromRDF(graph: n3.Store, uri?: string) {
+  static fromRDF(graph: n3.Store) {
     const defaultG = new n3.DefaultGraph();
     const name = graph.getObjects(null, predMap.name, defaultG).find(x => !!x)!.value;
     const weight = +graph.getObjects(null, predMap.weight, defaultG).find(x => !!x)!.value;
@@ -122,6 +122,9 @@ class AthletesModule extends VuexModule {
     medals: 0,
   }
 
+  topMaleAthletes: Athlete[] = [];
+  topFemaleAthletes: Athlete[] = [];
+
   articles: DataArticle[] = []
 
   averageMedalsPerAge: { [key: number]: number } = {}
@@ -147,6 +150,14 @@ class AthletesModule extends VuexModule {
 
   get getArticles() {
     return this.articles
+  }
+
+  get getTopMaleAthletes() {
+    return this.topMaleAthletes
+  }
+
+  get getTopFemaleAthletes() {
+    return this.topFemaleAthletes
   }
 
   @Mutation
@@ -184,6 +195,30 @@ class AthletesModule extends VuexModule {
       avgMedalsPerAge[age] = medals
     })
     this.averageMedalsPerAge = avgMedalsPerAge
+  }
+
+
+  @Mutation
+  setTopAthletes({ maleArr, femaleArr }: { maleArr: n3.Quad[], femaleArr: n3.Quad[] }) {
+    const maleG = new n3.DefaultGraph();
+    const femaleG = new n3.DefaultGraph();
+    const fStore = new n3.Store(femaleArr)
+    const mStore = new n3.Store(maleArr);
+    console.log(femaleArr)
+    this.topMaleAthletes = mStore.getSubjects("http://www.w3.org/2000/01/rdf-schema#label", null, maleG).map(s => {
+      const medals = +mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", maleG).find(x => !!x)!.value
+      const name = mStore.getObjects(s, "http://www.w3.org/2000/01/rdf-schema#label", maleG).find(x => !!x)!.value
+      return new Athlete(name, undefined, undefined, undefined, undefined, undefined, medals, undefined, undefined)
+    })
+
+    this.topFemaleAthletes = fStore.getSubjects("http://www.w3.org/2000/01/rdf-schema#label", null, femaleG).map(s => {
+      console.log(s)
+      const medals = +fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", femaleG).find(x => !!x)!.value
+      const name = fStore.getObjects(s, "http://www.w3.org/2000/01/rdf-schema#label", femaleG).find(x => !!x)!.value
+      console.log(name, medals)
+      return new Athlete(name, undefined, undefined, undefined, undefined, undefined, medals, undefined, undefined)
+    })
+    console.log("hi")
   }
 
   @Mutation
@@ -256,6 +291,18 @@ class AthletesModule extends VuexModule {
     const quadArr = parser.parse(resp);
     this.setAthleteArticles(quadArr);
   }
+
+  @Action
+  async fetchTopAthletes({ sport }: { sport: string }) {
+    const [male, female] = await Promise.all([useRecipe("top-athletes", { s: sport, o: "<http://wallscope.co.uk/resource/olympics/gender/M>" }), useRecipe("top-athletes", { s: sport, o: "<http://wallscope.co.uk/resource/olympics/gender/F>" })])
+    const parser = new n3.Parser();
+    console.log(female);
+    const maleArr = parser.parse(male);
+    const femaleArr = parser.parse(female);
+    console.log(femaleArr)
+    this.setTopAthletes({ maleArr, femaleArr })
+  }
+
 
 }
 

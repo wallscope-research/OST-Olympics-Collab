@@ -1,21 +1,20 @@
 <template lang="pug">
 div
-  h2.chart-title Top Female Athlets
+  h2.chart-title Top Female Athletes
   .athletsList
-    Tag(tag-text='Ewe Roberts')
-    Tag(tag-text='Maria Kora')
-    Tag(tag-text='Natasha Morrison')
-    Tag(tag-text='Barbara Fic')
-    Tag(tag-text='Angela Gaya Rose')
+    Tag(v-for='a in athletes', :text='a.name')
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import Tag from '@/components/Tag.vue';
+import { Athlete } from '@/store/athletesM';
 
 @Component({ components: { Tag } })
-export default class TopFemaleAthletes extends Vue {}
+export default class TopFemaleAthletes extends Vue {
+  @Prop({ required: true }) athletes!: Athlete[];
+}
 </script>
 
 

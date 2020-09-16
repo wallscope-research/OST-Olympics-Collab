@@ -14,9 +14,10 @@ import { useRecipe } from '@/utils/hiccupConnector';
 export class Sport {
 
   name: string
-
-  constructor(name: string) {
+  season?: string
+  constructor(name: string, season?: string) {
     this.name = name;
+    this.season = season;
   }
 }
 

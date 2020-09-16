@@ -25,7 +25,7 @@ const routes: Array<RouteConfig> = [
     props: true,
   },
   {
-    path: '/sport/:sport1',
+    path: '/sport/:sportID',
     name: 'sport',
     component: SportView,
     props: true,

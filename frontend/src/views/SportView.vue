@@ -5,14 +5,14 @@
     h3 Swimming
   .charts
     .one
-      InfoBox
+      SportInfoBox
     .two
-      TopFemaleAthletes
+      TopFemaleAthletes(:athletes='topFemale')
     .three
-      TopMaleAthletes
+      TopMaleAthletes(:athletes='topMale')
     .four
       h2.chart-title News
-      //- Article(v-for='a in articles', :article="a", @tag-clicked="navigate")
+      Article(v-for='a in articles', :article='a', @tag-clicked='navigate')
     .five
       SportsBar
     .six
@@ -24,9 +24,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 
-import InfoBox from '@/components/InfoBox.vue';
+import SportInfoBox from '@/components/SportInfoBox.vue';
 import Article from '@/components/Article.vue';
 import TopMaleAthletes from '@/components/TopMaleAthletes.vue';
 import TopFemaleAthletes from '@/components/TopFemaleAthletes.vue';
@@ -34,9 +34,11 @@ import OlympicTorch from '@/components/OlympicTorch.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
 import SportsBar from '@/components/SportsBar.vue';
 import { curveMonotoneX } from 'd3';
+import athleteM, { Athlete, DataArticle } from '@/store/athletesM';
+import athletesM from '@/store/athletesM';
 @Component({
   components: {
-    InfoBox,
+    SportInfoBox,
     Article,
     TopFemaleAthletes,
     TopMaleAthletes,
@@ -46,6 +48,7 @@ import { curveMonotoneX } from 'd3';
   },
 })
 export default class SportView extends Vue {
+  @Prop({ required: true }) sportID!: string;
   str = '';
   overTime: {
     [key: string]: {
@@ -73,6 +76,9 @@ export default class SportView extends Vue {
   ageTitle = 'Average Age of Athletes Over Time';
   heightTitle = 'Average Height of Athletes Over Time';
   weightTitle = 'Average Weight of Athletes Over Time';
+  topMale: Athlete[] = [];
+  topFemale: Athlete[] = [];
+  articles: DataArticle[] | null = null;
   get ageTime() {
     const data = Object.keys(this.overTime);
     const series = [];
@@ -119,6 +125,32 @@ export default class SportView extends Vue {
       type: 'line',
     });
     return { data, series };
+  }
+
+  @Watch('sportID')
+  async athleteChanged(val: string) {
+    // await Promise.all([this.fetchAthlete(), this.fetchAverages(), this.fetchMedalsAtAge()]);
+    await this.fetchNews();
+  }
+
+  async fetchTopAthletes() {
+    await athletesM.fetchTopAthletes({
+      sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
+    });
+    this.topMale = athleteM.getTopMaleAthletes;
+    this.topFemale = athleteM.getTopFemaleAthletes;
+  }
+
+  async fetchNews() {
+    await athleteM.fetchAthleteArticles();
+    this.articles = athleteM.getArticles;
+  }
+
+  async mounted() {
+    await Promise.all([this.fetchTopAthletes()]);
+    Vue.nextTick(async () => {
+      await this.fetchNews();
+    });
   }
 }
 </script>
@@ -169,12 +201,12 @@ export default class SportView extends Vue {
           grid-row: 1/4;
           grid-column: 5/6;
         }
-        &.five{
+        &.five {
           grid-column: 1/3;
         }
         &.six {
           grid-column: 3/5;
-          grid-row : 2/3;
+          grid-row: 2/3;
         }
         &.seven {
           grid-column: 1/3;
