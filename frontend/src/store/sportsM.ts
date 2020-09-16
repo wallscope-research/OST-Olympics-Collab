@@ -11,16 +11,6 @@ import * as n3 from "n3";
 import store from "@/store";
 import { useRecipe } from '@/utils/hiccupConnector';
 
-export class Sport {
-
-  name: string
-  season?: string
-  constructor(name: string, season?: string) {
-    this.name = name;
-    this.season = season;
-  }
-}
-
 @Module({ dynamic: true, namespaced: true, name: "sportsM", store })
 class SportsModule extends VuexModule {
   sportsMap: { [key: string]: string } = {}

@@ -22,7 +22,7 @@
       )
     .four
       h2.chart-title News
-      Article(v-for='a in articles', :article='a', @tag-clicked='navigate')
+      Article(:key="a.text", v-for='a in articles', :article='a', @tag-clicked='navigate')
 </template>
 
 <script lang="ts">
@@ -63,9 +63,9 @@ export default class ContinentView extends Vue {
 
   @Watch('continentID')
   async athleteChanged(val: string) {
-    this.selectedContinent = null;
-    this.selectedSport = null;
-    this.selectedGender = null;
+    this.selectedContinent = undefined;
+    this.selectedSport = undefined;
+    this.selectedGender = undefined;
     continentsM.setContinent(`http://dbpedia.org/resource/${this.continentID}`);
     await this.fetchOptions();
     this.continentName = continentsM.continentName;

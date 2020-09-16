@@ -12,7 +12,7 @@ div
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Tag from '@/components/Tag.vue';
-import { Sport } from '@/store/sportsM';
+import { Sport } from '@/store';
 
 @Component({ components: { Tag } })
 export default class InfoBox extends Vue {

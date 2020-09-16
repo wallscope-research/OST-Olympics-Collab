@@ -1,56 +1,76 @@
 <template lang="pug">
 #searchBar
   div
-    
-    form.searchbox.sbx-custom(novalidate='novalidate' onsubmit='return false;')
-      .sbx-custom__wrapper(role='search')
-        input.sbx-custom__input(type='search' name='search' placeholder='Search ...' autocomplete='off' required='required')
-        button.sbx-custom__submit(type='submit' title='Submit your search query.')
-          svg(role='img' aria-label='Search')
-            use(xlink:href='#sbx-icon-search-18')
-        button.sbx-custom__reset(type='reset' title='Clear the search query.')
-          icon(:icon="['far','times']" aria-label='Reset')
-   
-
+    vue-instant(
+      ref='instant',
+      type='custom',
+      :value='query',
+      :suggestions='results',
+      :suggest-on-all-words='true',
+      :show-autocomplete='true',
+      suggestion-attribute='label',
+      @input='$emit("input", $event)',
+      @selected='selected',
+      @enter='$emit("confirm")',
+      @click-button='$emit("confirm")'
+    )
   div
     div
       p You can search for:
     div
       .termType
-        icon(:icon="['fas', 'globe-europe']")
+        icon(:icon='["fas", "globe-europe"]')
         p continent
       .termType
         .small
-          OlympicTorch(
-            icon-width = 22
-            icon-height = 34
-          )
+          OlympicTorch(icon-width=22, icon-height=34)
         .large
-          OlympicTorch(
-            icon-width = 28
-            icon-height = 40
-          )
-        
+          OlympicTorch(icon-width=28, icon-height=40)
+
         p sport
       .termType
-        icon(:icon="['fas', 'user']")
+        icon(:icon='["fas", "user"]')
         p player
       span
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import 'vue-instant/dist/vue-instant.css'
-import VueInstant from 'vue-instant/dist/vue-instant.common'
-import OlympicTorch from '@/components/OlympicTorch.vue'
-Vue.use(VueInstant)
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import VueInstant from 'vue-instant/dist/vue-instant.common';
+import 'vue-instant/dist/vue-instant.css';
+import OlympicTorch from '@/components/OlympicTorch.vue';
+import { SearchResult } from '../store';
+Vue.use(VueInstant);
 
-@Component({components: { OlympicTorch }})
-export default class SearchBar extends Vue {}
+@Component({ components: { OlympicTorch } })
+export default class SearchBar extends Vue {
+  // @ts-ignore
+  @Prop({ required: true }) readonly query: string;
+  // @ts-ignore
+  @Prop({ required: true }) readonly results: SearchResult[];
+  selected(r: SearchResult) {
+    this.$emit('selected', r);
+    if (r?.score === 1) {
+      this.$emit('confirm');
+      Vue.nextTick(() => {
+        // @ts-ignore
+        this.$refs['instant'].reset();
+      });
+    }
+  }
+}
 </script>
 
 <style lang="scss">
+.vue-instant__suggestions li.highlighted__custom {
+  background-color: #ffffff;
+  color: #000000;
+}
+.vue-instant__suggestions {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
 
 .sbx-custom {
   display: inline-block;
@@ -61,20 +81,18 @@ export default class SearchBar extends Vue {}
   box-sizing: border-box;
   font-size: 14px;
 }
-
 .sbx-custom__wrapper {
   width: 100%;
   height: 100%;
 }
-
 .sbx-custom__input {
   display: inline-block;
-  -webkit-transition: box-shadow .4s ease, background .4s ease;
-  transition: box-shadow .4s ease, background .4s ease;
+  -webkit-transition: box-shadow 0.4s ease, background 0.4s ease;
+  transition: box-shadow 0.4s ease, background 0.4s ease;
   border: 0;
   border-radius: 26px;
   box-shadow: inset 0 0 0 2.5px #a0a5b7;
-  background: #FFFFFF !important;
+  background: #ffffff !important;
   padding: 0;
   padding-right: 41px;
   padding-left: 41px;
@@ -84,40 +102,58 @@ export default class SearchBar extends Vue {}
   white-space: normal;
   font-size: 20px;
   -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
-.sbx-custom__input::-webkit-search-decoration, .sbx-custom__input::-webkit-search-cancel-button, .sbx-custom__input::-webkit-search-results-button, .sbx-custom__input::-webkit-search-results-decoration {
+.sbx-custom__input-placeholder {
+  display: inline-block;
+  -webkit-transition: box-shadow 0.4s ease, background 0.4s ease;
+  transition: box-shadow 0.4s ease, background 0.4s ease;
+  border: 0;
+  border-radius: 26px;
+  box-shadow: inset 0 0 0 2.5px #a0a5b7;
+  background: #ffffff !important;
+  padding: 0;
+  padding-right: 41px;
+  padding-left: 41px;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  white-space: normal;
+  font-size: 20px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.sbx-custom__input::-webkit-search-decoration,
+.sbx-custom__input::-webkit-search-cancel-button,
+.sbx-custom__input::-webkit-search-results-button,
+.sbx-custom__input::-webkit-search-results-decoration {
   display: none;
 }
-
 .sbx-custom__input:hover {
   box-shadow: inset 0 0 0 2px #b3b3b3;
 }
-
-.sbx-custom__input:focus, .sbx-custom__input:active {
+.sbx-custom__input:focus,
+.sbx-custom__input:active {
   outline: 0;
   box-shadow: inset 0 0 0 2.5px var(--active-color);
-  background: #FFFFFF;
+  background: #ffffff;
 }
-
 .sbx-custom__input::-webkit-input-placeholder {
-  color: #BBBBBB;
+  color: #bbbbbb;
 }
-
 .sbx-custom__input::-moz-placeholder {
-  color: #BBBBBB;
+  color: #bbbbbb;
 }
-
 .sbx-custom__input:-ms-input-placeholder {
-  color: #BBBBBB;
+  color: #bbbbbb;
 }
-
 .sbx-custom__input::placeholder {
-  color: #BBBBBB;
+  color: #bbbbbb;
 }
-
 .sbx-custom__submit {
   position: absolute;
   top: 0;
@@ -134,11 +170,10 @@ export default class SearchBar extends Vue {}
   text-align: center;
   font-size: inherit;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
-
 .sbx-custom__submit::before {
   display: inline-block;
   margin-right: -4px;
@@ -146,28 +181,25 @@ export default class SearchBar extends Vue {}
   vertical-align: middle;
   content: '';
 }
-
-.sbx-custom__submit:hover, .sbx-custom__submit:active {
+.sbx-custom__submit:hover,
+.sbx-custom__submit:active {
   cursor: pointer;
 }
-
 .sbx-custom__submit:focus {
   outline: 0;
 }
-
 .sbx-custom__submit svg {
   width: 31px;
   height: 31px;
   vertical-align: middle;
-  fill: #FF2E83;
+  fill: #566598;
 }
-
 .sbx-custom__reset {
   display: none;
   position: absolute;
   top: 12px;
   right: 12px;
-  width:27px;
+  width: 27px;
   margin: 0;
   border: 0;
   background: none;
@@ -175,9 +207,9 @@ export default class SearchBar extends Vue {}
   padding: 0;
   font-size: inherit;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   fill: rgba(0, 0, 0, 0.5);
 }
 
@@ -189,7 +221,7 @@ export default class SearchBar extends Vue {}
   display: block;
   margin: 4px;
   font-size: 17px;
-  color:grey;
+  color: grey;
   &:hover {
     color: var(--active-color);
   }
@@ -198,33 +230,32 @@ export default class SearchBar extends Vue {}
 .sbx-custom__input:valid ~ .sbx-custom__reset {
   display: block;
   -webkit-animation-name: sbx-reset-in;
-          animation-name: sbx-reset-in;
-  -webkit-animation-duration: .15s;
-          animation-duration: .15s;
+  animation-name: sbx-reset-in;
+  -webkit-animation-duration: 0.15s;
+  animation-duration: 0.15s;
 }
 
 @-webkit-keyframes sbx-reset-in {
   0% {
     -webkit-transform: translate3d(-20%, 0, 0);
-            transform: translate3d(-20%, 0, 0);
+    transform: translate3d(-20%, 0, 0);
     opacity: 0;
   }
   100% {
     -webkit-transform: none;
-            transform: none;
+    transform: none;
     opacity: 1;
   }
 }
-
 @keyframes sbx-reset-in {
   0% {
     -webkit-transform: translate3d(-20%, 0, 0);
-            transform: translate3d(-20%, 0, 0);
+    transform: translate3d(-20%, 0, 0);
     opacity: 0;
   }
   100% {
     -webkit-transform: none;
-            transform: none;
+    transform: none;
     opacity: 1;
   }
 }
@@ -235,26 +266,26 @@ export default class SearchBar extends Vue {}
   padding: 8px 15px 10px 20px;
   display: grid;
   grid-template-columns: 1.5fr 1fr;
-  grid-gap:25px;
+  grid-gap: 25px;
   > div {
-    &:nth-child(1){
+    &:nth-child(1) {
       display: flex;
       align-items: center;
     }
-    &:nth-child(2){
+    &:nth-child(2) {
       > div {
-        &:nth-child(1){
+        &:nth-child(1) {
           p {
             font-size: 15px;
-            padding:0;
+            padding: 0;
             color: #444444;
           }
         }
-        &:nth-child(2){
+        &:nth-child(2) {
           display: grid;
-          grid-template-columns: auto  auto  auto 1fr;
+          grid-template-columns: auto auto auto 1fr;
           grid-gap: 20px;
-          .termType{
+          .termType {
             display: flex;
             align-items: center;
             p {
@@ -271,7 +302,7 @@ export default class SearchBar extends Vue {}
               font-size: 25px;
             }
           }
-          @media only screen and (max-width: 768px ) {
+          @media only screen and (max-width: 768px) {
             grid-gap: 10px;
           }
         }
@@ -282,7 +313,7 @@ export default class SearchBar extends Vue {}
 .small {
   display: none;
 }
-@media only screen and (max-width: 768px ) {
+@media only screen and (max-width: 768px) {
   .small {
     display: block !important;
   }
@@ -295,7 +326,7 @@ export default class SearchBar extends Vue {}
     box-shadow: 5px 7px 10px #0000002b;
     grid-gap: 4px;
     > div {
-      &:nth-child(2){
+      &:nth-child(2) {
         grid-row: 1/2;
       }
     }
@@ -304,7 +335,7 @@ export default class SearchBar extends Vue {}
     font-size: 20px;
   }
 }
-@media only screen and (min-width:769px) and (max-width:1400px){
+@media only screen and (min-width: 769px) and (max-width: 1400px) {
   #searchBar {
     padding: 8px 50px 10px 50px;
   }
