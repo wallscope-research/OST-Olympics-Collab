@@ -154,7 +154,7 @@ export default class AthleteView extends Vue {
 @media only screen and (min-width: 1301px) {
   .home {
     .charts {
-      grid-template-columns: 0.4fr 0.6fr 1fr;
+      grid-template-columns: 0.6fr 0.8fr 0.8fr;
       > div {
         &.four {
           grid-row: 1/3;
