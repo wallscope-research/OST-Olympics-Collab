@@ -10,12 +10,13 @@ import Vue from "vue";
 import * as n3 from "n3";
 import store, { Averages, DataArticle } from "@/store";
 import { useRecipe } from '@/utils/hiccupConnector';
+import { use } from 'vue/types/umd';
 
 @Module({ dynamic: true, namespaced: true, name: "continentM", store })
 class ContinentsModule extends VuexModule {
   continentMap: { [key: string]: string } = {}
-  continentURI : string = ''
-  continentName : string = ''
+  continentURI: string = ''
+  continentName: string = ''
   articles: DataArticle[] = []
   averageStats: Averages = {
     age: 0,
@@ -23,6 +24,7 @@ class ContinentsModule extends VuexModule {
     weight: 0,
     medals: 0,
   }
+  continentInfo = { medals: 0, teams: 0, athletes: 0 }
 
   get getAverateStats() {
     return this.averageStats;
@@ -30,6 +32,10 @@ class ContinentsModule extends VuexModule {
 
   get getArticles() {
     return this.articles
+  }
+
+  get getContinentInfo() {
+    return this.continentInfo;
   }
 
   @Mutation
@@ -76,21 +82,41 @@ class ContinentsModule extends VuexModule {
   }
 
   @Mutation
-  setContinentURI(uri:string){
+  setContinentURI(uri: string) {
     this.continentURI = uri
   }
 
   @Mutation
-  setContinentName(name:string | undefined){
-    if(name){
+  setContinentName(name: string | undefined) {
+    if (name) {
       this.continentName = name
-    }else {
+    } else {
       this.continentName = "Unknown";
     }
   }
 
+  //   @prefix ns0:	<http://dbpedia.org/resource/> .
+  // @prefix ns1:	<http://wallscope.co.uk/resource/> .
+  // ns1:filler	ns1:filler	ns0:Africa .
+  // @prefix ns2:	<http://wallscope.co.uk/ontology/olympics/> .
+  // _:__fresh_blank_node_1	ns2:numberOfTeams	56 ;
+  // 	ns2:athleteCount	7775 ;
+  // 	ns2:medalCount	554 .
+
+  @Mutation
+  setContinentInfo(quadArr: n3.Quad[]) {
+    const defaultG = new n3.DefaultGraph();
+    const store = new n3.Store(quadArr);
+    const athleteCount = +store.getObjects(null, "http://wallscope.co.uk/ontology/olympics/athleteCount", defaultG).find(x => !!x)!.value
+    const medalCount = +store.getObjects(null, "http://wallscope.co.uk/ontology/olympics/medalCount", defaultG).find(x => !!x)!.value
+    const numberOfTeams = +store.getObjects(null, "http://wallscope.co.uk/ontology/olympics/numberOfTeams", defaultG).find(x => !!x)!.value
+    this.continentInfo.athletes = athleteCount;
+    this.continentInfo.medals = medalCount;
+    this.continentInfo.teams = numberOfTeams;
+  }
+
   @Action
-  setContinent(uri:string){
+  setContinent(uri: string) {
     this.setContinentURI(uri)
     this.setContinentName(uri.split("/").pop()?.replace("_", " "))
   }
@@ -126,6 +152,15 @@ class ContinentsModule extends VuexModule {
     const parser = new n3.Parser();
     const quadArr = parser.parse(resp);
     this.setContinents(quadArr);
+  }
+
+  @Action
+  async fetchContinentInfo({ name }: { name: string }) {
+    const payload = { o: `<${this.continentMap[name]}>` }
+    const resp = await useRecipe("continent-info", payload)
+    const parser = new n3.Parser();
+    const quadArr = parser.parse(resp);
+    this.setContinentInfo(quadArr)
   }
 
   get continents() {

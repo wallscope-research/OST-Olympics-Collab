@@ -5,8 +5,12 @@
     h3(v-if='continentName') {{ continentName }}
     h3(v-else) Loading...
   .charts
-    .one
-      InfoBox
+    .one(v-if='info')
+      ContinentInfoBox(
+        :medals='continentMedals',
+        :teams='continentTeams',
+        :athletes='continentAthletes'
+      )
     .two
       MultipleLines(:propOptions='getOptions', :title='title')
     .three(v-if='continentAverages && averages')
@@ -22,12 +26,12 @@
       )
     .four
       h2.chart-title News
-      Article(:key="a.text", v-for='a in articles', :article='a', @tag-clicked='navigate')
+      Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import InfoBox from '@/components/InfoBox.vue';
+import ContinentInfoBox from '@/components/ContinentInfoBox.vue';
 import Article from '@/components/Article.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
 import ParallelChart from '@/components/ParallelChart.vue';
@@ -35,7 +39,7 @@ import continentsM from '@/store/continentsM';
 import sportsM from '@/store/sportsM';
 import { Averages, DataArticle } from '@/store';
 
-@Component({ components: { InfoBox, Article, MultipleLines, ParallelChart } })
+@Component({ components: { ContinentInfoBox, Article, MultipleLines, ParallelChart } })
 export default class ContinentView extends Vue {
   @Prop({ required: false }) readonly continentID: string | undefined;
   medals = {
@@ -60,6 +64,11 @@ export default class ContinentView extends Vue {
   selectedContinent: string | undefined;
   selectedSport: string | undefined;
   selectedGender: string | undefined;
+  info: {
+    medals: number;
+    teams: number;
+    athletes: number;
+  } | null = null;
 
   @Watch('continentID')
   async athleteChanged(val: string) {
@@ -91,6 +100,16 @@ export default class ContinentView extends Vue {
     return { data, series };
   }
 
+  get continentMedals() {
+    return this.info!.medals;
+  }
+  get continentAthletes() {
+    return this.info!.athletes;
+  }
+  get continentTeams() {
+    return this.info!.teams;
+  }
+
   sportSelected(uri: string) {
     this.selectedSport = uri;
     this.fetchAverages();
@@ -111,6 +130,11 @@ export default class ContinentView extends Vue {
       continent: continentsM.continentURI,
     });
     this.continentAverages = continentsM.getAverateStats;
+  }
+
+  async fetchContinentInfo() {
+    await continentsM.fetchContinentInfo({ name: this.continentID! });
+    this.info = continentsM.getContinentInfo;
   }
 
   async fetchAverages() {
@@ -144,6 +168,7 @@ export default class ContinentView extends Vue {
     await this.fetchNews();
     await this.fetchContinentAverages();
     await this.fetchAverages();
+    await this.fetchContinentInfo();
   }
 }
 </script>
