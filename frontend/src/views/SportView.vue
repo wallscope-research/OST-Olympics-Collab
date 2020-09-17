@@ -4,8 +4,8 @@
     OlympicTorch(icon-width=26, icon-height=36)
     h3 Swimming
   .charts
-    .one
-      SportInfoBox
+    .one(v-if='sport')
+      SportInfoBox(:season='season', :medals='medalCount', :athletes='athleteCount')
     .two
       TopFemaleAthletes(:athletes='topFemale')
     .three
@@ -36,6 +36,7 @@ import SportsBar from '@/components/SportsBar.vue';
 import { curveMonotoneX } from 'd3';
 import { Athlete, DataArticle } from '@/store/index';
 import athleteM from '@/store/athletesM';
+import sportsM, { Sport } from '@/store/sportsM';
 @Component({
   components: {
     SportInfoBox,
@@ -79,6 +80,7 @@ export default class SportView extends Vue {
   topMale: Athlete[] = [];
   topFemale: Athlete[] = [];
   articles: DataArticle[] | null = null;
+  sport: Sport | null = null;
   get ageTime() {
     const data = Object.keys(this.overTime);
     const series = [];
@@ -127,12 +129,32 @@ export default class SportView extends Vue {
     return { data, series };
   }
 
+  get athleteCount() {
+    return this.sport!.athleteCount;
+  }
+  get medalCount() {
+    return this.sport!.medalCount;
+  }
+  get season() {
+    return this.sport!.season;
+  }
+
+  navigate(uri: string) {
+    console.log('navigate');
+  }
   @Watch('sportID')
   async athleteChanged(val: string) {
     // await Promise.all([this.fetchAthlete(), this.fetchAverages(), this.fetchMedalsAtAge()]);
     await this.fetchNews();
   }
 
+  async fetchSportInfo() {
+    await sportsM.fetchSportInfo({
+      sport: `<http://wallscope.co.uk/resource/olympics/sport/${this.sportID}>`,
+      name: this.sportID,
+    });
+    // this.medalCount
+  }
   async fetchTopAthletes() {
     await athleteM.fetchTopAthletes({
       sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
@@ -142,12 +164,14 @@ export default class SportView extends Vue {
   }
 
   async fetchNews() {
-    await athleteM.fetchAthleteArticles();
-    this.articles = athleteM.getArticles;
+    await sportsM.fetchSportArticles();
+    this.articles = sportsM.getArticles;
   }
 
   async mounted() {
-    await Promise.all([this.fetchTopAthletes()]);
+    await sportsM.fetchSports();
+    await Promise.all([this.fetchTopAthletes(), this.fetchSportInfo()]);
+    this.sport = sportsM.getSport;
     Vue.nextTick(async () => {
       await this.fetchNews();
     });

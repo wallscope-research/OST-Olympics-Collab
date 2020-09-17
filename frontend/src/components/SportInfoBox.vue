@@ -1,11 +1,11 @@
 <template lang="pug">
 div
   h2.chart-title Sport Info
-  p Number of Athletes: {{ age }}
+  p Number of Athletes: {{ athletes }}
   p Medals won: {{ medals }}
   .sport
     p Season:
-    Tag(:text='sport.season')
+    Tag(:text='season')
 </template>
 
 
@@ -16,14 +16,9 @@ import { Sport } from '@/store';
 
 @Component({ components: { Tag } })
 export default class SportInfoBox extends Vue {
-  @Prop({ default: 'None Provided' }) age!: number;
-  @Prop() medals!: number;
-  @Prop({
-    default: function () {
-      return new Sport('None specified', 'None specified');
-    },
-  })
-  sport!: Sport;
+  @Prop({ required: true }) season!: string;
+  @Prop({ required: true }) athletes!: number;
+  @Prop({ required: true }) medals!: number;
 }
 </script>
 

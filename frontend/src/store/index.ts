@@ -17,11 +17,16 @@ const predMap: { [key: string]: string } = {
 }
 
 export class Sport {
-  name: string
-  season?: string
-  constructor(name: string, season?: string) {
+
+  name: string;
+  season?: string;
+  medalCount?: number;
+  athleteCount?: number;
+  constructor(name: string, season?: string, medalCount?: number, athleteCount?: number) {
     this.name = name;
     this.season = season;
+    this.medalCount = medalCount;
+    this.athleteCount = athleteCount;
   }
 }
 
