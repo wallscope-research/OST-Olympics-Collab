@@ -216,6 +216,9 @@ export default class ContinentView extends Vue {
 
 
 <style lang="scss" scoped>
+.three {
+  overflow: auto;
+}
 @media only screen and (max-width: 768px) {
   .home {
     .charts {

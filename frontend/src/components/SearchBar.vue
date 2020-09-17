@@ -4,6 +4,7 @@
     vue-instant(
       ref='instant',
       type='custom',
+      placeholder='Search...',
       :value='query',
       :suggestions='results',
       :suggest-on-all-words='true',
@@ -68,8 +69,8 @@ export default class SearchBar extends Vue {
   color: #000000;
 }
 .vue-instant__suggestions {
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-radius: 0;
+  border: none;
 }
 
 .sbx-custom {
@@ -189,10 +190,11 @@ export default class SearchBar extends Vue {
   outline: 0;
 }
 .sbx-custom__submit svg {
-  width: 31px;
-  height: 31px;
+  width: 22px;
+  height: 22px;
+  margin-left: 3px;
   vertical-align: middle;
-  fill: #566598;
+  fill: var(--active-color);
 }
 .sbx-custom__reset {
   display: none;
@@ -216,11 +218,19 @@ export default class SearchBar extends Vue {
 .sbx-custom__reset:focus {
   outline: 0;
 }
+ul.vue-instant__suggestions li {
+  &:hover {
+    background: var(--violet);
+    color: white;
+    transition: all 0.1s;
+  }
+}
 
 .sbx-custom__reset svg {
   display: block;
   margin: 4px;
-  font-size: 17px;
+  width: 16px;
+  height: 16px;
   color: grey;
   &:hover {
     color: var(--active-color);
@@ -266,6 +276,9 @@ export default class SearchBar extends Vue {
   padding: 8px 15px 10px 20px;
   display: grid;
   grid-template-columns: 1.5fr 1fr;
+  @media only screen and (max-width: 1540px) { 
+    grid-template-columns: auto 1fr;
+  }
   grid-gap: 25px;
   > div {
     &:nth-child(1) {
