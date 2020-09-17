@@ -10,6 +10,8 @@ import Vue from "vue";
 import * as n3 from "n3";
 import store, { DataArticle, Sport } from "@/store";
 import { useRecipe } from '@/utils/hiccupConnector';
+import { utcYears } from 'd3';
+import { continentMap } from "@/store/continentsM"
 
 @Module({ dynamic: true, namespaced: true, name: "sportsM", store })
 class SportsModule extends VuexModule {
@@ -17,6 +19,7 @@ class SportsModule extends VuexModule {
   sport: Sport | null = null;
   articles: DataArticle[] = []
   averages: { [key: string]: { female: { weight: number, age: number, height: number }, male: { weight: number, age: number, height: number } } } = {}
+  sportsOverTime: { [key: string]: { [key: string]: { medalCount: number, athleteCount: number } } } = {}
   @Mutation
   setSports(quads: n3.Quad[]) {
     const defaultG = new n3.DefaultGraph();
@@ -102,6 +105,26 @@ class SportsModule extends VuexModule {
 
   }
 
+  @Mutation
+  async setSportsOverTime(quadArr: n3.Quad[]) {
+    const defaultG = new n3.DefaultGraph();
+    const store = new n3.Store(quadArr);
+    const years: { [key: string]: { [key: string]: { medalCount: number, athleteCount: number } } } = {}
+
+    store.getSubjects("http://wallscope.co.uk/ontology/olympics/hasYear", null, defaultG).forEach(s => {
+      const year = store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/hasYear", defaultG).find(x => !!x)!.value
+      const continent = continentMap[store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/hasContinent", defaultG).find(x => !!x)!.value]
+      const medals = +store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/medalCount", defaultG).find(x => !!x)!.value
+      const athletes = +store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/athleteCount", defaultG).find(x => !!x)!.value
+      if (!years[year]) years[year] = {}
+      if (!years[year][continent]) years[year][continent] = { medalCount: medals, athleteCount: athletes }
+      // years[year][continent].push(s)
+      console.log(years[year])
+    })
+    this.sportsOverTime = years;
+  }
+
+
   @Action
   async fetchSports() {
     const payload = { p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: "<http://dbpedia.org/ontology/Sport>" };
@@ -142,10 +165,22 @@ class SportsModule extends VuexModule {
     this.setSportArticles(quadArr);
   }
 
+  @Action
+  async fetchSportsOverTime({ sport }: { sport: string }) {
+    const payload = { s: sport }
+    const resp = await useRecipe("sport-bar", payload)
+    const parser = new n3.Parser();
+    const quadArr = parser.parse(resp)
+    this.setSportsOverTime(quadArr)
+  }
+
   get getArticles() {
     return this.articles
   }
 
+  get getSportsOverTime() {
+    return this.sportsOverTime
+  }
   get sports() {
     return this.sportsMap;
   }

@@ -13,8 +13,8 @@
     .four
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
-    .five
-      SportsBar
+    .five(v-if='sportsOverTime && Object.keys(sportsOverTime).length > 0')
+      SportsBar(:overTime='sportsOverTime')
     .six(v-if='averages && Object.keys(averages).length > 0')
       MultipleLines(:propOptions='ageTime', :title='ageTitle')
     .seven(v-if='averages && Object.keys(averages).length > 0')
@@ -50,30 +50,6 @@ import sportsM from '@/store/sportsM';
 })
 export default class SportView extends Vue {
   @Prop({ required: true }) sportID!: string;
-  str = '';
-  overTime: {
-    [key: string]: {
-      mAge: number;
-      mHeight: number;
-      mWeight: number;
-      fAge: number;
-      fHeight: number;
-      fWeight: number;
-    };
-  } = {
-    '1998': { mAge: 36, mHeight: 168, mWeight: 86, fAge: 32, fHeight: 159, fWeight: 62 },
-    '2000': { mAge: 35, mHeight: 169, mWeight: 85, fAge: 33, fHeight: 161, fWeight: 59 },
-    '2002': { mAge: 36, mHeight: 174, mWeight: 82, fAge: 30, fHeight: 158, fWeight: 62 },
-    '2004': { mAge: 34, mHeight: 177, mWeight: 79, fAge: 31, fHeight: 164, fWeight: 68 },
-    '2006': { mAge: 30, mHeight: 182, mWeight: 78, fAge: 28, fHeight: 166, fWeight: 74 },
-    '2008': { mAge: 29, mHeight: 184, mWeight: 80, fAge: 27, fHeight: 163, fWeight: 74 },
-    '2010': { mAge: 26, mHeight: 180, mWeight: 74, fAge: 26, fHeight: 169, fWeight: 78 },
-    '2012': { mAge: 27, mHeight: 186, mWeight: 72, fAge: 24, fHeight: 171, fWeight: 76 },
-    '2014': { mAge: 29, mHeight: 192, mWeight: 66, fAge: 26, fHeight: 167, fWeight: 72 },
-    '2016': { mAge: 25, mHeight: 194, mWeight: 71, fAge: 25, fHeight: 169, fWeight: 66 },
-    '2018': { mAge: 24, mHeight: 195, mWeight: 76, fAge: 22, fHeight: 174, fWeight: 64 },
-  };
-
   ageTitle = 'Average Age of Athletes Over Time';
   heightTitle = 'Average Height of Athletes Over Time';
   weightTitle = 'Average Weight of Athletes Over Time';
@@ -87,6 +63,14 @@ export default class SportView extends Vue {
       male: { weight: number; age: number; height: number };
     };
   } | null = null;
+  sportsOverTime: {
+    [key: string]: {
+      [key: string]: {
+        medalCount: number;
+        athleteCount: number;
+      };
+    };
+  } | null = {};
 
   get ageTime() {
     const data = Object.keys(this.averages!);
@@ -194,12 +178,19 @@ export default class SportView extends Vue {
     await sportsM.fetchSportArticles();
     this.articles = sportsM.getArticles;
   }
+  async fetchSportsOverTime() {
+    await sportsM.fetchSportsOverTime({
+      sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
+    });
+    this.sportsOverTime = sportsM.getSportsOverTime;
+  }
 
   async mounted() {
     await Promise.all([
       this.fetchTopAthletes(),
       this.fetchSportInfo(),
       this.fetchSportAverages(),
+      this.fetchSportsOverTime(),
     ]);
     this.sport = sportsM.getSport;
     Vue.nextTick(async () => {

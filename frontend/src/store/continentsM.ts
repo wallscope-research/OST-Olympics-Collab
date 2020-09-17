@@ -12,6 +12,14 @@ import store, { Averages, DataArticle } from "@/store";
 import { useRecipe } from '@/utils/hiccupConnector';
 import { use } from 'vue/types/umd';
 
+export const continentMap: { [key: string]: string } = {
+  "http://dbpedia.org/resource/Oceania": "Oceania",
+  "http://dbpedia.org/resource/North_America": "North America",
+  "http://dbpedia.org/resource/South_America": "South America",
+  "http://dbpedia.org/resource/Europe": "Europe",
+  "http://dbpedia.org/resource/Africa": "Africa",
+  "http://dbpedia.org/resource/Asia": "Asia"
+}
 @Module({ dynamic: true, namespaced: true, name: "continentM", store })
 class ContinentsModule extends VuexModule {
   continentMap: { [key: string]: string } = {}

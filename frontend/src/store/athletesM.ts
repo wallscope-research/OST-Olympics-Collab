@@ -122,7 +122,6 @@ class AthletesModule extends VuexModule {
     const femaleG = new n3.DefaultGraph();
     const fStore = new n3.Store(femaleArr)
     const mStore = new n3.Store(maleArr);
-    console.log(femaleArr)
     this.topMaleAthletes = mStore.getSubjects("http://www.w3.org/2000/01/rdf-schema#label", null, maleG).map(s => {
       const medals = +mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", maleG).find(x => !!x)!.value
       const name = mStore.getObjects(s, "http://www.w3.org/2000/01/rdf-schema#label", maleG).find(x => !!x)!.value
@@ -211,10 +210,8 @@ class AthletesModule extends VuexModule {
   async fetchTopAthletes({ sport }: { sport: string }) {
     const [male, female] = await Promise.all([useRecipe("top-athletes", { s: sport, o: "<http://wallscope.co.uk/resource/olympics/gender/M>" }), useRecipe("top-athletes", { s: sport, o: "<http://wallscope.co.uk/resource/olympics/gender/F>" })])
     const parser = new n3.Parser();
-    console.log(female);
     const maleArr = parser.parse(male);
     const femaleArr = parser.parse(female);
-    console.log(femaleArr)
     this.setTopAthletes({ maleArr, femaleArr })
   }
 
