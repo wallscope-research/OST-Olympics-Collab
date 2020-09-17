@@ -2,7 +2,7 @@
 .home
   .title-page
     OlympicTorch(icon-width=26, icon-height=36)
-    h3 Swimming
+    h3 {{ sportID }}
   .charts
     .one(v-if='sport')
       SportInfoBox(:season='season', :medals='medalCount', :athletes='athleteCount')
@@ -113,14 +113,14 @@ export default class SportView extends Vue {
     const data = Object.keys(this.averages!);
     const series = [];
     series.push({
-      name: 'Male average height',
+      name: 'Male average height (cm)',
       data: Object.values(this.averages!).map((x) => {
         return x.male.height;
       }),
       type: 'line',
     });
     series.push({
-      name: 'Female average height',
+      name: 'Female average height (cm)',
       data: Object.values(this.averages!).map((x) => {
         return x.female.height;
       }),
@@ -133,14 +133,14 @@ export default class SportView extends Vue {
     const data = Object.keys(this.averages!);
     const series = [];
     series.push({
-      name: 'Male average weight',
+      name: 'Male average weight (kg)',
       data: Object.values(this.averages!).map((x) => {
         return x.male.weight;
       }),
       type: 'line',
     });
     series.push({
-      name: 'Female average weight',
+      name: 'Female average weight (kg)',
       data: Object.values(this.averages!).map((x) => {
         return x.female.weight;
       }),
