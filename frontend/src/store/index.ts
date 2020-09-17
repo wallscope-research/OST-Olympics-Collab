@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as n3 from "n3";
-import { Sport } from "@/store/sportsM"
 
 Vue.use(Vuex);
 
@@ -15,6 +14,20 @@ const predMap: { [key: string]: string } = {
   name: "http://www.w3.org/2000/01/rdf-schema#label",
   height: "http://dbpedia.org/ontology/height",
   age: "http://wallscope.co.uk/ontology/olympics/age"
+}
+
+export class Sport {
+
+  name: string;
+  season?: string;
+  medalCount?: number;
+  athleteCount?: number;
+  constructor(name: string, season?: string, medalCount?: number, athleteCount?: number) {
+    this.name = name;
+    this.season = season;
+    this.medalCount = medalCount;
+    this.athleteCount = athleteCount;
+  }
 }
 
 export class Athlete {
@@ -90,5 +103,6 @@ export class Averages {
 
 export type DataTag = { uri: string; text: string };
 export type DataArticle = { date: Date | null; title: string; url: string; tags: DataTag[] };
+export type SearchResult = { uri: string, type: string, label: string, score: number };
 
 export default new Vuex.Store({});

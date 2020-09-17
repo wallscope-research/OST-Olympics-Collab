@@ -43,10 +43,10 @@ export default class ParallelChart extends Vue {
   selectedSport: string = '';
   selectedGender: string = '';
 
-  genderMap = {
-    'Male': "http://wallscope.co.uk/resource/olympics/gender/M",
-    'Female': "http://wallscope.co.uk/resource/olympics/gender/F"
-  }
+  genderMap: { [key: string]: string } = {
+    Male: 'http://wallscope.co.uk/resource/olympics/gender/M',
+    Female: 'http://wallscope.co.uk/resource/olympics/gender/F',
+  };
 
   limits: { [key: string]: { min: number; max: number } } = {
     height: { min: 127, max: 226 },
@@ -65,7 +65,7 @@ export default class ParallelChart extends Vue {
   }
 
   get genders() {
-    return ['All Genders', 'Female', 'Male']
+    return ['All Genders', 'Female', 'Male'];
   }
 
   mounted() {

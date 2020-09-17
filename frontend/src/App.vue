@@ -4,7 +4,13 @@
     ArrowUp
     #top.navbar-group
       Navbar
-      SearchBar
+      SearchBar(
+        :query='query',
+        :results='searchResults',
+        @input='search',
+        @selected='selected = $event',
+        @confirm="navigate"
+      )
     router-view
     Footer
 </template>
@@ -18,9 +24,36 @@ import SearchBar from '@/components/SearchBar.vue';
 import ArrowUp from '@/components/ArrowUp.vue';
 import athleteM from '@/store/athletesM';
 import Loading from 'vue-loading-overlay';
-import axios from 'axios';
+import searchM from '@/store/searchM';
+import { SearchResult } from './store';
 @Component({ components: { Footer, Navbar, SearchBar, ArrowUp, Loading } })
-export default class App extends Vue {}
+export default class App extends Vue {
+  searchResults: SearchResult[] = [];
+  query: string = '';
+  selected: SearchResult | null = null
+  async search(query: string) {
+    this.query = query;
+    if (this.query.length > 3 && this.query !== this.selected?.label) {
+      await searchM.search(query);
+      this.searchResults = searchM.sortedResults;
+    }
+  }
+
+  navigate() {
+    if(!this.selected) return;
+    switch (this.selected.type) {
+      case 'https://schema.org/Continent':
+        this.$router.push(`/continent/${this.selected.uri.split('/').pop()}`);
+        return;
+      case 'http://xmlns.com/foaf/0.1/Person':
+        this.$router.push(`/athlete/${this.selected.uri.split('/').pop()}`);
+        return;
+      case 'http://dbpedia.org/ontology/SportsEvent':
+        this.$router.push(`/sport/${this.selected.uri.split('/').pop()}`);
+        return;
+    }
+  }
+}
 </script>
 
 <style lang="scss">

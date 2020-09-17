@@ -12,7 +12,7 @@
       TopMaleAthletes(:athletes='topMale')
     .four
       h2.chart-title News
-      Article(v-for='a in articles', :article='a', @tag-clicked='navigate')
+      Article(:key="a.text", v-for='a in articles', :article='a', @tag-clicked='navigate')
     .five
       SportsBar
     .six(v-if='averages && Object.keys(averages).length > 0')
@@ -34,9 +34,9 @@ import OlympicTorch from '@/components/OlympicTorch.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
 import SportsBar from '@/components/SportsBar.vue';
 import { curveMonotoneX } from 'd3';
-import { Athlete, DataArticle } from '@/store/index';
+import { Athlete, DataArticle, Sport } from '@/store/index';
 import athleteM from '@/store/athletesM';
-import sportsM, { Sport } from '@/store/sportsM';
+import sportsM from '@/store/sportsM';
 @Component({
   components: {
     SportInfoBox,

@@ -5,13 +5,13 @@
     a(:href='article.url', target='_blank')
       h4(v-html='escapedTitle')
   .tag-group
-    Tag(v-for='t in article.tags', @click='$emit("tag-clicked", t.uri)', :text='t.text')
+    Tag(:key="t.uri" v-for='t in article.tags', @click='$emit("tag-clicked", t.uri)', :text='t.text')
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import Tag from '@/components/Tag.vue';
-import { DataArticle } from '@/store/index';
+import type { DataArticle } from '@/store';
 
 @Component({ components: { Tag } })
 export default class Article extends Vue {

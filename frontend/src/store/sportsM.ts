@@ -8,23 +8,8 @@ import {
 } from "vuex-module-decorators";
 import Vue from "vue";
 import * as n3 from "n3";
-import store, { DataArticle } from "@/store";
+import store, { DataArticle, Sport } from "@/store";
 import { useRecipe } from '@/utils/hiccupConnector';
-
-export class Sport {
-
-  name: string;
-  season?: string;
-  medalCount?: number;
-  athleteCount?: number;
-  constructor(name: string, season?: string, medalCount?: number, athleteCount?: number) {
-    this.name = name;
-    this.season = season;
-    this.medalCount = medalCount;
-    this.athleteCount = athleteCount;
-  }
-}
-
 
 @Module({ dynamic: true, namespaced: true, name: "sportsM", store })
 class SportsModule extends VuexModule {

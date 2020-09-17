@@ -22,7 +22,7 @@
       )
     .four(v-if='articles')
       h2.chart-title News
-      Article(v-for='a in articles', :article='a', @tag-clicked='navigate')
+      Article(:key="a.text", v-for='a in articles', :article='a', @tag-clicked='navigate')
 </template>
 
 <script lang="ts">
@@ -35,7 +35,6 @@ import athleteM from '@/store/athletesM';
 import { Averages, Athlete } from '@/store';
 import continentsM from '@/store/continentsM';
 import sportsM from '@/store/sportsM';
-import { makeURI } from '@/utils/hiccupConnector';
 import axios from 'axios';
 import { DataArticle } from '@/store/index';
 

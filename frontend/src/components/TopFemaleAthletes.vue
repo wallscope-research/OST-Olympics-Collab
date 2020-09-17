@@ -2,7 +2,7 @@
 div
   h2.chart-title Top Female Athletes
   .athletsList
-    Tag(v-for='a in athletes', :text='a.name')
+    Tag(:key="a.name", v-for='a in athletes', :text='a.name')
 </template>
 
 

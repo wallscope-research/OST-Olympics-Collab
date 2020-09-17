@@ -22,7 +22,7 @@
       )
     .four
       h2.chart-title News
-      Article(v-for='a in articles', :article='a', @tag-clicked='navigate')
+      Article(:key="a.text", v-for='a in articles', :article='a', @tag-clicked='navigate')
 </template>
 
 <script lang="ts">
