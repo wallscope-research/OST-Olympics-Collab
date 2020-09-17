@@ -12,14 +12,14 @@
       TopMaleAthletes(:athletes='topMale')
     .four
       h2.chart-title News
-      Article(:key="a.text", v-for='a in articles', :article='a', @tag-clicked='navigate')
+      Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
     .five
       SportsBar
     .six(v-if='averages && Object.keys(averages).length > 0')
       MultipleLines(:propOptions='ageTime', :title='ageTitle')
-    .seven
+    .seven(v-if='averages && Object.keys(averages).length > 0')
       MultipleLines(:propOptions='heightTime', :title='heightTitle')
-    .eight
+    .eight(v-if='averages && Object.keys(averages).length > 0')
       MultipleLines(:propOptions='weightTime', :title='weightTitle')
 </template>
 
@@ -89,23 +89,20 @@ export default class SportView extends Vue {
   } | null = null;
 
   get ageTime() {
-    if (!this.averages) return {};
     const data = Object.keys(this.averages!);
     const series = [];
-    Object.values(this.averages!).map((x) => {
-      console.log(x.male.age, x.female.age);
-    }),
-      series.push({
-        name: 'Male average age',
-        data: Object.values(this.averages!).map((x) => {
-          x.male.age;
-        }),
-        type: 'line',
-      });
+
+    series.push({
+      name: 'Male average age',
+      data: Object.values(this.averages!).map((x) => {
+        return x.male.age;
+      }),
+      type: 'line',
+    });
     series.push({
       name: 'Female average age',
       data: Object.values(this.averages!).map((x) => {
-        x.female.age;
+        return x.female.age;
       }),
       type: 'line',
     });
@@ -113,32 +110,40 @@ export default class SportView extends Vue {
   }
 
   get heightTime() {
-    const data = Object.keys(this.overTime);
+    const data = Object.keys(this.averages!);
     const series = [];
     series.push({
       name: 'Male average height',
-      data: Object.values(this.overTime).map((x) => x.mHeight),
+      data: Object.values(this.averages!).map((x) => {
+        return x.male.height;
+      }),
       type: 'line',
     });
     series.push({
       name: 'Female average height',
-      data: Object.values(this.overTime).map((x) => x.fHeight),
+      data: Object.values(this.averages!).map((x) => {
+        return x.female.height;
+      }),
       type: 'line',
     });
     return { data, series };
   }
 
   get weightTime() {
-    const data = Object.keys(this.overTime);
+    const data = Object.keys(this.averages!);
     const series = [];
     series.push({
       name: 'Male average weight',
-      data: Object.values(this.overTime).map((x) => x.mWeight),
+      data: Object.values(this.averages!).map((x) => {
+        return x.male.weight;
+      }),
       type: 'line',
     });
     series.push({
       name: 'Female average weight',
-      data: Object.values(this.overTime).map((x) => x.fWeight),
+      data: Object.values(this.averages!).map((x) => {
+        return x.female.weight;
+      }),
       type: 'line',
     });
     return { data, series };
