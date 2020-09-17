@@ -25,12 +25,13 @@ export class Sport {
   }
 }
 
+
 @Module({ dynamic: true, namespaced: true, name: "sportsM", store })
 class SportsModule extends VuexModule {
   sportsMap: { [key: string]: string } = {}
   sport: Sport | null = null;
   articles: DataArticle[] = []
-
+  averages: { [key: string]: { female: { weight: number, age: number, height: number }, male: { weight: number, age: number, height: number } } } = {}
   @Mutation
   setSports(quads: n3.Quad[]) {
     const defaultG = new n3.DefaultGraph();
@@ -79,6 +80,43 @@ class SportsModule extends VuexModule {
     })
   }
 
+  @Mutation
+  setSportAverages({ mArr, fArr }: { mArr: n3.Quad[], fArr: n3.Quad[] }) {
+    const defaultG = new n3.DefaultGraph();
+    const fStore = new n3.Store(fArr)
+    const mStore = new n3.Store(mArr)
+
+
+    const female: { [key: string]: { weight: number, age: number, height: number } } = {};
+    const male: { [key: string]: { weight: number, age: number, height: number } } = {};
+    fStore.getSubjects(null, null, defaultG).map(s => {
+      const yearArr = (fStore.getObjects(s, "http://dbpedia.org/property/year", defaultG))
+      if (yearArr.length > 0) {
+        const year = yearArr[0].value
+        const avgFH = Math.round(+fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageHeight", defaultG).find(x => !!x)!.value)
+        const avgFW = Math.round(+fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageWeight", defaultG).find(x => !!x)!.value)
+        const avgFA = Math.round(+fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageAge", defaultG).find(x => !!x)!.value)
+
+        female[year] = { weight: avgFW, age: avgFA, height: avgFH }
+      }
+    });
+    mStore.getSubjects(null, null, defaultG).map(s => {
+      const yearArr = (mStore.getObjects(s, "http://dbpedia.org/property/year", defaultG))
+      if (yearArr.length > 0) {
+        const year = yearArr[0].value
+        const avgH = Math.round(+mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageHeight", defaultG).find(x => !!x)!.value)
+        const avgW = Math.round(+mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageWeight", defaultG).find(x => !!x)!.value)
+        const avgA = Math.round(+mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageAge", defaultG).find(x => !!x)!.value)
+        // console.log(year, avgH, avgW, avgA)
+        male[year] = { weight: avgW, age: avgA, height: avgH }
+      }
+    });
+    Object.keys(female).forEach(k => {
+      this.averages[k] = { female: { weight: female[k].weight, height: female[k].height, age: female[k].age }, male: { weight: male[k].weight, height: male[k].height, age: male[k].age } }
+    })
+
+  }
+
   @Action
   async fetchSports() {
     const payload = { p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: "<http://dbpedia.org/ontology/Sport>" };
@@ -88,6 +126,17 @@ class SportsModule extends VuexModule {
     this.setSports(quadArr);
   }
 
+  @Action
+  async fetchSportAverages({ sport }: { sport: string }) {
+    const fPayload = { s: sport, o: "<http://wallscope.co.uk/resource/olympics/gender/F>" }
+    const mPayload = { s: sport, o: "<http://wallscope.co.uk/resource/olympics/gender/M>" }
+    const fResp = await useRecipe("sport-averages", fPayload)
+    const mResp = await useRecipe("sport-averages", mPayload)
+    const parser = new n3.Parser();
+    const mArr = parser.parse(mResp);
+    const fArr = parser.parse(fResp);
+    this.setSportAverages({ mArr, fArr })
+  }
 
   @Action
   async fetchSportInfo({ sport, name }: { sport: string, name: string }) {
@@ -117,6 +166,9 @@ class SportsModule extends VuexModule {
   }
   get getSport() {
     return this.sport;
+  }
+  get getSportAverages() {
+    return this.averages
   }
 }
 

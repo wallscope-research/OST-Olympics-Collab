@@ -58,11 +58,11 @@ export default class MutipleLines extends Vue {
     series: this.propOptions.series,
   };
 
-  // @Watch('propOptions')
-  // updateData() {
-  //   //@ts-ignore
-  //   this.$refs.line.setOption(this.propOtions);
-  // }
+  @Watch('propOptions')
+  updateData() {
+    //@ts-ignore
+    this.$refs.line.setOption(this.propOtions);
+  }
 }
 </script>
 

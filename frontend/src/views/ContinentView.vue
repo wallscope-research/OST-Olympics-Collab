@@ -63,9 +63,9 @@ export default class ContinentView extends Vue {
 
   @Watch('continentID')
   async athleteChanged(val: string) {
-    this.selectedContinent = null;
-    this.selectedSport = null;
-    this.selectedGender = null;
+    this.selectedContinent = undefined;
+    this.selectedSport = undefined;
+    this.selectedGender = undefined;
     continentsM.setContinent(`http://dbpedia.org/resource/${this.continentID}`);
     await this.fetchOptions();
     this.continentName = continentsM.continentName;

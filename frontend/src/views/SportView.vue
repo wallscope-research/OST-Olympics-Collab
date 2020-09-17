@@ -15,7 +15,7 @@
       Article(v-for='a in articles', :article='a', @tag-clicked='navigate')
     .five
       SportsBar
-    .six
+    .six(v-if='averages && Object.keys(averages).length > 0')
       MultipleLines(:propOptions='ageTime', :title='ageTitle')
     .seven
       MultipleLines(:propOptions='heightTime', :title='heightTitle')
@@ -81,17 +81,32 @@ export default class SportView extends Vue {
   topFemale: Athlete[] = [];
   articles: DataArticle[] | null = null;
   sport: Sport | null = null;
+  averages: {
+    [key: string]: {
+      female: { weight: number; age: number; height: number };
+      male: { weight: number; age: number; height: number };
+    };
+  } | null = null;
+
   get ageTime() {
-    const data = Object.keys(this.overTime);
+    if (!this.averages) return {};
+    const data = Object.keys(this.averages!);
     const series = [];
+    Object.values(this.averages!).map((x) => {
+      console.log(x.male.age, x.female.age);
+    }),
+      series.push({
+        name: 'Male average age',
+        data: Object.values(this.averages!).map((x) => {
+          x.male.age;
+        }),
+        type: 'line',
+      });
     series.push({
-      name: 'Male average age',
-      data: Object.values(this.overTime).map((x) => x.mAge),
-      type: 'line',
-    });
-    series.push({
-      name: 'Female average ages',
-      data: Object.values(this.overTime).map((x) => x.fAge),
+      name: 'Female average age',
+      data: Object.values(this.averages!).map((x) => {
+        x.female.age;
+      }),
       type: 'line',
     });
     return { data, series };
@@ -148,6 +163,13 @@ export default class SportView extends Vue {
     await this.fetchNews();
   }
 
+  async fetchSportAverages() {
+    await sportsM.fetchSportAverages({
+      sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
+    });
+    this.averages = sportsM.getSportAverages;
+  }
+
   async fetchSportInfo() {
     await sportsM.fetchSportInfo({
       sport: `<http://wallscope.co.uk/resource/olympics/sport/${this.sportID}>`,
@@ -170,7 +192,11 @@ export default class SportView extends Vue {
 
   async mounted() {
     await sportsM.fetchSports();
-    await Promise.all([this.fetchTopAthletes(), this.fetchSportInfo()]);
+    await Promise.all([
+      this.fetchTopAthletes(),
+      this.fetchSportInfo(),
+      this.fetchSportAverages(),
+    ]);
     this.sport = sportsM.getSport;
     Vue.nextTick(async () => {
       await this.fetchNews();
