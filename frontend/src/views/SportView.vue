@@ -34,9 +34,9 @@ import OlympicTorch from '@/components/OlympicTorch.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
 import SportsBar from '@/components/SportsBar.vue';
 import { curveMonotoneX } from 'd3';
-import { Athlete, DataArticle } from '@/store/index';
+import { Athlete, DataArticle, Sport } from '@/store/index';
 import athleteM from '@/store/athletesM';
-import sportsM, { Sport } from '@/store/sportsM';
+import sportsM from '@/store/sportsM';
 @Component({
   components: {
     SportInfoBox,
