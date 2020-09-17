@@ -26,6 +26,7 @@ import athleteM from '@/store/athletesM';
 import Loading from 'vue-loading-overlay';
 import searchM from '@/store/searchM';
 import { SearchResult } from './store';
+import sportsM from './store/sportsM';
 @Component({ components: { Footer, Navbar, SearchBar, ArrowUp, Loading } })
 export default class App extends Vue {
   searchResults: SearchResult[] = [];
@@ -52,6 +53,10 @@ export default class App extends Vue {
         this.$router.push(`/sport/${this.selected.uri.split('/').pop()}`);
         return;
     }
+  }
+
+  async mounted() {
+    await sportsM.fetchSports();
   }
 }
 </script>

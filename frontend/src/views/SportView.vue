@@ -196,7 +196,6 @@ export default class SportView extends Vue {
   }
 
   async mounted() {
-    await sportsM.fetchSports();
     await Promise.all([
       this.fetchTopAthletes(),
       this.fetchSportInfo(),

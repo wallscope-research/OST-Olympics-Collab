@@ -109,6 +109,7 @@ export default class ParallelChart extends Vue {
 
   // Below this point it's all D3 stuff.
   // Proceed at your own risk
+  // Pray for @johnnystrachan who had to slave over this for over a week
 
   async draw() {
     const container = d3

@@ -11,8 +11,13 @@
         :teams='continentTeams',
         :athletes='continentAthletes'
       )
-    .two
-      MultipleLines(:propOptions='getOptions', :title='title')
+    .two(v-if='continentAverages && averages && medalsVAthletes')
+      MultipleLines(
+        :propOptions='getOptions',
+        title='Number of Medals and Athletes over time',
+        :sportsMap='sports',
+        @line-sport-selected='lineSportSelected'
+      )
     .three(v-if='continentAverages && averages')
       ParallelChart(
         :legend='continentName + " Stats"',
@@ -63,11 +68,18 @@ export default class ContinentView extends Vue {
   sports = sportsM.sports;
   selectedContinent: string | undefined;
   selectedSport: string | undefined;
+  lineSelectedSport: string | undefined;
   selectedGender: string | undefined;
   info: {
     medals: number;
     teams: number;
     athletes: number;
+  } | null = null;
+  medalsVAthletes: {
+    [key: string]: {
+      athletes: number;
+      medals: number;
+    };
   } | null = null;
 
   @Watch('continentID')
@@ -85,19 +97,36 @@ export default class ContinentView extends Vue {
 
   title = 'Number of athletes vs number of medals won';
   get getOptions() {
-    const data = Object.keys(this.medals);
+    const data = Object.keys(this.medalsVAthletes!);
     const series = [];
     series.push({
       name: 'Number of athletes',
-      data: Object.values(this.medals).map((x) => x.numOfAtheltes),
+      data: Object.values(this.medalsVAthletes!).map((x) => {
+        return x.athletes;
+      }),
       type: 'line',
     });
     series.push({
-      name: 'Number of meals awarded',
-      data: Object.values(this.medals).map((x) => x.numOfMedals),
+      name: 'Number of medals won',
+      data: Object.values(this.medalsVAthletes!).map((x) => {
+        return x.medals;
+      }),
       type: 'line',
     });
     return { data, series };
+    // const data = Object.keys(this.medals);
+    // const series = [];
+    // series.push({
+    //   name: 'Number of athletes',
+    //   data: Object.values(this.medals).map((x) => x.numOfAtheltes),
+    //   type: 'line',
+    // });
+    // series.push({
+    //   name: 'Number of meals awarded',
+    //   data: Object.values(this.medals).map((x) => x.numOfMedals),
+    //   type: 'line',
+    // });
+    // return { data, series };
   }
 
   get continentMedals() {
@@ -115,6 +144,12 @@ export default class ContinentView extends Vue {
     this.fetchAverages();
   }
 
+  lineSportSelected(uri: string) {
+    this.lineSelectedSport = uri;
+    console.log(this.lineSelectedSport);
+    this.fetchMedalsVAthletes();
+  }
+
   continentSelected(uri: string) {
     this.selectedContinent = uri;
     this.fetchAverages();
@@ -123,6 +158,11 @@ export default class ContinentView extends Vue {
   genderSelected(uri: string) {
     this.selectedGender = uri;
     this.fetchAverages();
+  }
+
+  async fetchMedalsVAthletes() {
+    await continentsM.fetchMedalsVAthletes({ sport: this.lineSelectedSport });
+    this.medalsVAthletes = continentsM.getMedalsVAthletes;
   }
 
   async fetchContinentAverages() {
@@ -169,6 +209,7 @@ export default class ContinentView extends Vue {
     await this.fetchContinentAverages();
     await this.fetchAverages();
     await this.fetchContinentInfo();
+    await this.fetchMedalsVAthletes();
   }
 }
 </script>

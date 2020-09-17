@@ -25,6 +25,7 @@ class ContinentsModule extends VuexModule {
     medals: 0,
   }
   continentInfo = { medals: 0, teams: 0, athletes: 0 }
+  medalsVAthletes: { [key: string]: { athletes: number, medals: number } } = {}
 
   get getAverateStats() {
     return this.averageStats;
@@ -32,6 +33,10 @@ class ContinentsModule extends VuexModule {
 
   get getArticles() {
     return this.articles
+  }
+
+  get getMedalsVAthletes() {
+    return this.medalsVAthletes
   }
 
   get getContinentInfo() {
@@ -95,14 +100,19 @@ class ContinentsModule extends VuexModule {
     }
   }
 
-  //   @prefix ns0:	<http://dbpedia.org/resource/> .
-  // @prefix ns1:	<http://wallscope.co.uk/resource/> .
-  // ns1:filler	ns1:filler	ns0:Africa .
-  // @prefix ns2:	<http://wallscope.co.uk/ontology/olympics/> .
-  // _:__fresh_blank_node_1	ns2:numberOfTeams	56 ;
-  // 	ns2:athleteCount	7775 ;
-  // 	ns2:medalCount	554 .
 
+  @Mutation
+  setMedalsVAthletes(quadArr: n3.Quad[]) {
+    if (this.medalsVAthletes) this.medalsVAthletes = {};
+    const defaultG = new n3.DefaultGraph();
+    const store = new n3.Store(quadArr);
+    store.getSubjects("http://wallscope.co.uk/ontology/olympics/hasYear", null, defaultG).forEach(s => {
+      const year = store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/hasYear", defaultG).find(x => !!x)!.value
+      const medals = +store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/medalCount", defaultG).find(x => !!x)!.value
+      const athletes = +store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/athleteCount", defaultG).find(x => !!x)!.value
+      this.medalsVAthletes[year] = { medals, athletes }
+    })
+  }
   @Mutation
   setContinentInfo(quadArr: n3.Quad[]) {
     const defaultG = new n3.DefaultGraph();
@@ -161,6 +171,17 @@ class ContinentsModule extends VuexModule {
     const parser = new n3.Parser();
     const quadArr = parser.parse(resp);
     this.setContinentInfo(quadArr)
+  }
+
+  @Action
+  async fetchMedalsVAthletes({ sport }: { sport: string | undefined }) {
+
+    const resp = await useRecipe("continent-medals-athletes", { s: sport })
+    console.log(resp)
+    const parser = new n3.Parser();
+    const quadArr = parser.parse(resp);
+    this.setMedalsVAthletes(quadArr)
+
   }
 
   get continents() {
