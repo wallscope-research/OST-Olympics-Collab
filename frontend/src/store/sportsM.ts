@@ -109,19 +109,18 @@ class SportsModule extends VuexModule {
   async setSportsOverTime(quadArr: n3.Quad[]) {
     const defaultG = new n3.DefaultGraph();
     const store = new n3.Store(quadArr);
-    const years: { [key: string]: { [key: string]: { medalCount: number, athleteCount: number } } } = {}
+    const continents: { [key: string]: { [key: string]: { medalCount: number, athleteCount: number } } } = {}
 
     store.getSubjects("http://wallscope.co.uk/ontology/olympics/hasYear", null, defaultG).forEach(s => {
       const year = store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/hasYear", defaultG).find(x => !!x)!.value
       const continent = continentMap[store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/hasContinent", defaultG).find(x => !!x)!.value]
       const medals = +store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/medalCount", defaultG).find(x => !!x)!.value
       const athletes = +store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/athleteCount", defaultG).find(x => !!x)!.value
-      if (!years[year]) years[year] = {}
-      if (!years[year][continent]) years[year][continent] = { medalCount: medals, athleteCount: athletes }
-      // years[year][continent].push(s)
-      console.log(years[year])
+      if (!continents[continent]) continents[continent] = {}
+      if (!continents[continent][year]) continents[continent][year] = { medalCount: medals, athleteCount: athletes }
+
     })
-    this.sportsOverTime = years;
+    this.sportsOverTime = continents;
   }
 
 

@@ -14,7 +14,9 @@
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
     .five(v-if='sportsOverTime && Object.keys(sportsOverTime).length > 0')
-      SportsBar(:overTime='sportsOverTime')
+      SportsBar(:overTime='overTime')
+      p Pick a year
+      vue-slider(v-model='date', :data='years')
     .six(v-if='averages && Object.keys(averages).length > 0')
       MultipleLines(:propOptions='ageTime', :title='ageTitle')
     .seven(v-if='averages && Object.keys(averages).length > 0')
@@ -25,7 +27,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-
+import VueSlider from 'vue-slider-component';
+import 'vue-slider-component/theme/default.css';
 import SportInfoBox from '@/components/SportInfoBox.vue';
 import Article from '@/components/Article.vue';
 import TopMaleAthletes from '@/components/TopMaleAthletes.vue';
@@ -37,9 +40,11 @@ import { curveMonotoneX } from 'd3';
 import { Athlete, DataArticle, Sport } from '@/store/index';
 import athleteM from '@/store/athletesM';
 import sportsM from '@/store/sportsM';
+import { continentMap } from '@/store/continentsM';
 @Component({
   components: {
     SportInfoBox,
+    'vue-slider': VueSlider,
     Article,
     TopFemaleAthletes,
     TopMaleAthletes,
@@ -57,6 +62,7 @@ export default class SportView extends Vue {
   topFemale: Athlete[] = [];
   articles: DataArticle[] | null = null;
   sport: Sport | null = null;
+  date: string = '';
   averages: {
     [key: string]: {
       female: { weight: number; age: number; height: number };
@@ -69,6 +75,13 @@ export default class SportView extends Vue {
         medalCount: number;
         athleteCount: number;
       };
+    };
+  } | null = {};
+  years: string[] = [];
+  barYear: {
+    [key: string]: {
+      medalCount: number;
+      athleteCount: number;
     };
   } | null = {};
 
@@ -91,6 +104,16 @@ export default class SportView extends Vue {
       type: 'line',
     });
     return { data, series };
+  }
+
+  get overTime() {
+    return Object.keys(this.barYear!).map((x) => {
+      return {
+        name: x,
+        type: 'bar',
+        data: [this.barYear![x].medalCount, this.barYear![x].athleteCount],
+      };
+    });
   }
 
   get heightTime() {
@@ -152,6 +175,24 @@ export default class SportView extends Vue {
     await this.fetchNews();
   }
 
+  @Watch('date')
+  dateChanged(year: string) {
+    Object.keys(this.sportsOverTime!).forEach((continent) => {
+      // console.log(this.barYear![continent]);
+      if (!this.barYear![continent])
+        this.barYear![continent] = { medalCount: 0, athleteCount: 0 };
+      if (this.sportsOverTime![continent][year]) {
+        this.barYear![continent].athleteCount = this.sportsOverTime![continent][
+          year
+        ].athleteCount;
+        this.barYear![continent].medalCount = this.sportsOverTime![continent][year].medalCount;
+      } else {
+        this.barYear![continent].athleteCount = 0;
+        this.barYear![continent].medalCount = 0;
+      }
+    });
+  }
+
   async fetchSportAverages() {
     await sportsM.fetchSportAverages({
       sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
@@ -183,6 +224,25 @@ export default class SportView extends Vue {
       sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
     });
     this.sportsOverTime = sportsM.getSportsOverTime;
+    this.years = Object.keys(this.sportsOverTime['Europe']);
+    const tempBarYear: {
+      [key: string]: {
+        medalCount: number;
+        athleteCount: number;
+      };
+    } | null = {};
+    Object.keys(this.sportsOverTime!).forEach((x) => {
+      tempBarYear[x] = { medalCount: 0, athleteCount: 0 };
+    });
+    Object.keys(this.sportsOverTime!).forEach((continent) => {
+      tempBarYear[continent]['athleteCount'] = this.sportsOverTime![continent][
+        '1928'
+      ].athleteCount;
+      tempBarYear[continent]['medalCount'] = this.sportsOverTime![continent][
+        '1928'
+      ].medalCount;
+    });
+    this.barYear = tempBarYear;
   }
 
   async mounted() {
@@ -251,6 +311,7 @@ export default class SportView extends Vue {
         }
         &.five {
           grid-column: 1/3;
+          text-align: center;
         }
         &.six {
           grid-column: 3/5;

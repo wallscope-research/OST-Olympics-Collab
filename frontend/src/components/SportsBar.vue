@@ -7,7 +7,7 @@ div
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import ECharts from 'vue-echarts'; // refers to components/ECharts.vue in webpack
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/component/tooltip';
@@ -21,14 +21,12 @@ import { continentMap } from '@/store/continentsM';
 })
 export default class SportsBar extends Vue {
   @Prop({ required: true }) overTime!: {
-    [key: string]: {
-      [key: string]: {
-        medalCount: number;
-        athleteCount: number;
-      };
-    };
-  } | null;
+    name: string;
+    type: string;
+    data: number[];
+  }[];
 
+  dimensions = ['Medal count', 'Athlete Count'];
   bar = {
     tooltip: {
       trigger: 'axis',
@@ -50,35 +48,17 @@ export default class SportsBar extends Vue {
     legend: {},
     xAxis: {
       type: 'category',
-      data: Object.keys(this.overTime!),
+      data: this.dimensions,
     },
     yAxis: {
       type: 'value',
     },
-    series: [
-      ...Object.values(this.overTime!).map((year) => {
-        return {
-          name: Object.keys(year)[0] + ' Medal Count',
-          data: Object.values(this.overTime!).map((y) => {
-            return Object.values(y)[0].medalCount;
-          }),
-          type: 'bar',
-        };
-      }),
-      ...Object.values(this.overTime!).map((year) => {
-        return {
-          name: Object.keys(year)[0] + ' Athlete Count',
-          data: Object.values(this.overTime!).map((y) => {
-            return Object.values(y)[0].athleteCount;
-          }),
-          type: 'bar',
-        };
-      }),
-    ],
+    series: this.overTime,
   };
-  mounted() {
-    console.log(this.overTime);
-    console.log(Object.values(this.overTime!));
+
+  @Watch('overTime')
+  dataChanged() {
+    this.bar.series = this.overTime;
   }
 }
 </script>

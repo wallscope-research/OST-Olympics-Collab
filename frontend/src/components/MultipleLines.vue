@@ -81,7 +81,6 @@ export default class MutipleLines extends Vue {
   }
   @Watch('propOptions')
   updateData() {
-    //@ts-ignore
     this.line.xAxis.data = this.propOptions.data;
     this.line.series = this.propOptions.series;
   }

@@ -9616,7 +9616,7 @@ vue-papa-parse@^1.3.0:
     papaparse "^4.6.3"
     vue "^2.6.10"
 
-vue-property-decorator@^8.4.2:
+vue-property-decorator@^8.0.0, vue-property-decorator@^8.4.2:
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-8.5.1.tgz#571a91cf8d2b507f537d79bf8275af3184572fff"
   integrity sha512-O6OUN2OMsYTGPvgFtXeBU3jPnX5ffQ9V4I1WfxFQ6dqz6cOUbR3Usou7kgFpfiXDvV7dJQSFcJ5yUPgOtPPm1Q==
@@ -9632,6 +9632,14 @@ vue-select@^3.10.8:
   version "3.10.8"
   resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.10.8.tgz#5d0839cba228a9a5efa1a88e5436840eb3fd0c7a"
   integrity sha512-PnjtZWCTiSr04bs8ctPIiU41qnBK+oh/SOe6Pb4gElMMxofDFwUxiUe++mz0+84aTy4zrleGxtvVVyWbiPYBiw==
+
+vue-slider-component@^3.2.5:
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-3.2.5.tgz#657e47bf6d1db418c8ab58145840bf25c9143514"
+  integrity sha512-re1OSpfYHM6Un22/vlAnCb8QtBcxXuno/7/D5z8sGTZNXBgK32zBbz1p/WNwj/qrlCegEEzqfX7Khd4TD4YNXA==
+  dependencies:
+    core-js "^3.6.5"
+    vue-property-decorator "^8.0.0"
 
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.2:
   version "4.1.2"
