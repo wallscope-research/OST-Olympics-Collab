@@ -173,8 +173,8 @@ class ContinentsModule extends VuexModule {
   }
 
   @Action
-  async fetchContinentInfo({ name }: { name: string }) {
-    const payload = { o: `<${this.continentMap[name]}>` }
+  async fetchContinentInfo() {
+    const payload = { o: `<${this.continentURI}>` }
     const resp = await useRecipe("continent-info", payload)
     const parser = new n3.Parser();
     const quadArr = parser.parse(resp);

@@ -19,7 +19,7 @@ class SportsModule extends VuexModule {
   sport: Sport | null = null;
   articles: DataArticle[] = []
   averages: { [key: string]: { female: { weight: number, age: number, height: number }, male: { weight: number, age: number, height: number } } } = {}
-  sportsOverTime: { [key: string]: { [key: string]: { medalCount: number, athleteCount: number } } } = {}
+  sportsOverTime: { [continent: string]: { [year: string]: { medalCount: number, athleteCount: number } } } = {}
   @Mutation
   setSports(quads: n3.Quad[]) {
     const defaultG = new n3.DefaultGraph();
