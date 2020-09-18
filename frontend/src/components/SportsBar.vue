@@ -25,6 +25,7 @@ export default class SportsBar extends Vue {
     type: string;
     data: number[];
   }[];
+  @Prop({ required: true }) axisMax!: number;
 
   dimensions = ['Medal count', 'Athlete Count'];
   bar = {
@@ -52,6 +53,7 @@ export default class SportsBar extends Vue {
     },
     yAxis: {
       type: 'value',
+      max: this.axisMax,
     },
     series: this.overTime,
   };
@@ -59,6 +61,11 @@ export default class SportsBar extends Vue {
   @Watch('overTime')
   dataChanged() {
     this.bar.series = this.overTime;
+  }
+
+  @Watch('axisMax')
+  maxChanged() {
+    this.bar.yAxis.max = this.axisMax;
   }
 }
 </script>
