@@ -52,6 +52,8 @@ export default class SportsBar extends Vue {
     },
     yAxis: {
       type: 'value',
+      min: 0,
+      max: 900,
     },
     series: this.overTime,
   };
