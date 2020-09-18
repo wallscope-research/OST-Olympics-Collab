@@ -146,7 +146,6 @@ export default class ContinentView extends Vue {
 
   lineSportSelected(uri: string) {
     this.lineSelectedSport = uri;
-    console.log(this.lineSelectedSport);
     this.fetchMedalsVAthletes();
   }
 

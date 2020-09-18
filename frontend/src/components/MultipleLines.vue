@@ -70,7 +70,6 @@ export default class MutipleLines extends Vue {
   };
 
   get sports() {
-    console.log(...Object.keys(this.sportsMap).sort());
     return ['All sports', ...Object.keys(this.sportsMap).sort()];
   }
 
