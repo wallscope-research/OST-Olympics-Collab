@@ -168,7 +168,7 @@ export default class SportView extends Vue {
   }
 
   navigate(uri: string) {
-    console.log('navigate');
+    //TODO
   }
   @Watch('sportID')
   async athleteChanged(val: string) {
@@ -179,7 +179,6 @@ export default class SportView extends Vue {
   @Watch('date')
   dateChanged(year: string) {
     Object.keys(this.sportsOverTime!).forEach((continent) => {
-      // console.log(this.barYear![continent]);
       this.barYear![continent] = this.barYear![continent] || {
         medalCount: 0,
         athleteCount: 0,
