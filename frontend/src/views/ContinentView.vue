@@ -83,16 +83,20 @@ export default class ContinentView extends Vue {
   } | null = null;
 
   @Watch('continentID')
-  async athleteChanged(val: string) {
+  async continentChanged(val: string) {
     this.selectedContinent = undefined;
     this.selectedSport = undefined;
     this.selectedGender = undefined;
-    continentsM.setContinent(`http://dbpedia.org/resource/${this.continentID}`);
+    await continentsM.setContinent(`http://dbpedia.org/resource/${this.continentID}`);
     await this.fetchOptions();
     this.continentName = continentsM.continentName;
-    await this.fetchNews();
-    await this.fetchContinentAverages();
     await this.fetchAverages();
+    await Promise.all([
+      this.fetchNews(),
+      this.fetchContinentAverages(),
+      this.fetchContinentInfo(),
+      this.fetchMedalsVAthletes(),
+    ]);
   }
 
   title = 'Number of athletes vs number of medals won';
@@ -114,19 +118,6 @@ export default class ContinentView extends Vue {
       type: 'line',
     });
     return { data, series };
-    // const data = Object.keys(this.medals);
-    // const series = [];
-    // series.push({
-    //   name: 'Number of athletes',
-    //   data: Object.values(this.medals).map((x) => x.numOfAtheltes),
-    //   type: 'line',
-    // });
-    // series.push({
-    //   name: 'Number of meals awarded',
-    //   data: Object.values(this.medals).map((x) => x.numOfMedals),
-    //   type: 'line',
-    // });
-    // return { data, series };
   }
 
   get continentMedals() {
@@ -202,14 +193,16 @@ export default class ContinentView extends Vue {
   }
 
   async mounted() {
-    continentsM.setContinent(`http://dbpedia.org/resource/${this.continentID}`);
+    await continentsM.setContinent(`http://dbpedia.org/resource/${this.continentID}`);
     await this.fetchOptions();
     this.continentName = continentsM.continentName;
-    await this.fetchNews();
-    await this.fetchContinentAverages();
     await this.fetchAverages();
-    await this.fetchContinentInfo();
-    await this.fetchMedalsVAthletes();
+    await Promise.all([
+      this.fetchNews(),
+      this.fetchContinentAverages(),
+      this.fetchContinentInfo(),
+      this.fetchMedalsVAthletes(),
+    ]);
   }
 }
 </script>

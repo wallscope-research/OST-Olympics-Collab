@@ -170,9 +170,17 @@ export default class SportView extends Vue {
     console.log('navigate');
   }
   @Watch('sportID')
-  async athleteChanged(val: string) {
-    // await Promise.all([this.fetchAthlete(), this.fetchAverages(), this.fetchMedalsAtAge()]);
-    await this.fetchNews();
+  async sportChanged(val: string) {
+    await Promise.all([
+      this.fetchTopAthletes(),
+      this.fetchSportInfo(),
+      this.fetchSportAverages(),
+      this.fetchSportsOverTime(),
+    ]);
+    this.sport = sportsM.getSport;
+    Vue.nextTick(async () => {
+      await this.fetchNews();
+    });
   }
 
   @Watch('date')

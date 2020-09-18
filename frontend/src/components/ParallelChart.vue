@@ -98,12 +98,20 @@ export default class ParallelChart extends Vue {
   focusWatcher() {
     this.reDraw();
   }
+  @Watch('comparison')
+  comparisonWatcher() {
+    this.reDraw();
+  }
   @Watch('continentMap')
   continentWatcher() {
     this.reDraw();
   }
   @Watch('sportsMap')
   sportsWatcher() {
+    this.reDraw();
+  }
+  @Watch('legend')
+  legendWatcher() {
     this.reDraw();
   }
 
