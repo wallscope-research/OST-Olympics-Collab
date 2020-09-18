@@ -179,8 +179,10 @@ export default class SportView extends Vue {
   dateChanged(year: string) {
     Object.keys(this.sportsOverTime!).forEach((continent) => {
       // console.log(this.barYear![continent]);
-      if (!this.barYear![continent])
-        this.barYear![continent] = { medalCount: 0, athleteCount: 0 };
+      this.barYear![continent] = this.barYear![continent] || {
+        medalCount: 0,
+        athleteCount: 0,
+      };
       if (this.sportsOverTime![continent][year]) {
         this.barYear![continent].athleteCount = this.sportsOverTime![continent][
           year
