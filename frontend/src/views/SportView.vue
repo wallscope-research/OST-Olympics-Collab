@@ -14,7 +14,7 @@
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
     .five(v-if='sportsOverTime && Object.keys(sportsOverTime).length > 0')
-      SportsBar(:overTime='overTime')
+      SportsBar(:overTime='overTime', :axisMax='axisMax')
       p Pick a year
       vue-slider(v-model='date', :data='years')
     .six(v-if='averages && Object.keys(averages).length > 0')
@@ -84,6 +84,7 @@ export default class SportView extends Vue {
       athleteCount: number;
     };
   } | null = {};
+  axisMax = 0;
 
   get ageTime() {
     const data = Object.keys(this.averages!);
@@ -237,6 +238,10 @@ export default class SportView extends Vue {
       tempBarYear[x] = { medalCount: 0, athleteCount: 0 };
     });
     Object.keys(this.sportsOverTime!).forEach((continent) => {
+      Object.values(this.sportsOverTime![continent]).forEach((x) => {
+        this.axisMax =
+          Math.ceil(Math.max(this.axisMax, x.athleteCount, x.medalCount) / 50) * 50;
+      });
       tempBarYear[continent]['athleteCount'] = this.sportsOverTime![continent][
         '1928'
       ].athleteCount;
