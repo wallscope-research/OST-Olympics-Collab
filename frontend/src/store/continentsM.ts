@@ -183,9 +183,7 @@ class ContinentsModule extends VuexModule {
 
   @Action
   async fetchMedalsVAthletes({ sport }: { sport: string | undefined }) {
-
     const resp = await useRecipe("continent-medals-athletes", { s: sport })
-    console.log(resp)
     const parser = new n3.Parser();
     const quadArr = parser.parse(resp);
     this.setMedalsVAthletes(quadArr)

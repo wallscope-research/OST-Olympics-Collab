@@ -85,6 +85,10 @@ export class Averages {
     this.age = age;
   }
 
+  isComplete() {
+    return (this.age != undefined) && (this.height != undefined) && (this.weight != undefined) && (this.medals != undefined)
+  }
+
   static fromRDF(store: n3.Store) {
     try {
       const defaultG = new n3.DefaultGraph();

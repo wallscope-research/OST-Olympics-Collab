@@ -1,21 +1,28 @@
 <template lang="pug">
-div 
+div
   h2.chart-title Statistic comparison
-  #parallel-focus
-  #dropdowns
-    #continent-dropdown
-      h3.chart-subtitle Filter by continent
-      v-select(
-        v-model='selectedContinent',
-        :options='continents',
-        :placeholder='"Select a continent"'
-      )
-    #sport-dropdown
-      h3.chart-subtitle Filter by sport
-      v-select(v-model='selectedSport', :options='sports', :placeholder='"Select a sport"')
-    #sport-dropdown
-      h3.chart-subtitle Filter by gender
-      v-select(v-model='selectedGender', :options='genders', :placeholder='"Select a gender"')
+  .wrapper
+    #parallel-focus
+    .dropdowns
+      .dropdown
+        h3.chart-subtitle Filter by continent
+        v-select(
+          v-model='selectedContinent',
+          :options='continents',
+          :placeholder='"Select a continent"'
+        )
+      .dropdown
+        h3.chart-subtitle Filter by sport
+        v-select(v-model='selectedSport', :options='sports', :placeholder='"Select a sport"')
+      .dropdown
+        h3.chart-subtitle Filter by gender
+        v-select(
+          v-model='selectedGender',
+          :options='genders',
+          :placeholder='"Select a gender"'
+        )
+      .notice(v-if='showNotice')
+        p There is no data for {{ selectedSport }} {{ selectedGender }} athletes in {{ selectedContinent }}, please try changing the filters.
 </template>
 
 
@@ -66,6 +73,10 @@ export default class ParallelChart extends Vue {
 
   get genders() {
     return ['All Genders', 'Female', 'Male'];
+  }
+
+  get showNotice() {
+    return !this.comparison.isComplete() || !this.focus.isComplete();
   }
 
   mounted() {
@@ -131,10 +142,10 @@ export default class ParallelChart extends Vue {
     const margin = this.margin;
 
     const lines: { [key: string]: { focus: number; rest: number } } = {
-      age: { focus: this.focus.age!, rest: this.comparison.age! },
-      height: { focus: this.focus.height!, rest: this.comparison.height! },
-      weight: { focus: this.focus.weight!, rest: this.comparison.weight! },
-      'Number of medals': { focus: this.focus.medals!, rest: this.comparison.medals! },
+      age: { focus: this.focus.age!, rest: this.comparison.age ?? -50 },
+      height: { focus: this.focus.height!, rest: this.comparison.height ?? -50 },
+      weight: { focus: this.focus.weight!, rest: this.comparison.weight ?? -50 },
+      'Number of medals': { focus: this.focus.medals!, rest: this.comparison.medals ?? -50 },
     };
 
     const keys = Object.keys(lines);
@@ -260,10 +271,10 @@ export default class ParallelChart extends Vue {
 
     //get data again
     const lines: { [key: string]: { focus: number; rest: number } } = {
-      age: { focus: this.focus.age!, rest: this.comparison.age! },
-      height: { focus: this.focus.height!, rest: this.comparison.height! },
-      weight: { focus: this.focus.weight!, rest: this.comparison.weight! },
-      'Number of medals': { focus: this.focus.medals!, rest: this.comparison.medals! },
+      age: { focus: this.focus.age!, rest: this.comparison.age ?? -50 },
+      height: { focus: this.focus.height!, rest: this.comparison.height ?? -50 },
+      weight: { focus: this.focus.weight!, rest: this.comparison.weight ?? -50 },
+      'Number of medals': { focus: this.focus.medals!, rest: this.comparison.medals ?? -50 },
     };
 
     const keys = Object.keys(lines);
@@ -314,21 +325,8 @@ export default class ParallelChart extends Vue {
   display: flex;
   justify-content: center;
 }
-
-#dropdowns {
+.wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-#continent-dropdown,
-#sport-dropdown {
-  margin: 5px;
-}
-#continent-dropdown {
-  grid-column: 1;
-}
-
-#sport-dropdown {
-  grid-column: 2;
+  grid-template-columns: 5fr 2fr;
 }
 </style>
