@@ -7,9 +7,9 @@
     .one(v-if='sport')
       SportInfoBox(:season='season', :medals='medalCount', :athletes='athleteCount')
     .two
-      TopFemaleAthletes(:athletes='topFemale')
+      TopAthletes(title="Top Female Athletes", :athletes='topFemale', @tag-clicked="navigate")
     .three
-      TopMaleAthletes(:athletes='topMale')
+      TopAthletes(title="Top Male Athletes", :athletes='topMale', @tag-clicked="navigate")
     .four
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
@@ -31,8 +31,7 @@ import VueSlider from 'vue-slider-component';
 import 'vue-slider-component/theme/default.css';
 import SportInfoBox from '@/components/SportInfoBox.vue';
 import Article from '@/components/Article.vue';
-import TopMaleAthletes from '@/components/TopMaleAthletes.vue';
-import TopFemaleAthletes from '@/components/TopFemaleAthletes.vue';
+import TopAthletes from '@/components/TopAthletes.vue';
 import OlympicTorch from '@/components/OlympicTorch.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
 import SportsBar from '@/components/SportsBar.vue';
@@ -46,8 +45,7 @@ import { continentMap } from '@/store/continentsM';
     SportInfoBox,
     'vue-slider': VueSlider,
     Article,
-    TopFemaleAthletes,
-    TopMaleAthletes,
+    TopAthletes,
     OlympicTorch,
     MultipleLines,
     SportsBar,
@@ -168,7 +166,7 @@ export default class SportView extends Vue {
   }
 
   navigate(uri: string) {
-    //TODO
+    this.$router.push(uri.replace('http://wallscope.co.uk/resource/olympics', ''));
   }
   @Watch('sportID')
   async sportChanged(val: string) {

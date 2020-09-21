@@ -1,8 +1,8 @@
 <template lang="pug">
 div
-  h2.chart-title Top Female Athletes
+  h2.chart-title {{ title }}
   .athletsList
-    Tag(:key="a.name", v-for='a in athletes', :text='a.name')
+    Tag(:key="a.uri", v-for='a in athletes', :text='a.name', @click='$emit("tag-clicked", a.uri)')
 </template>
 
 
@@ -12,7 +12,8 @@ import Tag from '@/components/Tag.vue';
 import { Athlete } from '@/store/index';
 
 @Component({ components: { Tag } })
-export default class TopFemaleAthletes extends Vue {
+export default class TopAthletes extends Vue {
+  @Prop({ required: true }) title!: string;
   @Prop({ required: true }) athletes!: Athlete[];
 }
 </script>
