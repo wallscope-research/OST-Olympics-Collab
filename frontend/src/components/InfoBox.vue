@@ -5,7 +5,7 @@ div
   p Medals: {{ medals }}
   .sport
     p Sport:
-    Tag(:text='sport.name')
+    Tag(:text='sport.name', @click='$emit("tag-clicked", sport.uri)')
 </template>
 
 
@@ -20,7 +20,7 @@ export default class InfoBox extends Vue {
   @Prop() medals!: number;
   @Prop({
     default: function () {
-      return new Sport('None specified');
+      return new Sport('http://wallscope.co.uk/resource/', 'None specified');
     },
   })
   sport!: Sport;

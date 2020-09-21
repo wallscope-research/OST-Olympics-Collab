@@ -6,7 +6,12 @@
     h3(v-else) Loading...
   .charts
     .one(v-if='athlete')
-      InfoBox(:age='athlete.age', :medals='athlete.medals', :sport='athlete.sport')
+      InfoBox(
+        :age='athlete.age',
+        :medals='athlete.medals',
+        :sport='athlete.sport',
+        @tag-clicked='navigate'
+      )
     .two(v-if='athlete')
       MedalsAtAge(:averageMedalsPerAge='averageMedalsPerAge', :athleteAge='athlete.age')
     .three(v-if='athlete && averages')
@@ -22,7 +27,7 @@
       )
     .four(v-if='articles')
       h2.chart-title News
-      Article(:key="a.text", v-for='a in articles', :article='a', @tag-clicked='navigate')
+      Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
 </template>
 
 <script lang="ts">
