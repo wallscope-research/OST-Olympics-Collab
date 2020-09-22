@@ -20,18 +20,21 @@
       p You can search for:
     div
       .termType
-        icon(:icon='["fas", "globe-europe"]')
-        p continent
+        icon(:icon="['fas', 'globe-europe']")
+        p continents
       .termType
         .small
           OlympicTorch(icon-width=22, icon-height=34)
         .large
-          OlympicTorch(icon-width=28, icon-height=40)
-
-        p sport
+          OlympicTorch(
+            icon-width = 28
+            icon-height = 40
+          )
+        
+        p sports
       .termType
-        icon(:icon='["fas", "user"]')
-        p player
+        icon(:icon="['fas', 'user']")
+        p athletes
       span
 </template>
 
