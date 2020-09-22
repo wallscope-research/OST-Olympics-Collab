@@ -85,7 +85,7 @@ export class Averages {
     this.age = age;
   }
 
-  isComplete() {
+  isComplete(): boolean {
     return (this.age != undefined) && (this.height != undefined) && (this.weight != undefined) && (this.medals != undefined)
   }
 

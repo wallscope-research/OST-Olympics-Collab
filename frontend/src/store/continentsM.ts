@@ -26,12 +26,7 @@ class ContinentsModule extends VuexModule {
   continentURI: string = ''
   continentName: string = ''
   articles: DataArticle[] = []
-  averageStats: Averages = {
-    age: 0,
-    height: 0,
-    weight: 0,
-    medals: 0,
-  }
+  averageStats = new Averages()
   continentInfo = { medals: 0, teams: 0, athletes: 0 }
   medalsVAthletes: { [key: string]: { athletes: number, medals: number } } = {}
 

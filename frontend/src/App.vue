@@ -42,17 +42,7 @@ export default class App extends Vue {
 
   navigate() {
     if (!this.selected) return;
-    switch (this.selected.type) {
-      case 'https://schema.org/Continent':
-        this.$router.push(`/continent/${this.selected.uri.split('/').pop()}`);
-        return;
-      case 'http://xmlns.com/foaf/0.1/Person':
-        this.$router.push(`/athlete/${this.selected.uri.split('/').pop()}`);
-        return;
-      case 'http://dbpedia.org/ontology/Sport':
-        this.$router.push(`/sport/${this.selected.uri.split('/').pop()}`);
-        return;
-    }
+    this.$router.push(this.selected.uri.replace('http://wallscope.co.uk/resource/olympics', ''));
   }
 
   async mounted() {

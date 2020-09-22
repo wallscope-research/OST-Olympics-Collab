@@ -8,7 +8,7 @@
       :value='query',
       :suggestions='results',
       :suggest-on-all-words='true',
-      :show-autocomplete='true',
+      :min-match="1",
       suggestion-attribute='label',
       @input='$emit("input", $event)',
       @selected='selected',
@@ -53,10 +53,10 @@ export default class SearchBar extends Vue {
   selected(r: SearchResult) {
     this.$emit('selected', r);
     if (r?.score === 1) {
-      this.$emit('confirm');
+      // @ts-ignore
+      this.$refs['instant'].reset();
       Vue.nextTick(() => {
-        // @ts-ignore
-        this.$refs['instant'].reset();
+        this.$emit('confirm');
       });
     }
   }
@@ -93,7 +93,7 @@ export default class SearchBar extends Vue {
   border: 0;
   border-radius: 26px;
   box-shadow: inset 0 0 0 2.5px #a0a5b7;
-  background: #ffffff !important;
+  // background: #ffffff !important;
   padding: 0;
   padding-right: 41px;
   padding-left: 41px;
@@ -276,7 +276,7 @@ ul.vue-instant__suggestions li {
   padding: 8px 15px 10px 20px;
   display: grid;
   grid-template-columns: 1.5fr 1fr;
-  @media only screen and (max-width: 1540px) { 
+  @media only screen and (max-width: 1540px) {
     grid-template-columns: auto 1fr;
   }
   grid-gap: 25px;

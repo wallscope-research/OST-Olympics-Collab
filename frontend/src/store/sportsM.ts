@@ -101,8 +101,8 @@ class SportsModule extends VuexModule {
     const mStore = new n3.Store(mArr)
 
 
-    const female: { [key: string]: { weight: number, age: number, height: number } } = {};
-    const male: { [key: string]: { weight: number, age: number, height: number } } = {};
+    const female: { [key: string]: Averages } = {};
+    const male: { [key: string]: Averages } = {};
     fStore.getSubjects(null, null, defaultG).map(s => {
       const yearArr = (fStore.getObjects(s, "http://dbpedia.org/property/year", defaultG))
       if (yearArr.length > 0) {
@@ -111,7 +111,7 @@ class SportsModule extends VuexModule {
         const avgFW = Math.round(+fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageWeight", defaultG).find(x => !!x)!.value)
         const avgFA = Math.round(+fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageAge", defaultG).find(x => !!x)!.value)
 
-        female[year] = { weight: avgFW, age: avgFA, height: avgFH }
+        female[year] = new Averages(avgFH, avgFW, undefined, avgFA)
       }
     });
     mStore.getSubjects(null, null, defaultG).map(s => {
@@ -121,11 +121,11 @@ class SportsModule extends VuexModule {
         const avgH = Math.round(+mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageHeight", defaultG).find(x => !!x)!.value)
         const avgW = Math.round(+mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageWeight", defaultG).find(x => !!x)!.value)
         const avgA = Math.round(+mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageAge", defaultG).find(x => !!x)!.value)
-        male[year] = { weight: avgW, age: avgA, height: avgH }
+        male[year] = new Averages(avgH, avgW, undefined, avgA)
       }
     });
     Object.keys(female).forEach(k => {
-      this.averages[k] = { female: { weight: female[k].weight, height: female[k].height, age: female[k].age }, male: { weight: male[k].weight, height: male[k].height, age: male[k].age } }
+      this.averages[k] = { female: female[k], male: male[k] }
     })
 
   }

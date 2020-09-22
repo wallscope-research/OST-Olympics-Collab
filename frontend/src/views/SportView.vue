@@ -42,10 +42,11 @@ import OlympicTorch from '@/components/OlympicTorch.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
 import SportsBar from '@/components/SportsBar.vue';
 import { curveMonotoneX } from 'd3';
-import { Athlete, DataArticle, Sport } from '@/store/index';
+import { Athlete, DataArticle, Sport, Averages } from '@/store/index';
 import athleteM from '@/store/athletesM';
 import sportsM, { DataSportYear, defaultDataSportYear } from '@/store/sportsM';
 import { continentMap } from '@/store/continentsM';
+
 @Component({
   components: {
     SportInfoBox,
@@ -69,8 +70,8 @@ export default class SportView extends Vue {
   date: string = '';
   averages: {
     [year: string]: {
-      female: { weight: number; age: number; height: number };
-      male: { weight: number; age: number; height: number };
+      female: Averages;
+      male: Averages;
     };
   } | null = null;
   sportsOverTime: { [year: string]: DataSportYear } | null = {};
@@ -99,6 +100,7 @@ export default class SportView extends Vue {
       return {
         name: x,
         type: 'bar',
+        // @ts-ignore
         data: [this.barYear![x].medalCount, this.barYear![x].athleteCount],
       };
     });
@@ -168,7 +170,7 @@ export default class SportView extends Vue {
   }
 
   get barYear() {
-    return this.sportsOverTime[this.date] || defaultDataSportYear() // default should actually never happen unless you manually mess with the years
+    return this.sportsOverTime?.[this.date] || defaultDataSportYear() // default should actually never happen unless you manually mess with the years
   }
 
   get axisMax(){

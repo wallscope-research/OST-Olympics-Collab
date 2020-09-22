@@ -33,12 +33,7 @@ class AthletesModule extends VuexModule {
   athleteInfo: n3.Quad[] = []
 
 
-  averageStats: Averages = {
-    age: 0,
-    height: 0,
-    weight: 0,
-    medals: 0,
-  }
+  averageStats = new Averages()
 
   topMaleAthletes: Athlete[] = [];
   topFemaleAthletes: Athlete[] = [];
