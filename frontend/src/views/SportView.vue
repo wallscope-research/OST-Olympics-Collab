@@ -68,27 +68,23 @@ export default class SportView extends Vue {
   articles: DataArticle[] | null = null;
   sport: Sport | null = null;
   date: string = '';
-  averages: {
-    [year: string]: {
-      female: Averages;
-      male: Averages;
-    };
-  } | null = null;
-  sportsOverTime: { [year: string]: DataSportYear } | null = {};
+  averages: { [year: string]: { female: Averages; male: Averages } } = {};
+  sportsOverTime: { [year: string]: DataSportYear } = {};
   years: string[] = [];
 
   get ageTime() {
+    if (!this.averages) return {};
     return {
-      data: Object.keys(this.averages!),
+      data: Object.keys(this.averages),
       series: [
         {
           name: 'Male average age',
-          data: Object.values(this.averages!).map((x) => x.male.age),
+          data: Object.values(this.averages).map((x) => x?.male?.age ?? 0),
           type: 'line',
         },
         {
           name: 'Female average age',
-          data: Object.values(this.averages!).map((x) => x.female.age),
+          data: Object.values(this.averages).map((x) => x?.female?.age ?? 0),
           type: 'line',
         },
       ],
@@ -96,28 +92,30 @@ export default class SportView extends Vue {
   }
 
   get overTime() {
-    return Object.keys(this.barYear!).map((x) => {
+    if (!this.barYear) return [];
+    return Object.keys(this.barYear).map((x) => {
       return {
         name: x,
         type: 'bar',
         // @ts-ignore
-        data: [this.barYear![x].medalCount, this.barYear![x].athleteCount],
+        data: [this.barYear[x].medalCount, this.barYear[x].athleteCount],
       };
     });
   }
 
   get heightTime() {
+    if (!this.averages) return {};
     return {
-      data: Object.keys(this.averages!),
+      data: Object.keys(this.averages),
       series: [
         {
           name: 'Male average height (cm)',
-          data: Object.values(this.averages!).map((x) => x.male.height),
+          data: Object.values(this.averages).map((x) => x?.male?.height ?? 0),
           type: 'line',
         },
         {
           name: 'Female average height (cm)',
-          data: Object.values(this.averages!).map((x) => x.female.height),
+          data: Object.values(this.averages).map((x) => x?.female?.height ?? 0),
           type: 'line',
         },
       ],
@@ -125,17 +123,18 @@ export default class SportView extends Vue {
   }
 
   get weightTime() {
+    if (!this.averages) return {};
     return {
-      data: Object.keys(this.averages!),
+      data: Object.keys(this.averages),
       series: [
         {
           name: 'Male average weight (cm)',
-          data: Object.values(this.averages!).map((x) => x.male.weight),
+          data: Object.values(this.averages).map((x) => x?.male?.weight ?? 0),
           type: 'line',
         },
         {
           name: 'Female average weight (cm)',
-          data: Object.values(this.averages!).map((x) => x.female.weight),
+          data: Object.values(this.averages).map((x) => x?.female?.weight ?? 0),
           type: 'line',
         },
       ],
@@ -143,13 +142,13 @@ export default class SportView extends Vue {
   }
 
   get athleteCount() {
-    return this.sport!.athleteCount;
+    return this.sport?.athleteCount ?? 0;
   }
   get medalCount() {
-    return this.sport!.medalCount;
+    return this.sport?.medalCount ?? 0;
   }
   get season() {
-    return this.sport!.season;
+    return this.sport?.season ?? 0;
   }
 
   navigate(uri: string) {
@@ -163,21 +162,21 @@ export default class SportView extends Vue {
       this.fetchSportAverages(),
       this.fetchSportsOverTime(),
     ]);
-    this.sport = sportsM.getSport;
     Vue.nextTick(async () => {
       await this.fetchNews();
     });
   }
 
   get barYear() {
-    return this.sportsOverTime?.[this.date] || defaultDataSportYear() // default should actually never happen unless you manually mess with the years
+    return this.sportsOverTime?.[this.date] || defaultDataSportYear(); // default should actually never happen unless you manually mess with the years
   }
 
-  get axisMax(){
+  get axisMax() {
     return sportsM.axisMax;
   }
 
   async fetchSportAverages() {
+    this.averages = {};
     await sportsM.fetchSportAverages({
       sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
     });
@@ -189,7 +188,7 @@ export default class SportView extends Vue {
       sport: `<http://wallscope.co.uk/resource/olympics/sport/${this.sportID}>`,
       name: this.sportID,
     });
-    // this.medalCount
+    this.sport = sportsM.getSport;
   }
   async fetchTopAthletes() {
     await athleteM.fetchTopAthletes({
@@ -208,7 +207,7 @@ export default class SportView extends Vue {
       sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
     });
     this.sportsOverTime = sportsM.getSportsOverTime;
-    this.years = Object.keys(this.sportsOverTime).sort((a,b) => Number(a) - Number(b));
+    this.years = Object.keys(this.sportsOverTime).sort((a, b) => Number(a) - Number(b));
     this.date = this.years[0];
   }
 
@@ -219,7 +218,6 @@ export default class SportView extends Vue {
       this.fetchSportAverages(),
       this.fetchSportsOverTime(),
     ]);
-    this.sport = sportsM.getSport;
     Vue.nextTick(async () => {
       await this.fetchNews();
     });

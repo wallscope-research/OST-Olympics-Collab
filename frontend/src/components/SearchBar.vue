@@ -8,12 +8,12 @@
       :value='query',
       :suggestions='results',
       :suggest-on-all-words='true',
-      :min-match="1",
+      :min-match='1',
       suggestion-attribute='label',
       @input='$emit("input", $event)',
       @selected='selected',
-      @enter='$emit("confirm")',
-      @click-button='$emit("confirm")'
+      @enter='confirm',
+      @click-button='confirm'
     )
   div
     div
@@ -53,12 +53,15 @@ export default class SearchBar extends Vue {
   selected(r: SearchResult) {
     this.$emit('selected', r);
     if (r?.score === 1) {
+      this.confirm();
+    }
+  }
+  confirm() {
+    this.$emit('confirm');
+    Vue.nextTick(() => {
       // @ts-ignore
       this.$refs['instant'].reset();
-      Vue.nextTick(() => {
-        this.$emit('confirm');
-      });
-    }
+    });
   }
 }
 </script>
