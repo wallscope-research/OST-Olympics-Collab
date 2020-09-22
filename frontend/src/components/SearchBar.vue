@@ -18,7 +18,7 @@
     div
       .termType
         icon(:icon="['fas', 'globe-europe']")
-        p continent
+        p continents
       .termType
         .small
           OlympicTorch(
@@ -31,10 +31,10 @@
             icon-height = 40
           )
         
-        p sport
+        p sports
       .termType
         icon(:icon="['fas', 'user']")
-        p player
+        p athletes
       span
 </template>
 
