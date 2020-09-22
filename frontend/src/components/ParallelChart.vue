@@ -41,7 +41,7 @@ export default class ParallelChart extends Vue {
   @Prop({ required: true }) continentMap!: { [key: string]: string };
   @Prop({ required: true }) sportsMap!: { [key: string]: string };
   margin = { top: 20, right: 20, bottom: 30, left: 50 };
-  width = 960 - this.margin.left - this.margin.right;
+  width = 800 - this.margin.left - this.margin.right;
   height = 500 - this.margin.top - this.margin.bottom;
   lineHeight = this.height + 30;
   verticalSpacer = this.width / 4;
@@ -320,13 +320,16 @@ export default class ParallelChart extends Vue {
 
 
 <style lang="scss">
-#parallel {
+.vs__dropdown-menu {
+  max-height: 250px;
+}
+#parallel-focus {
   margin: 10px;
   display: flex;
   justify-content: center;
 }
 .wrapper {
   display: grid;
-  grid-template-columns: 5fr 2fr;
+  grid-template-columns: 4fr 3fr;
 }
 </style>
