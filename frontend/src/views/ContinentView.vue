@@ -181,6 +181,10 @@ export default class ContinentView extends Vue {
   }
 
   navigate(uri: string) {
+    if (uri.indexOf('dbpedia.org') > -1) {
+      this.$router.push(uri.replace('http://dbpedia.org/resource/', '/continent/'));
+      return;
+    }
     this.$router.push(uri.replace('http://wallscope.co.uk/resource/olympics', ''));
   }
 

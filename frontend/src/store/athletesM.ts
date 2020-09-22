@@ -189,12 +189,21 @@ class AthletesModule extends VuexModule {
 
   @Action
   async fetchAthleteArticles() {
+    const quotesRegEx = /\"(.*)\"/;
     const names = this.athlete?.name.split(" ")
     if (!names) return;
     const last = [...names].reverse().find(x => x.length > 2)
     // This hack is Michael Phelps fault cause he has to have a ", II" after his name
     // Actually, that's a posh name, it's posh people's fault
-    const payload = { o: `${names.shift()} ${last?.replace(",", "") || names.pop()}` };
+    let first = names.shift();
+    // When an athlete has quotes in the name, that's usually the name they go by
+    // e.g.: Christopher Andrew "Chris" Hoy
+    // Results are a lot better for Chris Hoy than Christopher Hoy
+    const quotesMatch = this.athlete?.name?.match(quotesRegEx);
+    if (quotesMatch) {
+      first = quotesMatch.shift()?.replace(/\"/g, "")
+    }
+    const payload = { o: `${first} ${last?.replace(",", "") || names.pop()}` };
     const resp = await useRecipe("text/related", payload);
     const parser = new n3.Parser();
     const quadArr = parser.parse(resp);

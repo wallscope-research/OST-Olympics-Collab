@@ -43,6 +43,10 @@ export default class App extends Vue {
   navigate() {
     if (!this.selected) return;
     this.searchResults = [];
+    if (this.selected.uri.indexOf('dbpedia.org') > -1) {
+      this.$router.push(this.selected.uri.replace('http://dbpedia.org/resource/', '/continent/'));
+      return;
+    }
     this.$router.push(this.selected.uri.replace('http://wallscope.co.uk/resource/olympics', ''));
   }
 
