@@ -7,12 +7,18 @@
     .one(v-if='sport')
       SportInfoBox(:season='season', :medals='medalCount', :athletes='athleteCount')
     .two
-      TopFemaleAthletes(:athletes='topFemale')
+      TopAthletes(title='Top Female Athletes', :athletes='topFemale', @tag-clicked='navigate')
     .three
-      TopMaleAthletes(:athletes='topMale')
-    .four
+      TopAthletes(title='Top Male Athletes', :athletes='topMale', @tag-clicked='navigate')
+    .four(v-if='articles && articles.length > 0')
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
+    .four(v-else-if='articles != null && articles.length < 1')
+      h2.chart-title News
+      p No articles to display about {{ sport.name }}
+    .four(v-else)
+      h2.chart-title News
+      p Loading...
     .five(v-if='sportsOverTime && Object.keys(sportsOverTime).length > 0')
       SportsBar(:overTime='overTime', :axisMax='axisMax')
       p Pick a year
@@ -31,23 +37,22 @@ import VueSlider from 'vue-slider-component';
 import 'vue-slider-component/theme/default.css';
 import SportInfoBox from '@/components/SportInfoBox.vue';
 import Article from '@/components/Article.vue';
-import TopMaleAthletes from '@/components/TopMaleAthletes.vue';
-import TopFemaleAthletes from '@/components/TopFemaleAthletes.vue';
+import TopAthletes from '@/components/TopAthletes.vue';
 import OlympicTorch from '@/components/OlympicTorch.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
 import SportsBar from '@/components/SportsBar.vue';
 import { curveMonotoneX } from 'd3';
-import { Athlete, DataArticle, Sport } from '@/store/index';
+import { Athlete, DataArticle, Sport, Averages } from '@/store/index';
 import athleteM from '@/store/athletesM';
-import sportsM from '@/store/sportsM';
+import sportsM, { DataSportYear, defaultDataSportYear } from '@/store/sportsM';
 import { continentMap } from '@/store/continentsM';
+
 @Component({
   components: {
     SportInfoBox,
     'vue-slider': VueSlider,
     Article,
-    TopFemaleAthletes,
-    TopMaleAthletes,
+    TopAthletes,
     OlympicTorch,
     MultipleLines,
     SportsBar,
@@ -63,112 +68,95 @@ export default class SportView extends Vue {
   articles: DataArticle[] | null = null;
   sport: Sport | null = null;
   date: string = '';
-  averages: {
-    [key: string]: {
-      female: { weight: number; age: number; height: number };
-      male: { weight: number; age: number; height: number };
-    };
-  } | null = null;
-  sportsOverTime: {
-    [key: string]: {
-      [key: string]: {
-        medalCount: number;
-        athleteCount: number;
-      };
-    };
-  } | null = {};
+  averages: { [year: string]: { female: Averages; male: Averages } } = {};
+  sportsOverTime: { [year: string]: DataSportYear } = {};
   years: string[] = [];
-  barYear: {
-    [key: string]: {
-      medalCount: number;
-      athleteCount: number;
-    };
-  } | null = {};
-  axisMax = 0;
 
   get ageTime() {
-    const data = Object.keys(this.averages!);
-    const series = [];
-
-    series.push({
-      name: 'Male average age',
-      data: Object.values(this.averages!).map((x) => {
-        return x.male.age;
-      }),
-      type: 'line',
-    });
-    series.push({
-      name: 'Female average age',
-      data: Object.values(this.averages!).map((x) => {
-        return x.female.age;
-      }),
-      type: 'line',
-    });
-    return { data, series };
+    if (!this.averages) return {};
+    return {
+      data: Object.keys(this.averages),
+      series: [
+        {
+          name: 'Male average age',
+          data: Object.values(this.averages).map((x) => x?.male?.age ?? 0),
+          type: 'line',
+        },
+        {
+          name: 'Female average age',
+          data: Object.values(this.averages).map((x) => x?.female?.age ?? 0),
+          type: 'line',
+        },
+      ],
+    };
   }
 
   get overTime() {
-    return Object.keys(this.barYear!).map((x) => {
+    if (!this.barYear) return [];
+    return Object.keys(this.barYear).map((x) => {
       return {
         name: x,
         type: 'bar',
-        data: [this.barYear![x].medalCount, this.barYear![x].athleteCount],
+        // @ts-ignore
+        data: [this.barYear[x].medalCount, this.barYear[x].athleteCount],
       };
     });
   }
 
   get heightTime() {
-    const data = Object.keys(this.averages!);
-    const series = [];
-    series.push({
-      name: 'Male average height (cm)',
-      data: Object.values(this.averages!).map((x) => {
-        return x.male.height;
-      }),
-      type: 'line',
-    });
-    series.push({
-      name: 'Female average height (cm)',
-      data: Object.values(this.averages!).map((x) => {
-        return x.female.height;
-      }),
-      type: 'line',
-    });
-    return { data, series };
+    if (!this.averages) return {};
+    return {
+      data: Object.keys(this.averages),
+      series: [
+        {
+          name: 'Male average height (cm)',
+          data: Object.values(this.averages).map((x) => x?.male?.height ?? 0),
+          type: 'line',
+        },
+        {
+          name: 'Female average height (cm)',
+          data: Object.values(this.averages).map((x) => x?.female?.height ?? 0),
+          type: 'line',
+        },
+      ],
+    };
   }
 
   get weightTime() {
-    const data = Object.keys(this.averages!);
-    const series = [];
-    series.push({
-      name: 'Male average weight (kg)',
-      data: Object.values(this.averages!).map((x) => {
-        return x.male.weight;
-      }),
-      type: 'line',
-    });
-    series.push({
-      name: 'Female average weight (kg)',
-      data: Object.values(this.averages!).map((x) => {
-        return x.female.weight;
-      }),
-      type: 'line',
-    });
-    return { data, series };
+    if (!this.averages) return {};
+    return {
+      data: Object.keys(this.averages),
+      series: [
+        {
+          name: 'Male average weight (cm)',
+          data: Object.values(this.averages).map((x) => x?.male?.weight ?? 0),
+          type: 'line',
+        },
+        {
+          name: 'Female average weight (cm)',
+          data: Object.values(this.averages).map((x) => x?.female?.weight ?? 0),
+          type: 'line',
+        },
+      ],
+    };
   }
 
   get athleteCount() {
-    return this.sport!.athleteCount;
+    return this.sport?.athleteCount ?? 0;
   }
   get medalCount() {
-    return this.sport!.medalCount;
+    return this.sport?.medalCount ?? 0;
   }
   get season() {
-    return this.sport!.season;
+    return this.sport?.season ?? 0;
   }
 
   navigate(uri: string) {
-    //TODO
+    if (uri.indexOf('dbpedia.org') > -1) {
+      this.$router.push(uri.replace('http://dbpedia.org/resource/', '/continent/'));
+      return;
+    }
+    this.$router.push(uri.replace('http://wallscope.co.uk/resource/olympics', ''));
   }
   @Watch('sportID')
   async sportChanged(val: string) {
@@ -178,32 +166,21 @@ export default class SportView extends Vue {
       this.fetchSportAverages(),
       this.fetchSportsOverTime(),
     ]);
-    this.sport = sportsM.getSport;
     Vue.nextTick(async () => {
       await this.fetchNews();
     });
   }
 
-  @Watch('date')
-  dateChanged(year: string) {
-    Object.keys(this.sportsOverTime!).forEach((continent) => {
-      this.barYear![continent] = this.barYear![continent] || {
-        medalCount: 0,
-        athleteCount: 0,
-      };
-      if (this.sportsOverTime![continent][year]) {
-        this.barYear![continent].athleteCount = this.sportsOverTime![continent][
-          year
-        ].athleteCount;
-        this.barYear![continent].medalCount = this.sportsOverTime![continent][year].medalCount;
-      } else {
-        this.barYear![continent].athleteCount = 0;
-        this.barYear![continent].medalCount = 0;
-      }
-    });
+  get barYear() {
+    return this.sportsOverTime?.[this.date] || defaultDataSportYear(); // default should actually never happen unless you manually mess with the years
+  }
+
+  get axisMax() {
+    return sportsM.axisMax;
   }
 
   async fetchSportAverages() {
+    this.averages = {};
     await sportsM.fetchSportAverages({
       sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
     });
@@ -215,7 +192,7 @@ export default class SportView extends Vue {
       sport: `<http://wallscope.co.uk/resource/olympics/sport/${this.sportID}>`,
       name: this.sportID,
     });
-    // this.medalCount
+    this.sport = sportsM.getSport;
   }
   async fetchTopAthletes() {
     await athleteM.fetchTopAthletes({
@@ -234,29 +211,8 @@ export default class SportView extends Vue {
       sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
     });
     this.sportsOverTime = sportsM.getSportsOverTime;
-    this.years = Object.keys(this.sportsOverTime['Europe']);
-    const tempBarYear: {
-      [key: string]: {
-        medalCount: number;
-        athleteCount: number;
-      };
-    } | null = {};
-    Object.keys(this.sportsOverTime!).forEach((x) => {
-      tempBarYear[x] = { medalCount: 0, athleteCount: 0 };
-    });
-    Object.keys(this.sportsOverTime!).forEach((continent) => {
-      Object.values(this.sportsOverTime![continent]).forEach((x) => {
-        this.axisMax =
-          Math.ceil(Math.max(this.axisMax, x.athleteCount, x.medalCount) / 50) * 50;
-      });
-      tempBarYear[continent]['athleteCount'] = this.sportsOverTime![continent][
-        '1928'
-      ].athleteCount;
-      tempBarYear[continent]['medalCount'] = this.sportsOverTime![continent][
-        '1928'
-      ].medalCount;
-    });
-    this.barYear = tempBarYear;
+    this.years = Object.keys(this.sportsOverTime).sort((a, b) => Number(a) - Number(b));
+    this.date = this.years[0];
   }
 
   async mounted() {
@@ -266,7 +222,6 @@ export default class SportView extends Vue {
       this.fetchSportAverages(),
       this.fetchSportsOverTime(),
     ]);
-    this.sport = sportsM.getSport;
     Vue.nextTick(async () => {
       await this.fetchNews();
     });

@@ -17,12 +17,13 @@ const predMap: { [key: string]: string } = {
 }
 
 export class Sport {
-
+  uri: string
   name: string;
   season?: string;
   medalCount?: number;
   athleteCount?: number;
-  constructor(name: string, season?: string, medalCount?: number, athleteCount?: number) {
+  constructor(uri: string, name: string, season?: string, medalCount?: number, athleteCount?: number) {
+    this.uri = uri;
     this.name = name;
     this.season = season;
     this.medalCount = medalCount;
@@ -31,6 +32,7 @@ export class Sport {
 }
 
 export class Athlete {
+  uri: string;
   name: string;
   sport?: Sport;
   height?: number;
@@ -41,7 +43,8 @@ export class Athlete {
   team?: string;
   age?: number;
 
-  constructor(name: string, team?: string, sport?: Sport, height?: number, weight?: number, sex?: string, medals?: number, continent?: string, age?: number) {
+  constructor(uri: string, name: string, team?: string, sport?: Sport, height?: number, weight?: number, sex?: string, medals?: number, continent?: string, age?: number) {
+    this.uri = uri;
     this.name = name;
     this.sport = sport;
     this.height = height;
@@ -52,18 +55,20 @@ export class Athlete {
     this.age = age;
   }
 
-  static fromRDF(graph: n3.Store, uri?: string) {
+  static fromRDF(graph: n3.Store) {
     const defaultG = new n3.DefaultGraph();
-    const name = graph.getObjects(null, predMap.name, defaultG).find(x => !!x)!.value;
-    const weight = +graph.getObjects(null, predMap.weight, defaultG).find(x => !!x)!.value;
-    const sport = graph.getObjects(null, predMap.sport, defaultG).find(x => !!x)!.value;
-    const team = graph.getObjects(null, predMap.team, defaultG).find(x => !!x)!.value;
-    const continent = graph.getObjects(null, predMap.continent, defaultG).find(x => !!x)!.value;
-    const gender = graph.getObjects(null, predMap.gender, defaultG).find(x => !!x)!.value;
-    const medals = +graph.getObjects(null, predMap.medals, defaultG).find(x => !!x)!.value;
-    const height = +graph.getObjects(null, predMap.height, defaultG).find(x => !!x)!.value;
-    const age = +graph.getObjects(null, predMap.age, defaultG).find(x => !!x)!.value
-    return new Athlete(name, team, new Sport(sport), height, weight, gender, medals, continent, age)
+    const sportQuad = graph.getQuads(null, predMap.sport, null, defaultG).find(x => !!x)
+    const uri = sportQuad!.subject
+    const name = graph.getObjects(uri, predMap.name, defaultG).find(x => !!x)!.value;
+    const weight = +graph.getObjects(uri, predMap.weight, defaultG).find(x => !!x)!.value;
+    const sportLabel = graph.getObjects(sportQuad!.object, predMap.name, defaultG).find(x => !!x)!.value
+    const team = graph.getObjects(uri, predMap.team, defaultG).find(x => !!x)!.value;
+    const continent = graph.getObjects(uri, predMap.continent, defaultG).find(x => !!x)!.value;
+    const gender = graph.getObjects(uri, predMap.gender, defaultG).find(x => !!x)!.value;
+    const medals = +graph.getObjects(uri, predMap.medals, defaultG).find(x => !!x)!.value;
+    const height = +graph.getObjects(uri, predMap.height, defaultG).find(x => !!x)!.value;
+    const age = +graph.getObjects(uri, predMap.age, defaultG).find(x => !!x)!.value
+    return new Athlete(uri.id, name, team, new Sport(sportQuad!.object.id, sportLabel), height, weight, gender, medals, continent, age)
   }
 }
 
@@ -78,6 +83,10 @@ export class Averages {
     this.weight = weight;
     this.medals = medals;
     this.age = age;
+  }
+
+  isComplete(): boolean {
+    return (this.age != undefined) && (this.height != undefined) && (this.weight != undefined) && (this.medals != undefined)
   }
 
   static fromRDF(store: n3.Store) {

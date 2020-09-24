@@ -29,9 +29,15 @@
         @sport-selected='sportSelected',
         @gender-selected='genderSelected'
       )
-    .four
+    .four(v-if='articles && articles.length > 0')
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
+    .four(v-else-if="articles != null && articles.length < 1")
+      h2.chart-title News
+      p No articles to display about {{ continentName }}
+    .four(v-else)
+      h2.chart-title News
+      p Loading...
 </template>
 
 <script lang="ts">
@@ -175,6 +181,10 @@ export default class ContinentView extends Vue {
   }
 
   navigate(uri: string) {
+    if (uri.indexOf('dbpedia.org') > -1) {
+      this.$router.push(uri.replace('http://dbpedia.org/resource/', '/continent/'));
+      return;
+    }
     this.$router.push(uri.replace('http://wallscope.co.uk/resource/olympics', ''));
   }
 

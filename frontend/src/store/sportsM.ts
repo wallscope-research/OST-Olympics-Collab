@@ -8,18 +8,44 @@ import {
 } from "vuex-module-decorators";
 import Vue from "vue";
 import * as n3 from "n3";
-import store, { DataArticle, Sport } from "@/store";
+import store, { Averages, DataArticle, Sport } from "@/store";
 import { useRecipe } from '@/utils/hiccupConnector';
 import { utcYears } from 'd3';
 import { continentMap } from "@/store/continentsM"
+
+export type DataSportYear = {
+  Africa: DataSportValues;
+  Asia: DataSportValues;
+  Europe: DataSportValues;
+  'North America': DataSportValues;
+  'South America': DataSportValues;
+  Oceania: DataSportValues;
+};
+export function defaultDataSportYear(): DataSportYear {
+  const obj: DataSportYear = {
+    'Africa': defaultDataSportValues(),
+    'Asia': defaultDataSportValues(),
+    'Europe': defaultDataSportValues(),
+    'North America': defaultDataSportValues(),
+    'South America': defaultDataSportValues(),
+    Oceania: defaultDataSportValues(),
+  };
+  return obj;
+}
+export type DataSportValues = { medalCount: number; athleteCount: number };
+function defaultDataSportValues(): DataSportValues {
+  const obj: DataSportValues = { medalCount: 0, athleteCount: 0 };
+  return obj;
+}
 
 @Module({ dynamic: true, namespaced: true, name: "sportsM", store })
 class SportsModule extends VuexModule {
   sportsMap: { [key: string]: string } = {}
   sport: Sport | null = null;
   articles: DataArticle[] = []
-  averages: { [key: string]: { female: { weight: number, age: number, height: number }, male: { weight: number, age: number, height: number } } } = {}
-  sportsOverTime: { [continent: string]: { [year: string]: { medalCount: number, athleteCount: number } } } = {}
+  averages: { [year: string]: { female: Averages, male: Averages } } = {}
+  sportsOverTime: { [year: string]: DataSportYear } = {}
+  axisMax: number = 0;
   @Mutation
   setSports(quads: n3.Quad[]) {
     const defaultG = new n3.DefaultGraph();
@@ -36,10 +62,12 @@ class SportsModule extends VuexModule {
   setSportInfo({ quadArr, name }: { quadArr: n3.Quad[], name: string }) {
     const defaultG = new n3.DefaultGraph();
     const store = new n3.Store(quadArr);
-    const medalCount = +store.getObjects(null, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", defaultG).find(x => !!x)!.value
-    const athCount = +store.getObjects(null, "http://wallscope.co.uk/ontology/olympics/totalAthleteCount", defaultG).find(x => !!x)!.value
-    const season = store.getObjects(null, "http://www.w3.org/2000/01/rdf-schema#label", defaultG).find(x => !!x)!.value
-    this.sport = new Sport(name!, season, medalCount, athCount)
+    const medalCountQuad = store.getQuads(null, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", null, defaultG).find(x => !!x)
+    const uri = medalCountQuad!.subject
+    const medalCount = +(medalCountQuad!.object!.value)
+    const athCount = +store.getObjects(uri, "http://wallscope.co.uk/ontology/olympics/totalAthleteCount", defaultG).find(x => !!x)!.value
+    const season = store.getObjects(uri, "http://www.w3.org/2000/01/rdf-schema#label", defaultG).find(x => !!x)!.value
+    this.sport = new Sport(uri.id, name!, season, medalCount, athCount)
   }
 
   @Mutation
@@ -73,8 +101,8 @@ class SportsModule extends VuexModule {
     const mStore = new n3.Store(mArr)
 
 
-    const female: { [key: string]: { weight: number, age: number, height: number } } = {};
-    const male: { [key: string]: { weight: number, age: number, height: number } } = {};
+    const female: { [key: string]: Averages } = {};
+    const male: { [key: string]: Averages } = {};
     fStore.getSubjects(null, null, defaultG).map(s => {
       const yearArr = (fStore.getObjects(s, "http://dbpedia.org/property/year", defaultG))
       if (yearArr.length > 0) {
@@ -83,7 +111,7 @@ class SportsModule extends VuexModule {
         const avgFW = Math.round(+fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageWeight", defaultG).find(x => !!x)!.value)
         const avgFA = Math.round(+fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageAge", defaultG).find(x => !!x)!.value)
 
-        female[year] = { weight: avgFW, age: avgFA, height: avgFH }
+        female[year] = new Averages(avgFH, avgFW, undefined, avgFA)
       }
     });
     mStore.getSubjects(null, null, defaultG).map(s => {
@@ -93,11 +121,11 @@ class SportsModule extends VuexModule {
         const avgH = Math.round(+mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageHeight", defaultG).find(x => !!x)!.value)
         const avgW = Math.round(+mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageWeight", defaultG).find(x => !!x)!.value)
         const avgA = Math.round(+mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/averageAge", defaultG).find(x => !!x)!.value)
-        male[year] = { weight: avgW, age: avgA, height: avgH }
+        male[year] = new Averages(avgH, avgW, undefined, avgA)
       }
     });
     Object.keys(female).forEach(k => {
-      this.averages[k] = { female: { weight: female[k].weight, height: female[k].height, age: female[k].age }, male: { weight: male[k].weight, height: male[k].height, age: male[k].age } }
+      this.averages[k] = { female: female[k], male: male[k] }
     })
 
   }
@@ -106,18 +134,19 @@ class SportsModule extends VuexModule {
   async setSportsOverTime(quadArr: n3.Quad[]) {
     const defaultG = new n3.DefaultGraph();
     const store = new n3.Store(quadArr);
-    const continents: { [key: string]: { [key: string]: { medalCount: number, athleteCount: number } } } = {}
-
+    this.axisMax = 0;
     store.getSubjects("http://wallscope.co.uk/ontology/olympics/hasYear", null, defaultG).forEach(s => {
       const year = store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/hasYear", defaultG).find(x => !!x)!.value
-      const continent = continentMap[store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/hasContinent", defaultG).find(x => !!x)!.value]
+      const continentUri = store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/hasContinent", defaultG).find(x => !!x)!.value
       const medals = +store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/medalCount", defaultG).find(x => !!x)!.value
       const athletes = +store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/athleteCount", defaultG).find(x => !!x)!.value
-      if (!continents[continent]) continents[continent] = {}
-      if (!continents[continent][year]) continents[continent][year] = { medalCount: medals, athleteCount: athletes }
-
+      if (!this.sportsOverTime[year]) {
+        this.sportsOverTime[year] = defaultDataSportYear()
+      }
+      const continentName = continentMap[continentUri]!
+      this.axisMax = Math.ceil(Math.max(this.axisMax, athletes, medals) / 50) * 50;
+      Vue.set(this.sportsOverTime[year], continentName, { medalCount: medals, athleteCount: athletes })
     })
-    this.sportsOverTime = continents;
   }
 
 

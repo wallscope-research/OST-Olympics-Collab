@@ -27,9 +27,9 @@
                   | You can 
                   a(href="https://medium.com/" target="_blank" alt="link to the Medium blog article") read about 
                   | how this was all created and feel free to get in touch with 
-                  a(href="https://wallscope.co.uk" target="_blank" alt="link to the Wallscope website") Wallscope 
+                  a(href="https://wallscope.co.uk/#contact-us" target="_blank" alt="link to contact Wallscope") Wallscope 
                   | and 
-                  a(href="https://www.oxfordsemantic.tech/" target="_blank" alt="link to the Oxford Semantic Technologies website") Oxford Semantic Technologies
+                  a(href="https://www.oxfordsemantic.tech/contact" target="_blank" alt="link to contact Oxford Semantic Technologies") Oxford Semantic Technologies
               .links
                 div
                   p Read more on:

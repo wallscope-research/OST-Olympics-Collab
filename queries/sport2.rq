@@ -2,19 +2,21 @@
 # We could see e.g. shotput athletes getting younger and heavier over time.
 # NOTE IN QUERY COMMENTS.
 
-PREFIX walls: <http://wallscope.co.uk/ontology/olympics/>
+PREFIX wso: <http://wallscope.co.uk/ontology/olympics/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX dbp: <http://dbpedia.org/property/>
 PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 SELECT ?year
        (AVG(?height) As ?avgHeight)
        (AVG(?weight) As ?avgWeight)
+       (AVG(?year - ?birthYear) As ?avgAge)
 WHERE {
- ?instance walls:games   ?games ;
-           walls:event   ?event ;
-           walls:athlete ?athlete .
+ ?instance wso:games   ?games ;
+           wso:event   ?event ;
+           wso:athlete ?athlete .
  
  ?event rdfs:subClassOf <http://wallscope.co.uk/resource/olympics/sport/Swimming> . # SPORT VARIABLE HERE - try e.g. Judo
  
@@ -22,6 +24,7 @@ WHERE {
  
  ?athlete foaf:gender <http://wallscope.co.uk/resource/olympics/gender/M> ; # SEX VARIABLE HERE - can switch to F
           dbo:height ?height ;
+          wso:birthYear ?birthYear ;
           dbo:weight ?weight .
 }
 GROUP BY ?year

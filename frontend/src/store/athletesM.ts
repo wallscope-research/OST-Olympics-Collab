@@ -33,12 +33,7 @@ class AthletesModule extends VuexModule {
   athleteInfo: n3.Quad[] = []
 
 
-  averageStats: Averages = {
-    age: 0,
-    height: 0,
-    weight: 0,
-    medals: 0,
-  }
+  averageStats = new Averages()
 
   topMaleAthletes: Athlete[] = [];
   topFemaleAthletes: Athlete[] = [];
@@ -125,13 +120,13 @@ class AthletesModule extends VuexModule {
     this.topMaleAthletes = mStore.getSubjects("http://www.w3.org/2000/01/rdf-schema#label", null, maleG).map(s => {
       const medals = +mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", maleG).find(x => !!x)!.value
       const name = mStore.getObjects(s, "http://www.w3.org/2000/01/rdf-schema#label", maleG).find(x => !!x)!.value
-      return new Athlete(name, undefined, undefined, undefined, undefined, undefined, medals, undefined, undefined)
+      return new Athlete(s.id, name, undefined, undefined, undefined, undefined, undefined, medals, undefined, undefined)
     })
 
     this.topFemaleAthletes = fStore.getSubjects("http://www.w3.org/2000/01/rdf-schema#label", null, femaleG).map(s => {
       const medals = +fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", femaleG).find(x => !!x)!.value
       const name = fStore.getObjects(s, "http://www.w3.org/2000/01/rdf-schema#label", femaleG).find(x => !!x)!.value
-      return new Athlete(name, undefined, undefined, undefined, undefined, undefined, medals, undefined, undefined)
+      return new Athlete(s.id, name, undefined, undefined, undefined, undefined, undefined, medals, undefined, undefined)
     })
   }
 
@@ -194,12 +189,21 @@ class AthletesModule extends VuexModule {
 
   @Action
   async fetchAthleteArticles() {
+    const quotesRegEx = /\"(.*)\"/;
     const names = this.athlete?.name.split(" ")
     if (!names) return;
     const last = [...names].reverse().find(x => x.length > 2)
     // This hack is Michael Phelps fault cause he has to have a ", II" after his name
     // Actually, that's a posh name, it's posh people's fault
-    const payload = { o: `${names.shift()} ${last?.replace(",", "") || names.pop()}` };
+    let first = names.shift();
+    // When an athlete has quotes in the name, that's usually the name they go by
+    // e.g.: Christopher Andrew "Chris" Hoy
+    // Results are a lot better for Chris Hoy than Christopher Hoy
+    const quotesMatch = this.athlete?.name?.match(quotesRegEx);
+    if (quotesMatch) {
+      first = quotesMatch.shift()?.replace(/\"/g, "")
+    }
+    const payload = { o: `${first} ${last?.replace(",", "") || names.pop()}` };
     const resp = await useRecipe("text/related", payload);
     const parser = new n3.Parser();
     const quadArr = parser.parse(resp);

@@ -4,17 +4,14 @@ div
   p Number of Athletes: {{ athletes }}
   p Medals won: {{ medals }}
   .sport
-    p Season:
-    Tag(:text='season')
+    p Season: {{ season }}
 </template>
 
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import Tag from '@/components/Tag.vue';
-import { Sport } from '@/store';
 
-@Component({ components: { Tag } })
+@Component({})
 export default class SportInfoBox extends Vue {
   @Prop({ required: true }) season!: string;
   @Prop({ required: true }) athletes!: number;

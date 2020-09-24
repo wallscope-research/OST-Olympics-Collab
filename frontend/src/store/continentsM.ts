@@ -26,12 +26,7 @@ class ContinentsModule extends VuexModule {
   continentURI: string = ''
   continentName: string = ''
   articles: DataArticle[] = []
-  averageStats: Averages = {
-    age: 0,
-    height: 0,
-    weight: 0,
-    medals: 0,
-  }
+  averageStats = new Averages()
   continentInfo = { medals: 0, teams: 0, athletes: 0 }
   medalsVAthletes: { [key: string]: { athletes: number, medals: number } } = {}
 
@@ -183,7 +178,6 @@ class ContinentsModule extends VuexModule {
 
   @Action
   async fetchMedalsVAthletes({ sport }: { sport: string | undefined }) {
-
     const resp = await useRecipe("continent-medals-athletes", { s: sport })
     const parser = new n3.Parser();
     const quadArr = parser.parse(resp);
