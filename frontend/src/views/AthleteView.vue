@@ -6,12 +6,7 @@
     h3(v-else) Loading...
   .charts
     .one(v-if='athlete')
-      InfoBox(
-        :age='athlete.age',
-        :medals='athlete.medals',
-        :sport='athlete.sport',
-        @tag-clicked='navigate'
-      )
+      InfoBox(:sport='athlete.sport', :athlete='athlete', @tag-clicked='navigate')
     .two(v-if='athlete')
       MedalsAtAge(:averageMedalsPerAge='averageMedalsPerAge', :athleteAge='athlete.age')
     .three(v-if='athlete && averages')
@@ -28,7 +23,7 @@
     .four(v-if='articles && articles.length > 0')
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
-    .four(v-else-if="articles != null && articles.length < 1")
+    .four(v-else-if='articles != null && articles.length < 1')
       h2.chart-title News
       p No articles to display about {{ athlete.name }}
     .four(v-else)

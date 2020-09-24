@@ -65,9 +65,10 @@ class SportsModule extends VuexModule {
     const medalCountQuad = store.getQuads(null, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", null, defaultG).find(x => !!x)
     const uri = medalCountQuad!.subject
     const medalCount = +(medalCountQuad!.object!.value)
+    const eventcount = +store.getObjects(uri, "http://wallscope.co.uk/ontology/olympics/totalEventCount", defaultG).find(x => !!x)!.value
     const athCount = +store.getObjects(uri, "http://wallscope.co.uk/ontology/olympics/totalAthleteCount", defaultG).find(x => !!x)!.value
     const season = store.getObjects(uri, "http://www.w3.org/2000/01/rdf-schema#label", defaultG).find(x => !!x)!.value
-    this.sport = new Sport(uri.id, name!, season, medalCount, athCount)
+    this.sport = new Sport(uri.id, name!, season, medalCount, athCount, eventcount)
   }
 
   @Mutation

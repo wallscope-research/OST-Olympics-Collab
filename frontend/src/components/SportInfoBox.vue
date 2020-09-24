@@ -2,7 +2,9 @@
 div
   h2.chart-title Sport Info
   p Number of Athletes: {{ athletes }}
+  p Number of Events: {{ eventCount }}
   p Medals won: {{ medals }}
+
   .sport
     p Season: {{ season }}
 </template>
@@ -16,6 +18,7 @@ export default class SportInfoBox extends Vue {
   @Prop({ required: true }) season!: string;
   @Prop({ required: true }) athletes!: number;
   @Prop({ required: true }) medals!: number;
+  @Prop({ required: true }) eventCount!: number;
 }
 </script>
 

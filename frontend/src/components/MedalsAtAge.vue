@@ -1,6 +1,6 @@
 <template lang="pug">
 #medalsContainer
-  h2.chart-title Medals By Age
+  h2.chart-title Average Medals By Age
   .legendContainer 
     .athleteLegend
       | &nbsp;

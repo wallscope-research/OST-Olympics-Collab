@@ -5,7 +5,12 @@
     h3 {{ sportID }}
   .charts
     .one(v-if='sport')
-      SportInfoBox(:season='season', :medals='medalCount', :athletes='athleteCount')
+      SportInfoBox(
+        :season='season',
+        :medals='medalCount',
+        :athletes='athleteCount',
+        :eventCount='events'
+      )
     .two
       TopAthletes(title='Top Female Athletes', :athletes='topFemale', @tag-clicked='navigate')
     .three
@@ -24,11 +29,21 @@
       p Pick a year
       vue-slider(v-model='date', :data='years')
     .six(v-if='averages && Object.keys(averages).length > 0')
-      MultipleLines(:propOptions='ageTime', :title='ageTitle')
+      MultipleLines(:propOptions='ageTime', :title='ageTitle', :min='ageMin', :max='ageMax')
     .seven(v-if='averages && Object.keys(averages).length > 0')
-      MultipleLines(:propOptions='heightTime', :title='heightTitle')
+      MultipleLines(
+        :propOptions='heightTime',
+        :title='heightTitle',
+        :max='heightMax',
+        :min='heightMin'
+      )
     .eight(v-if='averages && Object.keys(averages).length > 0')
-      MultipleLines(:propOptions='weightTime', :title='weightTitle')
+      MultipleLines(
+        :propOptions='weightTime',
+        :title='weightTitle',
+        :max='weightMax',
+        :min='weightMin'
+      )
 </template>
 
 <script lang="ts">
@@ -71,6 +86,12 @@ export default class SportView extends Vue {
   averages: { [year: string]: { female: Averages; male: Averages } } = {};
   sportsOverTime: { [year: string]: DataSportYear } = {};
   years: string[] = [];
+  ageMax: number = 0;
+  ageMin: number = 0;
+  weightMin: number = 0;
+  weightMax: number = 0;
+  heightMin: number = 0;
+  heightMax: number = 0;
 
   get ageTime() {
     if (!this.averages) return {};
@@ -148,7 +169,11 @@ export default class SportView extends Vue {
     return this.sport?.medalCount ?? 0;
   }
   get season() {
-    return this.sport?.season ?? 0;
+    return this.sport?.season ?? 'None specified';
+  }
+
+  get events() {
+    return this.sport?.eventCount ?? 0;
   }
 
   navigate(uri: string) {
@@ -184,7 +209,33 @@ export default class SportView extends Vue {
     await sportsM.fetchSportAverages({
       sport: `http://wallscope.co.uk/resource/olympics/sport/${this.sportID}`,
     });
+    let minAge = 100,
+      maxAge = 0;
+    let minWeight = 100,
+      maxWeight = 0;
+    let minHeight = 200,
+      maxHeight = 0;
     this.averages = sportsM.getSportAverages;
+    Object.values(this.averages).forEach((avg) => {
+      if (avg.male.age! > maxAge) maxAge = avg.male.age!;
+      else if (avg.male.age! < minAge) minAge = avg.male.age!;
+      if (avg.male.weight! > maxWeight) maxWeight = avg.male.weight!;
+      else if (avg.male.weight! < minWeight) minWeight = avg.male.weight!;
+      if (avg.male.height! > maxHeight) maxHeight = avg.male.height!;
+      else if (avg.male.height! < minHeight) minHeight = avg.male.height!;
+      if (avg.male.age! > maxAge) maxAge = avg.male.age!;
+      else if (avg.female.age! < minAge) minAge = avg.female.age!;
+      if (avg.female.weight! > maxWeight) maxWeight = avg.female.weight!;
+      else if (avg.female.weight! < minWeight) minWeight = avg.female.weight!;
+      if (avg.female.height! > maxHeight) maxHeight = avg.female.height!;
+      else if (avg.female.height! < minHeight) minHeight = avg.female.height!;
+    });
+    this.ageMax = maxAge;
+    this.ageMin = minAge;
+    this.weightMax = maxWeight;
+    this.weightMin = minWeight;
+    this.heightMax = maxHeight;
+    this.heightMin = minHeight;
   }
 
   async fetchSportInfo() {

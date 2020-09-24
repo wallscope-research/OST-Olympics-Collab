@@ -32,7 +32,7 @@
     .four(v-if='articles && articles.length > 0')
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
-    .four(v-else-if="articles != null && articles.length < 1")
+    .four(v-else-if='articles != null && articles.length < 1')
       h2.chart-title News
       p No articles to display about {{ continentName }}
     .four(v-else)
@@ -144,7 +144,10 @@ export default class ContinentView extends Vue {
   }
 
   async fetchMedalsVAthletes() {
-    await continentsM.fetchMedalsVAthletes({ sport: this.lineSelectedSport });
+    await continentsM.fetchMedalsVAthletes({
+      continent: `<http://dbpedia.org/resource/${this.continentID}>`,
+      sport: this.lineSelectedSport,
+    });
     this.medalsVAthletes = continentsM.getMedalsVAthletes;
   }
 

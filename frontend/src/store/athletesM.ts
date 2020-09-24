@@ -105,7 +105,8 @@ class AthletesModule extends VuexModule {
     subjs.forEach(subj => {
       const age = +store.getObjects(subj, "http://wallscope.co.uk/ontology/olympics/age", defaultG).find(x => !!x)!.value
       const medals = +store.getObjects(subj, "http://wallscope.co.uk/ontology/olympics/medals", defaultG).find(x => !!x)!.value
-      avgMedalsPerAge[age] = medals
+      if (age > 18)
+        avgMedalsPerAge[age] = medals
     })
     this.averageMedalsPerAge = avgMedalsPerAge
   }

@@ -36,6 +36,8 @@ export default class MutipleLines extends Vue {
   };
   @Prop({ required: true }) title!: string;
   @Prop() sportsMap!: { [key: string]: string };
+  @Prop() min!: number;
+  @Prop() max!: number;
   selectedSport: string = '';
   line = {
     title: {
@@ -59,6 +61,8 @@ export default class MutipleLines extends Vue {
       },
     },
     yAxis: {
+      min: this.min,
+      max: this.max,
       type: 'value',
     },
     legend: {}, //need this to show legend

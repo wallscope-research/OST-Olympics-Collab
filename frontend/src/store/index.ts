@@ -22,12 +22,14 @@ export class Sport {
   season?: string;
   medalCount?: number;
   athleteCount?: number;
-  constructor(uri: string, name: string, season?: string, medalCount?: number, athleteCount?: number) {
+  eventCount?: number;
+  constructor(uri: string, name: string, season?: string, medalCount?: number, athleteCount?: number, eventCount?: number) {
     this.uri = uri;
     this.name = name;
     this.season = season;
     this.medalCount = medalCount;
     this.athleteCount = athleteCount;
+    this.eventCount = eventCount
   }
 }
 
@@ -53,6 +55,7 @@ export class Athlete {
     this.medals = medals;
     this.continent = continent;
     this.age = age;
+    this.team = team;
   }
 
   static fromRDF(graph: n3.Store) {
