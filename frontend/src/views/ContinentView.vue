@@ -16,7 +16,9 @@
         :propOptions='getOptions',
         title='Number of Medals and Athletes over time',
         :sportsMap='sports',
-        @line-sport-selected='lineSportSelected'
+        @line-sport-selected='lineSportSelected',
+        :min='min',
+        :max='max'
       )
     .three(v-if='continentAverages && averages')
       ParallelChart(
@@ -74,6 +76,8 @@ export default class ContinentView extends Vue {
       medals: number;
     };
   } | null = null;
+  max = 0;
+  min = 0;
 
   @Watch('continentID')
   async continentChanged(val: string) {
@@ -149,6 +153,16 @@ export default class ContinentView extends Vue {
       sport: this.lineSelectedSport,
     });
     this.medalsVAthletes = continentsM.getMedalsVAthletes;
+    let min = 100,
+      max = 0;
+    Object.values(this.medalsVAthletes).forEach((x) => {
+      if (x.athletes < min) min = x.athletes;
+      else if (x.athletes > max) max = x.athletes;
+      if (x.medals < min) min = x.medals;
+      else if (x.medals > max) max = x.medals;
+    });
+    this.min = min;
+    this.max = max;
   }
 
   async fetchContinentAverages() {
