@@ -201,7 +201,13 @@ export default class SportView extends Vue {
   }
 
   get axisMax() {
-    return sportsM.axisMax;
+    const medals = Object.values(this.barYear).map((x) => {
+      return x.medalCount;
+    });
+    const athletes = Object.values(this.barYear).map((x) => {
+      return x.athleteCount;
+    });
+    return Math.ceil(Math.max(...medals, ...athletes) / 50) * 50;
   }
 
   async fetchSportAverages() {

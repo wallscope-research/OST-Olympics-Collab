@@ -45,7 +45,6 @@ class SportsModule extends VuexModule {
   articles: DataArticle[] = []
   averages: { [year: string]: { female: Averages, male: Averages } } = {}
   sportsOverTime: { [year: string]: DataSportYear } = {}
-  axisMax: number = 0;
   @Mutation
   setSports(quads: n3.Quad[]) {
     const defaultG = new n3.DefaultGraph();
@@ -135,7 +134,6 @@ class SportsModule extends VuexModule {
   async setSportsOverTime(quadArr: n3.Quad[]) {
     const defaultG = new n3.DefaultGraph();
     const store = new n3.Store(quadArr);
-    this.axisMax = 0;
     store.getSubjects("http://wallscope.co.uk/ontology/olympics/hasYear", null, defaultG).forEach(s => {
       const year = store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/hasYear", defaultG).find(x => !!x)!.value
       const continentUri = store.getObjects(s, "http://wallscope.co.uk/ontology/olympics/hasContinent", defaultG).find(x => !!x)!.value
@@ -145,7 +143,7 @@ class SportsModule extends VuexModule {
         this.sportsOverTime[year] = defaultDataSportYear()
       }
       const continentName = continentMap[continentUri]!
-      this.axisMax = Math.ceil(Math.max(this.axisMax, athletes, medals) / 50) * 50;
+
       Vue.set(this.sportsOverTime[year], continentName, { medalCount: medals, athleteCount: athletes })
     })
   }

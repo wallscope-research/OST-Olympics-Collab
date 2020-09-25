@@ -1,9 +1,9 @@
 <template lang="pug">
 div
   h2.chart-title Sport Info
-  p Number of Athletes: {{ athletes }}
-  p Number of Events: {{ eventCount }}
-  p Medals won: {{ medals }}
+  p Number of Athletes: {{ athletes.toLocaleString() }}
+  p Number of Events: {{ eventCount.toLocaleString() }}
+  p Medals won: {{ medals.toLocaleString() }}
 
   .sport
     p Season: {{ season }}

@@ -1,11 +1,11 @@
 <template lang="pug">
 div
   h2.chart-title Athlete Info
-  p Age: {{ athlete.age }}
+  p Age: {{ athlete.age.toLocaleString() }}
   p Height: {{ athlete.height }} cm
   p Weight: {{ athlete.weight }} kg
   p Sex: {{ athlete.sex }}
-  p Medals: {{ athlete.medals }}
+  p Medals: {{ athlete.medals.toLocaleString() }}
   p Team: {{ athlete.team }}
   .sport
     p Sport:
