@@ -1,0 +1,42 @@
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix dbp: <http://dbpedia.org/property/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+@prefix wso: <http://wallscope.co.uk/ontology/olympics/> .
+@prefix wsr: <http://wallscope.co.uk/resource/olympics/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+wsr:instance\/AthleticsWomensHeptathlon\/2012Summer\/JessicaPhyllisEnnisHill wso:games wsr:games\/2012\/Summer .
+wsr:instance\/AthleticsWomensHeptathlon\/2012Summer\/JessicaPhyllisEnnisHill wso:medal wsr:medal\/Gold .
+wsr:instance\/AthleticsWomensHeptathlon\/2012Summer\/JessicaPhyllisEnnisHill wso:event wsr:event\/AthleticsWomensHeptathlon .
+wsr:instance\/AthleticsWomensHeptathlon\/2012Summer\/JessicaPhyllisEnnisHill wso:athlete wsr:athlete\/JessicaPhyllisEnnisHill .
+wsr:instance\/AthleticsWomensHeptathlon\/2012Summer\/JessicaPhyllisEnnisHill rdf:type wso:Instance .
+wsr:instance\/AthleticsWomensHeptathlon\/2012Summer\/JessicaPhyllisEnnisHill rdfs:label "Jessica Ennis-Hill Heptathlon London 2012" .
+wsr:athlete\/JessicaPhyllisEnnisHill foaf:gender wsr:gender\/F .
+wsr:athlete\/JessicaPhyllisEnnisHill dbo:team wsr:team\/GreatBritain .
+wsr:NOC\/GBR dbo:ground wsr:team\/GreatBritain .
+wsr:event\/AthleticsWomensHeptathlon rdfs:subClassOf wsr:sport\/Athletics .
+wsr:games\/2012\/Summer wso:season wsr:season\/Summer .
+wsr:games\/2012\/Summer dbp:location wsr:city\/London .
+wsr:city\/London rdf:type dbo:City .
+wsr:games\/2012\/Summer rdfs:label "2012 London Summer Olympics".
+wsr:instance\/AthleticsWomensHeptathlon\/2016Summer\/JessicaPhyllisEnnisHill wso:games wsr:games\/2016\/Summer .
+wsr:instance\/AthleticsWomensHeptathlon\/2016Summer\/JessicaPhyllisEnnisHill wso:medal wsr:medal\/Silver .
+wsr:instance\/AthleticsWomensHeptathlon\/2016Summer\/JessicaPhyllisEnnisHill wso:event wsr:event\/AthleticsWomensHeptathlon .
+wsr:instance\/AthleticsWomensHeptathlon\/2016Summer\/JessicaPhyllisEnnisHill wso:athlete wsr:athlete\/JessicaPhyllisEnnisHill .
+wsr:instance\/AthleticsWomensHeptathlon\/2016Summer\/JessicaPhyllisEnnisHill rdf:type wso:Instance .
+wsr:instance\/AthleticsWomensHeptathlon\/2016Summer\/JessicaPhyllisEnnisHill rdfs:label "Jessica Ennis-Hill Heptathlon Rio 2016" .
+wsr:athlete\/JessicaPhyllisEnnisHill foaf:gender wsr:gender\/F .
+wsr:athlete\/JessicaPhyllisEnnisHill dbo:team wsr:team\/GreatBritain .
+wsr:athlete\/JessicaPhyllisEnnisHill rdf:type foaf:Person .
+wsr:NOC\/GBR dbo:ground wsr:team\/GreatBritain .
+wsr:event\/AthleticsWomensHeptathlon rdfs:subClassOf wsr:sport\/Athletics .
+wsr:games\/2016\/Summer wso:season wsr:season\/Summer .
+wsr:games\/2016\/Summer dbp:location wsr:city\/RiodeJaneiro .
+wsr:city\/RiodeJaneiro rdf:type dbo:City .
+wsr:games\/2016\/Summer rdfs:label "2016 Rio Summer Olympics".
