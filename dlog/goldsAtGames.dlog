@@ -1,0 +1,25 @@
+[?part, wso:goldsAtGames, ?ct]
+:-
+AGGREGATE(
+    [?part, wso:hasInstance, ?inst],
+    [?inst, wso:medal, wsr:medal\/Gold]
+    ON ?part
+    BIND COUNT(?inst) AS ?ct ) .
+
+
+[?part, wso:silversAtGames, ?ct]
+:-
+AGGREGATE(
+    [?part, wso:hasInstance, ?inst],
+    [?inst, wso:medal, wsr:medal\/Silver]
+    ON ?part
+    BIND COUNT(?inst) AS ?ct ) .
+
+
+[?part, wso:bronzesAtGames, ?ct]
+:-
+AGGREGATE(
+    [?part, wso:hasInstance, ?inst],
+    [?inst, wso:medal, wsr:medal\/Bronze]
+    ON ?part
+    BIND COUNT(?inst) AS ?ct ) .
