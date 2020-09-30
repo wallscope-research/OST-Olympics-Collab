@@ -1,7 +1,7 @@
 <template lang="pug">
   #topBar
     .pageTitle
-      h2 OST Olympics Data Visualiser
+      h2 The Olympics: A Linked Data Platform
     .button(id="show-modal" @click="showModal = true")
       p About
     Modal(v-if="showModal" @close="showModal = false")
