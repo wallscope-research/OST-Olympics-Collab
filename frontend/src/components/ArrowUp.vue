@@ -12,13 +12,17 @@ export default class ArrowUp extends Vue {}
 </script>
 
 <style lang="scss" scoped>
+.vue-back-to-top {
+  width: 40px;
+  height: 50px;
+}
 .arrow-container {
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  margin-left: calc(100vw - 55px);
-  margin-top: 50vh;
+  // margin-left: calc(100vw - 55px);
+  // margin-top: 50vh;
   background: var(--active-color);
   box-shadow: -2px 2px 4px 1px #00000047;
   width: 40px;
