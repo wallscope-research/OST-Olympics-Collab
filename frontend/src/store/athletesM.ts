@@ -31,7 +31,20 @@ class AthletesModule extends VuexModule {
   athlete: Athlete | null = null;
   graph = new n3.Store();
   athleteInfo: n3.Quad[] = []
-
+  topMaleMedals: {
+    [key: string]: {
+      gold: number,
+      silver: number,
+      bronze: number,
+    }
+  } = {}
+  topFemaleMedals: {
+    [key: string]: {
+      gold: number,
+      silver: number,
+      bronze: number,
+    }
+  } = {}
 
   averageStats = new Averages()
 
@@ -123,7 +136,6 @@ class AthletesModule extends VuexModule {
       const name = mStore.getObjects(s, "http://www.w3.org/2000/01/rdf-schema#label", maleG).find(x => !!x)!.value
       return new Athlete(s.id, name, undefined, undefined, undefined, undefined, undefined, medals, undefined, undefined)
     })
-
     this.topFemaleAthletes = fStore.getSubjects("http://www.w3.org/2000/01/rdf-schema#label", null, femaleG).map(s => {
       const medals = +fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", femaleG).find(x => !!x)!.value
       const name = fStore.getObjects(s, "http://www.w3.org/2000/01/rdf-schema#label", femaleG).find(x => !!x)!.value

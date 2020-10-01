@@ -6,7 +6,10 @@
     h3(v-else) Loading...
   .charts
     .one(v-if='athlete')
-      InfoBox(:sport='athlete.sport', :athlete='athlete', @tag-clicked='navigate')
+      .about-area
+        AboutPopup(:text='infoText')
+      .main-area
+        InfoBox(:sport='athlete.sport', :athlete='athlete', @tag-clicked='navigate')
     .two(v-if='athlete')
       MedalsAtAge(:averageMedalsPerAge='averageMedalsPerAge', :athleteAge='athlete.age')
     .three(v-if='athlete && averages')
@@ -37,6 +40,7 @@ import InfoBox from '@/components/InfoBox.vue';
 import Article from '@/components/Article.vue';
 import MedalsAtAge from '@/components/MedalsAtAge.vue';
 import ParallelChart from '@/components/ParallelChart.vue';
+import AboutPopup from '@/components/AboutPopup.vue';
 import athleteM from '@/store/athletesM';
 import { Averages, Athlete } from '@/store';
 import continentsM from '@/store/continentsM';
@@ -44,7 +48,7 @@ import sportsM from '@/store/sportsM';
 import axios from 'axios';
 import { DataArticle } from '@/store/index';
 
-@Component({ components: { InfoBox, Article, MedalsAtAge, ParallelChart } })
+@Component({ components: { InfoBox, Article, MedalsAtAge, ParallelChart, AboutPopup } })
 export default class AthleteView extends Vue {
   @Prop({ required: false }) readonly athleteID: string | undefined;
   athlete: Athlete | null = null;
@@ -56,7 +60,7 @@ export default class AthleteView extends Vue {
   selectedSport: string | undefined;
   selectedGender: string | undefined;
   averageMedalsPerAge: { [key: number]: number } = {};
-
+  infoText = 'testing with text';
   get avgFocus() {
     return new Averages(
       this.athlete!.height,
@@ -144,8 +148,28 @@ export default class AthleteView extends Vue {
 
 
 <style lang="scss" scoped>
+.one {
+  display: grid;
+  grid-template-columns: 0.8fr 1.7fr 0.5fr;
+  grid-template-rows: 0.4fr 1.6fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    '. . about-area'
+    'main-area main-area main-area';
+  &.main-area {
+    grid-area: main-area;
+  }
+  & .about-area {
+    grid-area: about-area;
+  }
+}
+.two {
+}
 .three {
   overflow: auto;
+}
+
+.four {
 }
 @media only screen and (max-width: 768px) {
   .home {

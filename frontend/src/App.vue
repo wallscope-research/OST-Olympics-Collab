@@ -44,10 +44,14 @@ export default class App extends Vue {
     if (!this.selected) return;
     this.searchResults = [];
     if (this.selected.uri.indexOf('dbpedia.org') > -1) {
-      this.$router.push(this.selected.uri.replace('http://dbpedia.org/resource/', '/continent/'));
+      this.$router.push(
+        this.selected.uri.replace('http://dbpedia.org/resource/', '/continent/')
+      );
       return;
     }
-    this.$router.push(this.selected.uri.replace('http://wallscope.co.uk/resource/olympics', ''));
+    this.$router.push(
+      this.selected.uri.replace('http://wallscope.co.uk/resource/olympics', '')
+    );
   }
 
   async mounted() {
@@ -78,6 +82,9 @@ export default class App extends Vue {
 }
 
 :root {
+  --gold: #ffd700;
+  --silver: #c0c0c0;
+  --bronze: #cd7f32;
   --violet: #566598;
   --grey-page: #dee0e6;
   --grey-search-bar: #e8ebf6;
