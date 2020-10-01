@@ -161,6 +161,8 @@ export default class AthleteView extends Vue {
   }
   & .about-area {
     grid-area: about-area;
+    width: auto;
+    justify-content: flex-end;
   }
 }
 .two {

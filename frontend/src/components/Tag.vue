@@ -17,7 +17,7 @@ export default class TagC extends Vue {
 
 <style lang="scss">
 .container {
-  width: fit-content;
+  // width: fit-content;
 }
 .tag {
   cursor: pointer;

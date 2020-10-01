@@ -45,21 +45,19 @@ export default class AboutPopup extends Vue {
   }
 }
 #aboutContainer {
-  padding-top: 10px;
-  padding-bottom: 10px;
   display: grid;
-  grid-template-columns: 1fr 60px;
+  grid-template-columns: 1fr;
   grid-gap: 10px;
-  align-items: center;
   .about {
     align-self: right;
     justify-self: right;
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     .round {
       background: var(--violet);
-      height: 40px;
-      width: 40px;
+      height: 28px;
+      width: 28px;
       border-radius: 50px;
       display: flex;
       align-items: center;
@@ -72,7 +70,7 @@ export default class AboutPopup extends Vue {
         box-shadow: 11px 3px 9px var(--violet);
       }
       p {
-        font-size: 25px;
+        font-size: 20px;
         font-weight: bold;
         color: white;
       }
@@ -81,10 +79,10 @@ export default class AboutPopup extends Vue {
       height: 0;
       width: 0;
       overflow: hidden;
-      position: relative;
+      position: absolute;
       z-index: 99999;
       margin-left: 0px;
-      margin-top: 62px;
+      margin-top: 32px;
       background: white;
       margin-right: 0;
       box-shadow: 6px 6px 20px #797979;
@@ -110,7 +108,8 @@ export default class AboutPopup extends Vue {
         animation: unfold 0.5s;
         display: block;
         height: auto;
-        width: 680px;
+        width: 330px;
+        max-width: 80vw;
         max-height: 98vh;
         overflow: auto;
       }
