@@ -48,6 +48,7 @@ export default class AboutPopup extends Vue {
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 10px;
+  height: 0;
   .about {
     align-self: right;
     justify-self: right;
@@ -80,7 +81,6 @@ export default class AboutPopup extends Vue {
       width: 0;
       overflow: hidden;
       position: absolute;
-      z-index: 99999;
       margin-left: 0px;
       margin-top: 32px;
       background: white;
@@ -89,7 +89,7 @@ export default class AboutPopup extends Vue {
       float: right;
       animation: fold 0.5s;
       > div {
-        padding: 12px 20px 40px 30px;
+        padding: 12px 20px;
         svg {
           justify-self: center;
         }
@@ -119,46 +119,5 @@ export default class AboutPopup extends Vue {
     }
   }
 }
-h1 {
-  font-size: 23px;
-  color: white;
-  font-weight: normal;
-}
-h3 {
-  font-weight: normal;
-  font-size: 22px;
-}
-@media screen and (max-width: 599px) {
-  h1 {
-    font-size: 18px;
-  }
-  h3 {
-    margin-top: 15px;
-  }
-  #topBar .about .aboutContent {
-    padding-top: 25px;
-    svg {
-      font-size: 30px;
-      margin-top: 12px;
-      color: #50a8bf;
-      cursor: pointer;
-    }
-    &.show {
-      width: 100vw;
-      height: 100vh;
-    }
-    margin-left: 0;
-    margin-top: 0;
-    left: 0;
-    top: 0;
-    svg {
-      display: block;
-    }
-    > div {
-      display: grid;
-      grid-template-columns: 1fr 50px;
-      grid-gap: 10px;
-    }
-  }
-}
+
 </style>

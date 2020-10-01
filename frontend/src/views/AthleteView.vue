@@ -150,17 +150,9 @@ export default class AthleteView extends Vue {
 <style lang="scss" scoped>
 .one {
   display: grid;
-  grid-template-columns: 0.8fr 1.7fr 0.5fr;
-  grid-template-rows: 0.4fr 1.6fr;
+  grid-template-columns: 1fr;
   gap: 0px 0px;
-  grid-template-areas:
-    '. . about-area'
-    'main-area main-area main-area';
-  &.main-area {
-    grid-area: main-area;
-  }
   & .about-area {
-    grid-area: about-area;
     width: auto;
     justify-content: flex-end;
   }
