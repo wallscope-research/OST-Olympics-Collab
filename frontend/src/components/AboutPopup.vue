@@ -29,10 +29,6 @@ export default class AboutPopup extends Vue {
   checkStatus() {
     this.tipOn = this.tipOn ? false : true;
   }
-
-  mounted() {
-    if (this.links) console.log(this.links);
-  }
 }
 </script>
 

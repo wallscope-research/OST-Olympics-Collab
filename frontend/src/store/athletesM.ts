@@ -14,7 +14,6 @@ import * as n3 from "n3";
 
 export const starterAthletes: string[] = [
   "http://wallscope.co.uk/resource/olympics/athlete/UsainStLeoBolt",
-  "http://wallscope.co.uk/resource/olympics/athlete/NabilMuhammadAliNosseir",
   "http://wallscope.co.uk/resource/olympics/athlete/FrederickCarltonCarlLewis",
   "http://wallscope.co.uk/resource/olympics/athlete/MichaelFredPhelpsII",
   "http://wallscope.co.uk/resource/olympics/athlete/JamesClevelandJesseOwens",

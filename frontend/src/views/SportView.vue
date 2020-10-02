@@ -301,6 +301,7 @@ export default class SportView extends Vue {
         'warning'
       ).then(() => {
         this.fetchErrored = false;
+        this.$router.push('/');
       });
     }
   }

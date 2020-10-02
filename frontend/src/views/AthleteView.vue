@@ -168,11 +168,13 @@ export default class AthleteView extends Vue {
         'warning'
       ).then(() => {
         this.fetchErrored = false;
+        this.$router.push('/');
       });
     }
   }
 
   async mounted() {
+    console.log(window.history.length);
     try {
       await Promise.all([
         this.fetchOptions(),

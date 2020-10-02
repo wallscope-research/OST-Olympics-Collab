@@ -222,11 +222,12 @@ export default class ContinentView extends Vue {
     if (this.fetchErrored) {
       // alert(message, title, type)
       this.$alert(
-        'Missing information for this continent. Please search for something else',
+        'Missing information for this continent. Please search for something else.',
         '',
         'warning'
       ).then(() => {
         this.fetchErrored = false;
+        this.$router.push('/');
       });
     }
   }
