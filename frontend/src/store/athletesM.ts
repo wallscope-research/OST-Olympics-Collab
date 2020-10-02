@@ -31,20 +31,14 @@ class AthletesModule extends VuexModule {
   athlete: Athlete | null = null;
   graph = new n3.Store();
   athleteInfo: n3.Quad[] = []
-  topMaleMedals: {
+  topMedals: {
     [key: string]: {
       gold: number,
       silver: number,
       bronze: number,
     }
   } = {}
-  topFemaleMedals: {
-    [key: string]: {
-      gold: number,
-      silver: number,
-      bronze: number,
-    }
-  } = {}
+
 
   averageStats = new Averages()
 
@@ -59,7 +53,7 @@ class AthletesModule extends VuexModule {
   }
 
   get getAthlete() {
-    return this.athlete
+    return this.athlete;
   }
 
   get getAverateStats() {
@@ -67,23 +61,27 @@ class AthletesModule extends VuexModule {
   }
 
   get getAthleteInfo() {
-    return this.athleteInfo
+    return this.athleteInfo;
   }
 
   get getAverageMedalsPerAge() {
-    return this.averageMedalsPerAge
+    return this.averageMedalsPerAge;
   }
 
   get getArticles() {
-    return this.articles
+    return this.articles;
   }
 
   get getTopMaleAthletes() {
-    return this.topMaleAthletes
+    return this.topMaleAthletes;
   }
 
   get getTopFemaleAthletes() {
-    return this.topFemaleAthletes
+    return this.topFemaleAthletes;
+  }
+
+  get getTopMedals() {
+    return this.topMedals
   }
 
   @Mutation
@@ -132,11 +130,21 @@ class AthletesModule extends VuexModule {
     const fStore = new n3.Store(femaleArr)
     const mStore = new n3.Store(maleArr);
     this.topMaleAthletes = mStore.getSubjects("http://www.w3.org/2000/01/rdf-schema#label", null, maleG).map(s => {
+      this.topMedals[s.id] = {
+        gold: +mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalGoldsCount", maleG).find(x => !!x)!.value,
+        silver: +mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalSilversCount", maleG).find(x => !!x)!.value,
+        bronze: +mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalBronzesCount", maleG).find(x => !!x)!.value,
+      }
       const medals = +mStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", maleG).find(x => !!x)!.value
       const name = mStore.getObjects(s, "http://www.w3.org/2000/01/rdf-schema#label", maleG).find(x => !!x)!.value
       return new Athlete(s.id, name, undefined, undefined, undefined, undefined, undefined, medals, undefined, undefined)
     })
     this.topFemaleAthletes = fStore.getSubjects("http://www.w3.org/2000/01/rdf-schema#label", null, femaleG).map(s => {
+      this.topMedals[s.id] = {
+        gold: +fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalGoldsCount", femaleG).find(x => !!x)!.value,
+        silver: +fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalSilversCount", femaleG).find(x => !!x)!.value,
+        bronze: +fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalBronzesCount", femaleG).find(x => !!x)!.value,
+      }
       const medals = +fStore.getObjects(s, "http://wallscope.co.uk/ontology/olympics/totalMedalCount", femaleG).find(x => !!x)!.value
       const name = fStore.getObjects(s, "http://www.w3.org/2000/01/rdf-schema#label", femaleG).find(x => !!x)!.value
       return new Athlete(s.id, name, undefined, undefined, undefined, undefined, undefined, medals, undefined, undefined)

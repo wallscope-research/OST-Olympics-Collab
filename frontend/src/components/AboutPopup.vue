@@ -6,7 +6,10 @@
     .aboutContent(:class='{ show: tipOn }')
       div
         .text
-          p {{ text }}
+          h2 What is this?
+          p {{ desc }}
+          h2 How did we do it?
+          p {{ how }}
         icon(:icon='["far", "times"]', @click='tipOn = false')
 </template>
 
@@ -15,7 +18,8 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class AboutPopup extends Vue {
-  @Prop({ required: true }) text!: string;
+  @Prop({ required: true }) desc!: string;
+  @Prop({ required: true }) how!: string;
   tipOn = false;
 
   checkStatus() {
@@ -81,9 +85,9 @@ export default class AboutPopup extends Vue {
       height: 0;
       width: 0;
       overflow: hidden;
-      position: relative;
+      position: absolute;
       z-index: 99999;
-      margin-left: 0px;
+      max-width: 70vw;
       margin-top: 62px;
       background: white;
       margin-right: 0;
