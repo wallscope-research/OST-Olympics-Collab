@@ -2,9 +2,9 @@
   #topBar
     .pageTitle
       h2 
-        | The Olympics:
+        | The Olympics
         br
-        | A Linked Data Platform
+        span A Linked Data Platform
     .button(id="show-modal" @click="showModal = true")
       p About
     Modal(v-if="showModal" @close="showModal = false")
@@ -53,6 +53,10 @@ export default class Navbar extends Vue {
     font-size: 26px;
     color: white;
     font-weight: normal;
+    span {
+      font-size: 18px;
+      padding-top: 10px;
+    }
   }
   > div {
     display: flex;
@@ -78,6 +82,9 @@ export default class Navbar extends Vue {
       font-size: 24px;
       line-height: 30px;
       padding:0;
+      span {
+        font-size: 20px;
+      }
     }
     div.button {
       padding: 0;

@@ -82,7 +82,8 @@ export default class App extends Vue {
 }
 
 :root {
-  --gold: #ffd700;
+  // --gold: #ffd700;
+  --gold: #dbbc14;
   --silver: #c0c0c0;
   --bronze: #cd7f32;
   --violet: #566598;
