@@ -37,6 +37,7 @@
     "vue-property-decorator": "^8.4.2",
     "vue-router": "^3.2.0",
     "vue-select": "^3.10.8",
+    "vue-simple-alert": "^1.1.1",
     "vue-slider-component": "^3.2.5",
     "vue-svg-loader": "^0.16.0",
     "vuex": "^3.4.0",

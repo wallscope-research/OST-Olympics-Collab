@@ -75,6 +75,7 @@ export default class AthleteView extends Vue {
   selectedGender: string | undefined;
   averageMedalsPerAge: { [key: number]: number } = {};
   infoText = 'testing with text';
+  fetchErrored = false;
   get avgFocus() {
     return new Averages(
       this.athlete!.height,
@@ -154,16 +155,32 @@ export default class AthleteView extends Vue {
     this.$router.push(uri.replace('http://wallscope.co.uk/resource/olympics', ''));
   }
 
+  @Watch('fetchErrored')
+  errorChanged() {
+    if (this.fetchErrored) {
+      // alert(message, title, type)
+      this.$alert(
+        'Missing information for this athlete. Please search for something else',
+        '',
+        'warning'
+      );
+    }
+  }
+
   async mounted() {
-    await Promise.all([
-      this.fetchOptions(),
-      this.fetchAthlete(),
-      this.fetchAverages(),
-      this.fetchMedalsAtAge(),
-    ]);
-    Vue.nextTick(async () => {
-      await this.fetchNews();
-    });
+    try {
+      await Promise.all([
+        this.fetchOptions(),
+        this.fetchAthlete(),
+        this.fetchAverages(),
+        this.fetchMedalsAtAge(),
+      ]);
+      Vue.nextTick(async () => {
+        await this.fetchNews();
+      });
+    } catch (e) {
+      this.fetchErrored = true;
+    }
   }
 }
 </script>

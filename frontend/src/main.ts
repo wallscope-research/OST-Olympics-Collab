@@ -6,6 +6,9 @@ import store from './store';
 /* FontAwesome */
 import '@/utils/imports/font-awesome';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueSimpleAlert from "vue-simple-alert";
+
+Vue.use(VueSimpleAlert);
 Vue.component('icon', FontAwesomeIcon);
 
 Vue.config.productionTip = false;
