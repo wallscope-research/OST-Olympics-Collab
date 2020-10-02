@@ -13,7 +13,7 @@
           .links(v-if='links')
             h3 Links
             a(v-for='l in links', :href='l.link', target='_blank') {{ l.name }}
-        icon(:icon='["far", "times"]', @click='tipOn = false')
+        icon(:icon='["far", "times"]')
 </template>
 
 <script lang="ts">
