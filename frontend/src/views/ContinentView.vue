@@ -61,7 +61,9 @@ import continentsM from '@/store/continentsM';
 import sportsM from '@/store/sportsM';
 import { Averages, DataArticle } from '@/store';
 
-@Component({ components: { ContinentInfoBox, Article, MultipleLines, ParallelChart, AboutPopup } })
+@Component({
+  components: { ContinentInfoBox, Article, MultipleLines, ParallelChart, AboutPopup },
+})
 export default class ContinentView extends Vue {
   @Prop({ required: false }) readonly continentID: string | undefined;
   continentAverages: Averages | null = null;
@@ -87,6 +89,7 @@ export default class ContinentView extends Vue {
   } | null = null;
   max = 0;
   min = 0;
+  fetchErrored = false;
 
   @Watch('continentID')
   async continentChanged(val: string) {
@@ -214,17 +217,35 @@ export default class ContinentView extends Vue {
     this.$router.push(uri.replace('http://wallscope.co.uk/resource/olympics', ''));
   }
 
+  @Watch('fetchErrored')
+  errorChanged() {
+    if (this.fetchErrored) {
+      // alert(message, title, type)
+      this.$alert(
+        'Missing information for this continent. Please search for something else',
+        '',
+        'warning'
+      ).then(() => {
+        this.fetchErrored = false;
+      });
+    }
+  }
+
   async mounted() {
     await continentsM.setContinent(`http://dbpedia.org/resource/${this.continentID}`);
     await this.fetchOptions();
     this.continentName = continentsM.continentName;
     await this.fetchAverages();
-    await Promise.all([
-      this.fetchNews(),
-      this.fetchContinentAverages(),
-      this.fetchContinentInfo(),
-      this.fetchMedalsVAthletes(),
-    ]);
+    try {
+      await Promise.all([
+        this.fetchNews(),
+        this.fetchContinentAverages(),
+        this.fetchContinentInfo(),
+        this.fetchMedalsVAthletes(),
+      ]);
+    } catch (e) {
+      this.fetchErrored = true;
+    }
   }
 }
 </script>

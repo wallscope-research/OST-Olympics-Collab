@@ -163,7 +163,9 @@ export default class AthleteView extends Vue {
         'Missing information for this athlete. Please search for something else',
         '',
         'warning'
-      );
+      ).then(() => {
+        this.fetchErrored = false;
+      });
     }
   }
 

@@ -110,6 +110,7 @@ export default class SportView extends Vue {
   weightMax: number = 0;
   heightMin: number = 0;
   heightMax: number = 0;
+  fetchErrored = false;
 
   get ageTime() {
     if (!this.averages) return {};
@@ -290,16 +291,34 @@ export default class SportView extends Vue {
     this.date = this.years[0];
   }
 
+  @Watch('fetchErrored')
+  errorChanged() {
+    if (this.fetchErrored) {
+      // alert(message, title, type)
+      this.$alert(
+        'Missing information for this athlete. Please search for something else',
+        '',
+        'warning'
+      ).then(() => {
+        this.fetchErrored = false;
+      });
+    }
+  }
+
   async mounted() {
-    await Promise.all([
-      this.fetchTopAthletes(),
-      this.fetchSportInfo(),
-      this.fetchSportAverages(),
-      this.fetchSportsOverTime(),
-    ]);
-    Vue.nextTick(async () => {
-      await this.fetchNews();
-    });
+    try {
+      await Promise.all([
+        this.fetchTopAthletes(),
+        this.fetchSportInfo(),
+        this.fetchSportAverages(),
+        this.fetchSportsOverTime(),
+      ]);
+      Vue.nextTick(async () => {
+        await this.fetchNews();
+      });
+    } catch (e) {
+      this.fetchErrored = true;
+    }
   }
 }
 </script>
