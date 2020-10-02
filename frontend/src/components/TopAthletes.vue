@@ -43,11 +43,15 @@ export default class TopAthletes extends Vue {
   justify-content: center;
   align-content: center;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: auto 1fr;
   gap: 0px 3px;
+  margin-left: auto;
   grid-template-areas:
     'gold-medal silver-medal bronze-medal'
     'gold-count silver-count bronze-count';
+  p {
+    text-align: center;
+  }
 }
 .gold-medal {
   grid-area: gold-medal;
