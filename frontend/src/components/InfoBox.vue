@@ -42,18 +42,11 @@ export default class InfoBox extends Vue {
 p {
   line-height: 25px;
 }
-.sport {
+.sport, .continent {
   display: flex;
   align-items: center;
   p {
     margin-right: 5px;
-  }
-  .continent {
-    display: flex;
-    align-items: center;
-    p {
-      margin-right: 1px;
-    }
   }
 }
 </style>

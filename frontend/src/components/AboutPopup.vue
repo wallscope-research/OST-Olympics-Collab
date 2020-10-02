@@ -1,7 +1,7 @@
 <template lang="pug">
 #aboutContainer.container
   .about
-    .round(@click='checkStatus', title='About the project')
+    .round(@click='checkStatus', title='About the section')
       p ?
     .aboutContent(:class='{ show: tipOn }')
       div
@@ -55,25 +55,29 @@ export default class AboutPopup extends Vue {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    z-index: 9;
     .round {
-      background: var(--violet);
-      height: 28px;
-      width: 28px;
+      background: #ffffff;
+      height: 31px;
+      width: 31px;
       border-radius: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 3px 2px 9px var(--violet);
+      box-shadow: 2px 2px 8px 3px #cacaca;
       cursor: pointer;
       &:hover {
-        background: var(--active-color);
         transition: all 0.2s ease-in-out;
-        box-shadow: 11px 3px 9px var(--violet);
+        box-shadow: 2px 2px 8px 3px #bbbbbb;
+        background: var(--active-color);
+        p {
+          color: white;
+        }
       }
       p {
-        font-size: 20px;
+        font-size: 24px;
         font-weight: bold;
-        color: white;
+        color: var(--active-color);
       }
     }
     .aboutContent {

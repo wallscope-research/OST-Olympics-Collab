@@ -6,12 +6,16 @@
     h3(v-else) Loading...
   .charts
     .one(v-if='info')
+      .about-area
+        AboutPopup(:text='infoText')
       ContinentInfoBox(
         :medals='continentMedals',
         :teams='continentTeams',
         :athletes='continentAthletes'
       )
     .two(v-if='continentAverages && averages && medalsVAthletes')
+      .about-area
+        AboutPopup(:text='infoText')
       MultipleLines(
         :propOptions='getOptions',
         title='Number of Medals and Athletes over time',
@@ -21,6 +25,8 @@
         :max='max'
       )
     .three(v-if='continentAverages && averages')
+      .about-area
+        AboutPopup(:text='infoText')
       ParallelChart(
         :legend='continentName + " Stats"',
         :focus='continentAverages',
@@ -32,6 +38,8 @@
         @gender-selected='genderSelected'
       )
     .four(v-if='articles && articles.length > 0')
+      .about-area
+        AboutPopup(:text='infoText')
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
     .four(v-else-if='articles != null && articles.length < 1')
@@ -46,13 +54,14 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import ContinentInfoBox from '@/components/ContinentInfoBox.vue';
 import Article from '@/components/Article.vue';
+import AboutPopup from '@/components/AboutPopup.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
 import ParallelChart from '@/components/ParallelChart.vue';
 import continentsM from '@/store/continentsM';
 import sportsM from '@/store/sportsM';
 import { Averages, DataArticle } from '@/store';
 
-@Component({ components: { ContinentInfoBox, Article, MultipleLines, ParallelChart } })
+@Component({ components: { ContinentInfoBox, Article, MultipleLines, ParallelChart, AboutPopup } })
 export default class ContinentView extends Vue {
   @Prop({ required: false }) readonly continentID: string | undefined;
   continentAverages: Averages | null = null;
