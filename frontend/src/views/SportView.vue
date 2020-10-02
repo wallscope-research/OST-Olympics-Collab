@@ -6,7 +6,11 @@
   .charts
     .one(v-if='sport')
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getSportsContent.infoBox.description',
+          :how='getSportsContent.infoBox.source',
+          :links='getSportsContent.infoBox.links'
+        )
       SportInfoBox(
         :season='season',
         :medals='medalCount',
@@ -15,15 +19,21 @@
       )
     .two
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getSportsContent.topFemales.description',
+          :how='getSportsContent.topFemales.source'
+        )
       TopAthletes(title='Top Female Athletes', :athletes='topFemale', @tag-clicked='navigate')
     .three
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getSportsContent.topMale.description',
+          :how='getSportsContent.topMale.source'
+        )
       TopAthletes(title='Top Male Athletes', :athletes='topMale', @tag-clicked='navigate')
     .four(v-if='articles && articles.length > 0')
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(:desc='getAllContent.news.description', :how='getAllContent.news.source')
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
     .four(v-else-if='articles != null && articles.length < 1')
@@ -34,17 +44,26 @@
       p Loading...
     .five(v-if='sportsOverTime && Object.keys(sportsOverTime).length > 0')
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getSportsContent.medalsPerContinent.description',
+          :how='getSportsContent.medalsPerContinent.source'
+        )
       SportsBar(:overTime='overTime', :axisMax='axisMax')
       p Pick a year
       vue-slider(v-model='date', :data='years')
     .six(v-if='averages && Object.keys(averages).length > 0')
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getSportsContent.ageOverTime.description',
+          :how='getSportsContent.ageOverTime.source'
+        )
       MultipleLines(:propOptions='ageTime', :title='ageTitle', :min='ageMin', :max='ageMax')
     .seven(v-if='averages && Object.keys(averages).length > 0')
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getSportsContent.heightOverTime.description',
+          :how='getSportsContent.heightOverTime.source'
+        )
       MultipleLines(
         :propOptions='heightTime',
         :title='heightTitle',
@@ -53,7 +72,10 @@
       )
     .eight(v-if='averages && Object.keys(averages).length > 0')
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getSportsContent.weightOverTime.description',
+          :how='getSportsContent.weightOverTime.source'
+        )
       MultipleLines(
         :propOptions='weightTime',
         :title='weightTitle',
@@ -78,7 +100,7 @@ import { Athlete, DataArticle, Sport, Averages } from '@/store/index';
 import athleteM from '@/store/athletesM';
 import sportsM, { DataSportYear, defaultDataSportYear } from '@/store/sportsM';
 import { continentMap } from '@/store/continentsM';
-
+import { sportTexts, allTexts } from '@/utils/aboutTexts';
 @Component({
   components: {
     SportInfoBox,
@@ -112,6 +134,13 @@ export default class SportView extends Vue {
   heightMax: number = 0;
   fetchErrored = false;
 
+  get getSportsContent() {
+    return sportTexts;
+  }
+
+  get getAllContent() {
+    return allTexts;
+  }
   get ageTime() {
     if (!this.averages) return {};
     return {

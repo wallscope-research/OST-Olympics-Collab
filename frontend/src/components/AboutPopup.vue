@@ -94,6 +94,7 @@ export default class AboutPopup extends Vue {
     }
     .aboutContent {
       height: 0;
+      z-index: 10;
       width: 0;
       overflow: hidden;
       position: absolute;
@@ -123,6 +124,7 @@ export default class AboutPopup extends Vue {
       &.show {
         animation: unfold 0.5s;
         display: block;
+        z-index: 99;
         height: auto;
         width: 330px;
         max-width: 80vw;

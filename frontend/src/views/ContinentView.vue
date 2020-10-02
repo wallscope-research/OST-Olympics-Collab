@@ -7,7 +7,10 @@
   .charts
     .one(v-if='info')
       .about-area
-        //- AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getContinentsContent.infoBox.description',
+          :how='getContinentsContent.infoBox.source'
+        )
       ContinentInfoBox(
         :medals='continentMedals',
         :teams='continentTeams',
@@ -15,7 +18,10 @@
       )
     .two(v-if='continentAverages && averages && medalsVAthletes')
       .about-area
-        //- AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getContinentsContent.medalsAndAthletesOverTime.description',
+          :how='getContinentsContent.medalsAndAthletesOverTime.source'
+        )
       MultipleLines(
         :propOptions='getOptions',
         title='Number of Medals and Athletes over time',
@@ -26,7 +32,10 @@
       )
     .three(v-if='continentAverages && averages')
       .about-area
-        //- AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getContinentsContent.statistics.description',
+          :how='getContinentsContent.statistics.source'
+        )
       ParallelChart(
         :legend='continentName + " Stats"',
         :focus='continentAverages',
@@ -39,7 +48,7 @@
       )
     .four(v-if='articles && articles.length > 0')
       .about-area
-        //- AboutPopup(:text='infoText')
+        AboutPopup(:desc='getAllContent.news.description', :how='getAllContent.news.source')
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
     .four(v-else-if='articles != null && articles.length < 1')
@@ -60,7 +69,7 @@ import ParallelChart from '@/components/ParallelChart.vue';
 import continentsM from '@/store/continentsM';
 import sportsM from '@/store/sportsM';
 import { Averages, DataArticle } from '@/store';
-
+import { continentTexts, allTexts } from '@/utils/aboutTexts';
 @Component({
   components: { ContinentInfoBox, Article, MultipleLines, ParallelChart, AboutPopup },
 })
@@ -90,6 +99,7 @@ export default class ContinentView extends Vue {
   max = 0;
   min = 0;
   fetchErrored = false;
+  title = 'Number of athletes vs number of medals won';
 
   @Watch('continentID')
   async continentChanged(val: string) {
@@ -108,7 +118,14 @@ export default class ContinentView extends Vue {
     ]);
   }
 
-  title = 'Number of athletes vs number of medals won';
+  get getContinentsContent() {
+    return continentTexts;
+  }
+
+  get getAllContent() {
+    return allTexts;
+  }
+
   get getOptions() {
     const data = Object.keys(this.medalsVAthletes!);
     const series = [];
