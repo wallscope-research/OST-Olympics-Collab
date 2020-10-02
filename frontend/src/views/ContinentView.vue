@@ -7,7 +7,7 @@
   .charts
     .one(v-if='info')
       .about-area
-        AboutPopup(:text='infoText')
+        //- AboutPopup(:text='infoText')
       ContinentInfoBox(
         :medals='continentMedals',
         :teams='continentTeams',
@@ -15,7 +15,7 @@
       )
     .two(v-if='continentAverages && averages && medalsVAthletes')
       .about-area
-        AboutPopup(:text='infoText')
+        //- AboutPopup(:text='infoText')
       MultipleLines(
         :propOptions='getOptions',
         title='Number of Medals and Athletes over time',
@@ -26,7 +26,7 @@
       )
     .three(v-if='continentAverages && averages')
       .about-area
-        AboutPopup(:text='infoText')
+        //- AboutPopup(:text='infoText')
       ParallelChart(
         :legend='continentName + " Stats"',
         :focus='continentAverages',
@@ -39,7 +39,7 @@
       )
     .four(v-if='articles && articles.length > 0')
       .about-area
-        AboutPopup(:text='infoText')
+        //- AboutPopup(:text='infoText')
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
     .four(v-else-if='articles != null && articles.length < 1')

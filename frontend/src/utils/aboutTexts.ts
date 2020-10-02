@@ -1,12 +1,18 @@
-export const athleteTexts: { [key: string]: { description: string, source: string } } = {
+export const athleteTexts: { [key: string]: { description: string, source: string, links?: { name: string, link: string }[] } } = {
   infoBox: {
     description: "This is an overview of an athlete’s attributes.",
-    source: `This information is sourced from ` + `Kaggle`.link("https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results") + `. We transformed the tabular dataset into a knowledge graph and then created rules to deduce additional information from that graph. For example, we used the age and year at which an athlete won their first medal to calculate their current age today.
+    source: `This information is sourced from Kaggle. We transformed the tabular dataset into a knowledge graph and then created rules to deduce additional information from that graph. For example, we used the age and year at which an athlete won their first medal to calculate their current age today.
 
 The dataset does not contain any death information. If the selected athlete has passed away, the age reflects how old they would be if still alive today.
 
-There is one bug in the original Kaggle dataset that affects a few athlete’s names. We have `+ `reported the bug (examples included in report)`.link("https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results/discussion/185670") + ` and will update when resolved.
-`
+There is one bug in the original Kaggle dataset that affects a few athlete’s names. We have reported the bug (examples included in report) and will update when resolved.
+`,
+    links: [{
+      name: "Kaggle Dataset", link: "https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results",
+    },
+    {
+      name: "Dataset Bug Report", link: "https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results/discussion/185670"
+    }]
   },
   medalsByAge: {
     description: "This chart displays the mean number of medals Olympic athletes have, grouped by age.",
@@ -22,10 +28,13 @@ There is one bug in the original Kaggle dataset that affects a few athlete’s n
   }
 }
 
-export const sportTexts: { [key: string]: { description: string, source: string } } = {
+export const sportTexts: { [key: string]: { description: string, source: string, links?: { name: string, link: string }[] } } = {
   infoBox: {
     description: "This is an overview of a sport’s stats.",
-    source: `This information is sourced from ` + `Kaggle`.link("https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results") + `. We transformed the tabular dataset into a knowledge graph and then created rules to deduce additional information from that graph.`
+    source: `This information is sourced from Kaggle. We transformed the tabular dataset into a knowledge graph and then created rules to deduce additional information from that graph.`,
+    links: [{
+      name: "Kaggle Dataset", link: "https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results",
+    }]
   },
   topFemales: {
     description: "These are the top five female athletes for the given sport, ordered by total medal count.",
@@ -55,10 +64,13 @@ export const sportTexts: { [key: string]: { description: string, source: string 
   },
 }
 
-export const continentTexts: { [key: string]: { description: string, source: string } } = {
+export const continentTexts: { [key: string]: { description: string, source: string, links?: { name: string, link: string }[] } } = {
   infoBox: {
     description: "This is an overview of a continent's stats.",
-    source: `This information is sourced from ` + `Kaggle`.link("https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results") + `. We transformed the tabular dataset into a knowledge graph and then created rules to deduce additional information from that graph.`
+    source: `This information is sourced from Kaggle. We transformed the tabular dataset into a knowledge graph and then created rules to deduce additional information from that graph.`,
+    links: [{
+      name: "Kaggle Dataset", link: "https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results",
+    }]
   },
   medalsAndAthletesOverTime: {
     description: "This chart displays both how many athletes represented the continent, and how many medals the continent’s athletes won, over time. This can be filtered by sport.",

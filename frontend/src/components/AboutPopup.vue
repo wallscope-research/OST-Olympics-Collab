@@ -10,6 +10,9 @@
           p {{ desc }}
           h2 How did we do it?
           p {{ how }}
+          .links(v-if='links')
+            h3 Links
+            a(v-for='l in links', :href='l.link', target='_blank') {{ l.name }}
         icon(:icon='["far", "times"]', @click='tipOn = false')
 </template>
 
@@ -20,15 +23,24 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 export default class AboutPopup extends Vue {
   @Prop({ required: true }) desc!: string;
   @Prop({ required: true }) how!: string;
+  @Prop({ required: false }) links!: { name: string; link: string }[];
   tipOn = false;
 
   checkStatus() {
     this.tipOn = this.tipOn ? false : true;
   }
+
+  mounted() {
+    if (this.links) console.log(this.links);
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+.links {
+  display: flex;
+  flex-direction: column;
+}
 @keyframes fold {
   0% {
     opacity: 1;

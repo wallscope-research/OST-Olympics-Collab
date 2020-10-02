@@ -5,7 +5,7 @@ div
   p Height: {{ athlete.height }} cm
   p Weight: {{ athlete.weight }} kg
   p Sex: {{ athlete.sex }}
-  p Medals: {{ athlete.medals.toLocaleString() }}
+  p Medals won: {{ athlete.medals.toLocaleString() }}
   p Team: {{ athlete.team }}
   .sport
     p Sport:
@@ -42,7 +42,8 @@ export default class InfoBox extends Vue {
 p {
   line-height: 25px;
 }
-.sport, .continent {
+.sport,
+.continent {
   display: flex;
   align-items: center;
   p {

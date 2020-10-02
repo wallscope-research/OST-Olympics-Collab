@@ -9,7 +9,8 @@
       .about-area
         AboutPopup(
           :desc='getAthleteContent.infoBox.description',
-          :how='getAthleteContent.infoBox.source'
+          :how='getAthleteContent.infoBox.source',
+          :links='getAthleteContent.infoBox.links'
         )
       InfoBox(:sport='athlete.sport', :athlete='athlete', @tag-clicked='navigate')
     .two(v-if='athlete')
@@ -21,7 +22,10 @@
       MedalsAtAge(:averageMedalsPerAge='averageMedalsPerAge', :athleteAge='athlete.age')
     .three(v-if='athlete && averages')
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getAthleteContent.statistics.description',
+          :how='getAthleteContent.statistics.source'
+        )
       .parallel
         ParallelChart(
           legend='Athlete Stats',
@@ -74,6 +78,7 @@ export default class AthleteView extends Vue {
   averageMedalsPerAge: { [key: number]: number } = {};
   infoText = 'testing with text';
   fetchErrored = false;
+
   get avgFocus() {
     return new Averages(
       this.athlete!.height,
