@@ -118,7 +118,7 @@ h6 {
 .chart-subtitle {
   color: var(--violet);
   font-size: 14px;
-  margin-bottom: 5px;
+  margin-top: 5px;
 }
 .home {
   padding: 12px 50px 60px 50px;
