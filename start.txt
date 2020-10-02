@@ -15,9 +15,6 @@ prefix foaf: <http://xmlns.com/foaf/0.1/>
 prefix wsr: <http://wallscope.co.uk/resource/olympics/>
 prefix schema: <https://schema.org/>
 
-import olympics.nt
-import continents.nt
-
 import Instance.dlog #e.g. Bolt_100m_2008 \
         athleteInGames.dlog \
         hasCountry.dlog \
@@ -36,7 +33,10 @@ import Instance.dlog #e.g. Bolt_100m_2008 \
 
 import  AbstractSport.dlog #e.g. Asia_Boxing_1980 \
         ContinentInSport.dlog \
-        continentAverageFemaleAge.dlog \
+        goldsAtGames.dlog #This also gives us silvers at games and bronzes. \
+        totalGoldsCount.dlog 
+
+import  continentAverageFemaleAge.dlog \
         continentAverageMaleAge.dlog \
         continentAverageFemaleMinAge.dlog \
         continentAverageMaleMinAge.dlog \
@@ -57,3 +57,6 @@ import  AbstractSport.dlog #e.g. Asia_Boxing_1980 \
 
 
 endpoint start
+
+import olympics.nt
+import continents.nt

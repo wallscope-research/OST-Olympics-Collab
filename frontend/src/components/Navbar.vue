@@ -1,7 +1,10 @@
 <template lang="pug">
   #topBar
     .pageTitle
-      h2 The Olympics: A Linked Data Platform
+      h2 
+        | The Olympics:
+        br
+        | A Linked Data Platform
     .button(id="show-modal" @click="showModal = true")
       p About
     Modal(v-if="showModal" @close="showModal = false")
@@ -29,7 +32,7 @@ export default class Navbar extends Vue {
   padding-bottom: 10px;
   grid-gap: 10px;
   align-items: center;
-  padding: 40px 50px 20px 50px;
+  padding: 10px 50px 20px 50px;
   .button, .pageTitle {
     cursor: pointer;
   }

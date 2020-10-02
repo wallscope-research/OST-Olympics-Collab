@@ -5,6 +5,8 @@
     h3 {{ sportID }}
   .charts
     .one(v-if='sport')
+      .about-area
+        AboutPopup(:text='infoText')
       SportInfoBox(
         :season='season',
         :medals='medalCount',
@@ -12,10 +14,16 @@
         :eventCount='events'
       )
     .two
+      .about-area
+        AboutPopup(:text='infoText')
       TopAthletes(title='Top Female Athletes', :athletes='topFemale', @tag-clicked='navigate')
     .three
+      .about-area
+        AboutPopup(:text='infoText')
       TopAthletes(title='Top Male Athletes', :athletes='topMale', @tag-clicked='navigate')
     .four(v-if='articles && articles.length > 0')
+      .about-area
+        AboutPopup(:text='infoText')
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
     .four(v-else-if='articles != null && articles.length < 1')
@@ -25,12 +33,18 @@
       h2.chart-title News
       p Loading...
     .five(v-if='sportsOverTime && Object.keys(sportsOverTime).length > 0')
+      .about-area
+        AboutPopup(:text='infoText')
       SportsBar(:overTime='overTime', :axisMax='axisMax')
       p Pick a year
       vue-slider(v-model='date', :data='years')
     .six(v-if='averages && Object.keys(averages).length > 0')
+      .about-area
+        AboutPopup(:text='infoText')
       MultipleLines(:propOptions='ageTime', :title='ageTitle', :min='ageMin', :max='ageMax')
     .seven(v-if='averages && Object.keys(averages).length > 0')
+      .about-area
+        AboutPopup(:text='infoText')
       MultipleLines(
         :propOptions='heightTime',
         :title='heightTitle',
@@ -38,6 +52,8 @@
         :min='heightMin'
       )
     .eight(v-if='averages && Object.keys(averages).length > 0')
+      .about-area
+        AboutPopup(:text='infoText')
       MultipleLines(
         :propOptions='weightTime',
         :title='weightTitle',
@@ -52,6 +68,7 @@ import VueSlider from 'vue-slider-component';
 import 'vue-slider-component/theme/default.css';
 import SportInfoBox from '@/components/SportInfoBox.vue';
 import Article from '@/components/Article.vue';
+import AboutPopup from '@/components/AboutPopup.vue';
 import TopAthletes from '@/components/TopAthletes.vue';
 import OlympicTorch from '@/components/OlympicTorch.vue';
 import MultipleLines from '@/components/MultipleLines.vue';
@@ -71,6 +88,7 @@ import { continentMap } from '@/store/continentsM';
     OlympicTorch,
     MultipleLines,
     SportsBar,
+    AboutPopup,
   },
 })
 export default class SportView extends Vue {

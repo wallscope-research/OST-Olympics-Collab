@@ -1,0 +1,55 @@
+[?ath, wso:totalGoldsCount, ?gc]
+:-
+AGGREGATE(
+    [?part, wso:hasAthlete, ?ath],
+    [?part, wso:goldsAtGames, ?golds]
+    ON ?ath
+    BIND SUM(?golds) AS ?gc
+) .
+
+
+[?ath, wso:totalGoldsCount, 0]
+:-
+[?ath, a, foaf:Person],
+NOT EXIST ?golds, ?part IN (
+    [?part, wso:hasAthlete, ?ath],
+    [?part, wso:goldsAtGames, ?golds] ) .
+
+
+
+
+[?ath, wso:totalSilversCount, ?sc]
+:-
+AGGREGATE(
+    [?part, wso:hasAthlete, ?ath],
+    [?part, wso:silversAtGames, ?silv]
+    ON ?ath
+    BIND SUM(?silv) AS ?sc
+) .
+
+[?ath, wso:totalSilversCount, 0]
+:-
+[?ath, a, foaf:Person],
+NOT EXIST ?silv, ?part IN (
+    [?part, wso:hasAthlete, ?ath],
+    [?part, wso:silversAtGames, ?silv] ) .
+
+
+
+
+
+[?ath, wso:totalBronzesCount, ?bc]
+:-
+AGGREGATE(
+    [?part, wso:hasAthlete, ?ath],
+    [?part, wso:bronzesAtGames, ?brzs]
+    ON ?ath
+    BIND SUM(?brzs) AS ?bc
+) .
+
+[?ath, wso:totalBronzesCount, 0]
+:-
+[?ath, a, foaf:Person],
+NOT EXIST ?brzs, ?part IN (
+    [?part, wso:hasAthlete, ?ath],
+    [?part, wso:bronzesAtGames, ?brzs] ) .

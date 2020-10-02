@@ -16,9 +16,6 @@ export default class TagC extends Vue {
 
 
 <style lang="scss">
-.container {
-  width: fit-content;
-}
 .tag {
   cursor: pointer;
   background: #f1f1f1;
@@ -26,7 +23,7 @@ export default class TagC extends Vue {
   padding: 0 10px;
   display: flex;
   align-items: center;
-  width: auto;
+  width: fit-content;
   &:hover {
     background: var(--active-color);
     p {

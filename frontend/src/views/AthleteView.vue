@@ -7,43 +7,30 @@
   .charts
     .one(v-if='athlete')
       .about-area
-        AboutPopup(
-          :desc='getAthleteContent.infoBox.description',
-          :how='getAthleteContent.infoBox.source'
-        )
-      .main-area
-        InfoBox(:sport='athlete.sport', :athlete='athlete', @tag-clicked='navigate')
+        AboutPopup(:text='infoText')
+      InfoBox(:sport='athlete.sport', :athlete='athlete', @tag-clicked='navigate')
     .two(v-if='athlete')
       .about-area
-        AboutPopup(
-          :desc='getAthleteContent.medalsByAge.description',
-          :how='getAthleteContent.medalsByAge.source'
-        )
-      .main-area
-        MedalsAtAge(:averageMedalsPerAge='averageMedalsPerAge', :athleteAge='athlete.age')
+        AboutPopup(:text='infoText')
+      MedalsAtAge(:averageMedalsPerAge='averageMedalsPerAge', :athleteAge='athlete.age')
     .three(v-if='athlete && averages')
       .about-area
-        AboutPopup(
-          :desc='getAthleteContent.statistics.description',
-          :how='getAthleteContent.statistics.source'
-        )
-      .main-area
-        ParallelChart(
-          legend='Athlete Stats',
-          :focus='avgFocus',
-          :comparison='averages',
-          :continentMap='continents',
-          :sportsMap='sports',
-          @continent-selected='continentSelected',
-          @sport-selected='sportSelected',
-          @gender-selected='genderSelected'
-        )
+        AboutPopup(:text='infoText')
+      ParallelChart(
+        legend='Athlete Stats',
+        :focus='avgFocus',
+        :comparison='averages',
+        :continentMap='continents',
+        :sportsMap='sports',
+        @continent-selected='continentSelected',
+        @sport-selected='sportSelected',
+        @gender-selected='genderSelected'
+      )
     .four(v-if='articles && articles.length > 0')
       .about-area
-        AboutPopup(:desc='getAllContent.news.description', :how='getAllContent.news.source')
-      .main-area
-        h2.chart-title News
-        Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
+        AboutPopup(:text='infoText')
+      h2.chart-title News
+      Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
     .four(v-else-if='articles != null && articles.length < 1')
       h2.chart-title News
       p No articles to display about {{ athlete.name }}
@@ -176,17 +163,11 @@ export default class AthleteView extends Vue {
 <style lang="scss" scoped>
 .one {
   display: grid;
-  grid-template-columns: 0.8fr 1.7fr 0.5fr;
-  grid-template-rows: 0.4fr 1.6fr;
+  grid-template-columns: 1fr;
   gap: 0px 0px;
-  grid-template-areas:
-    '. . about-area'
-    'main-area main-area main-area';
-  &.main-area {
-    grid-area: main-area;
-  }
   & .about-area {
-    grid-area: about-area;
+    width: auto;
+    justify-content: flex-end;
   }
 }
 .two {
