@@ -67,7 +67,6 @@ export default class AboutPopup extends Vue {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    z-index: 9;
     .round {
       background: #ffffff;
       height: 31px;

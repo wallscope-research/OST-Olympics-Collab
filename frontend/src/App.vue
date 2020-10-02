@@ -120,6 +120,9 @@ h6 {
   font-size: 14px;
   margin-top: 5px;
 }
+.about-area {
+  z-index: 9999;
+}
 .home {
   padding: 12px 50px 60px 50px;
   .title-page {
