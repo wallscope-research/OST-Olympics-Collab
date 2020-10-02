@@ -7,15 +7,24 @@
   .charts
     .one(v-if='athlete')
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getAthleteContent.infoBox.description',
+          :how='getAthleteContent.infoBox.source'
+        )
       InfoBox(:sport='athlete.sport', :athlete='athlete', @tag-clicked='navigate')
     .two(v-if='athlete')
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getAthleteContent.medalsByAge.description',
+          :how='getAthleteContent.medalsByAge.source'
+        )
       MedalsAtAge(:averageMedalsPerAge='averageMedalsPerAge', :athleteAge='athlete.age')
     .three(v-if='athlete && averages')
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(
+          :desc='getAthleteContent.statistics.descripton',
+          :how='getAthleteContent.statistics.source'
+        )
       ParallelChart(
         legend='Athlete Stats',
         :focus='avgFocus',
@@ -28,7 +37,7 @@
       )
     .four(v-if='articles && articles.length > 0')
       .about-area
-        AboutPopup(:text='infoText')
+        AboutPopup(:desc='getAllContent.news.description', :how='getAllContent.news.source')
       h2.chart-title News
       Article(:key='a.text', v-for='a in articles', :article='a', @tag-clicked='navigate')
     .four(v-else-if='articles != null && articles.length < 1')
