@@ -28,7 +28,7 @@ export default class AboutPopup extends Vue {
   hovering = false;
 
   @Watch('hovering')
-  hoverHandler(newVal, oldVal) {
+  hoverHandler(newVal: boolean, oldVal: boolean) {
     // if opening, we just trigger right away
     if (newVal && !oldVal) {
       this.tipOn = true;
