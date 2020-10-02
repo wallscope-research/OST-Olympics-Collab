@@ -52,7 +52,7 @@ import continentsM from '@/store/continentsM';
 import sportsM from '@/store/sportsM';
 import axios from 'axios';
 import { DataArticle } from '@/store/index';
-
+import { athleteTexts, allTexts } from '@/utils/aboutTexts';
 @Component({ components: { InfoBox, Article, MedalsAtAge, ParallelChart, AboutPopup } })
 export default class AthleteView extends Vue {
   @Prop({ required: false }) readonly athleteID: string | undefined;
@@ -73,6 +73,14 @@ export default class AthleteView extends Vue {
       this.athlete!.medals,
       this.athlete!.age
     );
+  }
+
+  get getAthleteContent() {
+    return athleteTexts;
+  }
+
+  get getAllContent() {
+    return allTexts;
   }
 
   @Watch('athleteID')
@@ -163,9 +171,35 @@ export default class AthleteView extends Vue {
   }
 }
 .two {
+  display: grid;
+  grid-template-columns: 0.8fr 1.7fr 0.5fr;
+  grid-template-rows: 0.4fr 1.6fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    '. . about-area'
+    'main-area main-area main-area';
+  &.main-area {
+    grid-area: main-area;
+  }
+  & .about-area {
+    grid-area: about-area;
+  }
 }
 .three {
   overflow: auto;
+  display: grid;
+  grid-template-columns: 0.8fr 1.7fr 0.5fr;
+  grid-template-rows: 0.4fr 1.6fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    '. . about-area'
+    'main-area main-area main-area';
+  &.main-area {
+    grid-area: main-area;
+  }
+  & .about-area {
+    grid-area: about-area;
+  }
 }
 
 .four {

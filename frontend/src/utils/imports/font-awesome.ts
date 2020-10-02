@@ -1,17 +1,17 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 
-import {} from '@fortawesome/pro-light-svg-icons';
+import { } from '@fortawesome/pro-light-svg-icons';
 
-import { 
+import {
   faTimes as farTimes,
   faExternalLinkSquare as farExternalLinkSquare,
 } from '@fortawesome/pro-regular-svg-icons';
 
-import { 
+import {
   faGlobeEurope as fasGlobeEurope,
   faUser as fasUser,
   faChevronDoubleUp as fasCheveronDoubleUp,
-
+  faMedal as fasMedal
 } from '@fortawesome/pro-solid-svg-icons';
 
 library.add(
@@ -23,5 +23,6 @@ library.add(
   //solid
   fasGlobeEurope,
   fasUser,
+  fasMedal,
   fasCheveronDoubleUp,
 );
