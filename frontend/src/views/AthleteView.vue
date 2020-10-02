@@ -16,16 +16,17 @@
     .three(v-if='athlete && averages')
       .about-area
         AboutPopup(:text='infoText')
-      ParallelChart(
-        legend='Athlete Stats',
-        :focus='avgFocus',
-        :comparison='averages',
-        :continentMap='continents',
-        :sportsMap='sports',
-        @continent-selected='continentSelected',
-        @sport-selected='sportSelected',
-        @gender-selected='genderSelected'
-      )
+      .parallel
+        ParallelChart(
+          legend='Athlete Stats',
+          :focus='avgFocus',
+          :comparison='averages',
+          :continentMap='continents',
+          :sportsMap='sports',
+          @continent-selected='continentSelected',
+          @sport-selected='sportSelected',
+          @gender-selected='genderSelected'
+        )
     .four(v-if='articles && articles.length > 0')
       .about-area
         AboutPopup(:text='infoText')
@@ -161,48 +162,12 @@ export default class AthleteView extends Vue {
 
 
 <style lang="scss" scoped>
-.one {
+.three {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0px 0px;
-  & .about-area {
-    width: auto;
-    justify-content: flex-end;
+  .parallel {
+    overflow-x: auto;
   }
-}
-.two {
-  display: grid;
-  grid-template-columns: 0.8fr 1.7fr 0.5fr;
-  grid-template-rows: 0.4fr 1.6fr;
-  gap: 0px 0px;
-  grid-template-areas:
-    '. . about-area'
-    'main-area main-area main-area';
-  &.main-area {
-    grid-area: main-area;
-  }
-  & .about-area {
-    grid-area: about-area;
-  }
-}
-.three {
-  overflow: auto;
-  display: grid;
-  grid-template-columns: 0.8fr 1.7fr 0.5fr;
-  grid-template-rows: 0.4fr 1.6fr;
-  gap: 0px 0px;
-  grid-template-areas:
-    '. . about-area'
-    'main-area main-area main-area';
-  &.main-area {
-    grid-area: main-area;
-  }
-  & .about-area {
-    grid-area: about-area;
-  }
-}
-
-.four {
 }
 @media only screen and (max-width: 768px) {
   .home {
