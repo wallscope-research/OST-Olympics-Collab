@@ -27,6 +27,7 @@
     "sass": "^1.26.10",
     "sass-loader": "^9.0.3",
     "string-similarity": "^4.0.2",
+    "v-click-outside": "^3.1.2",
     "vue": "^2.6.11",
     "vue-backtotop": "^1.6.1",
     "vue-class-component": "^7.2.3",

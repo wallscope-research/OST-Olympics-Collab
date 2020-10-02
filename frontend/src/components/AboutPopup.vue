@@ -1,5 +1,5 @@
 <template lang="pug">
-#aboutContainer.container
+#aboutContainer.container(v-click-outside='checkStatus')
   .about
     .round(@click='checkStatus', title='About the section')
       p ?
@@ -13,18 +13,22 @@
           .links(v-if='links')
             h3 Links
             a(v-for='l in links', :href='l.link', target='_blank') {{ l.name }}
-        icon(:icon='["far", "times"]', @click='tipOn = false')
+        icon(:icon='["far", "times"]', @click='checkStatus')
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-
-@Component
+import vClickOutside from 'v-click-outside';
+@Component({ directives: { clickOutside: vClickOutside.directive } })
 export default class AboutPopup extends Vue {
   @Prop({ required: true }) desc!: string;
   @Prop({ required: true }) how!: string;
   @Prop({ required: false }) links!: { name: string; link: string }[];
   tipOn = false;
+
+  onClickOutside(event: any) {
+    console.log('Clicked outside. Event: ', event);
+  }
 
   checkStatus() {
     this.tipOn = this.tipOn ? false : true;
