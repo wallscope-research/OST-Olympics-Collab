@@ -190,6 +190,7 @@ export default class ContinentView extends Vue {
       if (x.medals < min) min = x.medals;
       else if (x.medals > max) max = x.medals;
     });
+    console.log(min, max);
     this.min = min;
     this.max = max;
   }

@@ -325,7 +325,7 @@ export default class SportView extends Vue {
     if (this.fetchErrored) {
       // alert(message, title, type)
       this.$alert(
-        'Missing information for this athlete. Please search for something else',
+        'Missing information for this Sport. Please search for something else',
         '',
         'warning'
       ).then(() => {
