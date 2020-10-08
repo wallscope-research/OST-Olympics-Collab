@@ -6,15 +6,18 @@ PREFIX wSport: <http://wallscope.co.uk/resource/olympics/sport/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
-SELECT DISTINCT ?name ?mc WHERE {
+SELECT DISTINCT ?athlete ?name ((?mgc + ?msc + ?mbc) AS ?mc) (MAX(?gc) AS ?mgc) (MAX(?sc) AS ?msc) (MAX(?bc) AS ?mbc)  WHERE  {
     ?instance wso:event ?event ;
               wso:athlete ?athlete .
 
     ?event rdfs:subClassOf wSport:Swimming . # Replace "Swimming" with selected sport - Using Swimming as an example.
   
     ?athlete foaf:gender wSex:F ; # This returns top 5 female athletes! Switch "F" for "M" to get male athletes.
-             wso:totalMedalCount ?mc ;
+             wso:totalGoldsCount ?gc ;
+             wso:totalSilversCount ?sc ;
+             wso:totalBronzesCount ?bc ;
              rdfs:label ?name .
 }
+GROUP BY ?athlete ?name
 ORDER BY DESC(?mc)
 LIMIT 5
