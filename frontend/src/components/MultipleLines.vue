@@ -82,6 +82,16 @@ export default class MutipleLines extends Vue {
     const uri = this.sportsMap[this.selectedSport];
     this.$emit('line-sport-selected', uri);
   }
+
+  @Watch('min')
+  minChanges() {
+    this.line.yAxis.min = this.min;
+  }
+
+  @Watch('max')
+  maxChanges() {
+    this.line.yAxis.max = this.max;
+  }
   @Watch('propOptions')
   updateData() {
     this.line.xAxis.data = this.propOptions.data;

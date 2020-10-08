@@ -1,7 +1,7 @@
 <template lang="pug">
-#aboutContainer.container
+#aboutContainer.container(@mouseover='hovering = true', @mouseout='hovering = false')
   .about
-    .round(@click='checkStatus', title='About the section')
+    .round(title='About the section')
       p ?
     .aboutContent(:class='{ show: tipOn }')
       div
@@ -13,11 +13,11 @@
           .links(v-if='links')
             h3 Links
             a(v-for='l in links', :href='l.link', target='_blank') {{ l.name }}
-        icon(:icon='["far", "times"]', @click='tipOn = false')
+        icon(:icon='["far", "times"]')
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
 @Component
 export default class AboutPopup extends Vue {
@@ -25,9 +25,22 @@ export default class AboutPopup extends Vue {
   @Prop({ required: true }) how!: string;
   @Prop({ required: false }) links!: { name: string; link: string }[];
   tipOn = false;
+  hovering = false;
 
-  checkStatus() {
-    this.tipOn = this.tipOn ? false : true;
+  @Watch('hovering')
+  hoverHandler(newVal: boolean, oldVal: boolean) {
+    // if opening, we just trigger right away
+    if (newVal && !oldVal) {
+      this.tipOn = true;
+    }
+    // if closing we should debounce to allow movement from the question mark to the info box without the CSS transition
+    if (oldVal && !newVal) {
+      setTimeout(() => {
+        if (!this.hovering) {
+          this.tipOn = false;
+        }
+      }, 100);
+    }
   }
 }
 </script>

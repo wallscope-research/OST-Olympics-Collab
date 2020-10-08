@@ -1,8 +1,9 @@
 <template lang="pug">
 div
   h2.chart-title Statistic comparison
+
   .wrapper
-    
+    #parallel-focus
     .dropdowns
       .dropdown
         h3.chart-subtitle Filter by continent
@@ -23,7 +24,6 @@ div
         )
       .notice(v-if='showNotice')
         p There is no data for {{ selectedSport }} {{ selectedGender }} athletes in {{ selectedContinent }}, please try changing the filters.
-  #parallel-focus
 </template>
 
 
@@ -327,7 +327,7 @@ export default class ParallelChart extends Vue {
 #parallel-focus {
   margin: 10px;
   justify-content: center;
-  overflow-x:auto;
+  // overflow-x: auto;
 }
 .wrapper {
   max-width: 90vw;
@@ -343,7 +343,7 @@ export default class ParallelChart extends Vue {
   min-width: 250px;
   margin-bottom: 20px;
   .dropdown {
-    .vs__dropdown-toggle{
+    .vs__dropdown-toggle {
       cursor: pointer;
     }
   }
