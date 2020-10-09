@@ -44,8 +44,6 @@ import  continentAverageFemaleAge.dlog \
         continentAverageMaleHeight.dlog \
         continentAverageFemaleWeight.dlog \
         continentAverageMaleWeight.dlog  \
-        #continentAverageFemaleMedalCount.dlog \
-        #continentAverageMaleMedalCount.dlog \
         continentInSportAverageFemaleAge.dlog \
         continentInSportAverageMaleAge.dlog \
         continentInSportAverageFemaleMinAge.dlog \
@@ -60,3 +58,4 @@ endpoint start
 
 import olympics.nt
 import continents.nt
+import results-reddit-clean.nt
