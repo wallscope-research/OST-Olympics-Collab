@@ -1,4 +1,22 @@
-# OST-Olympics-Collab
-Collaboration Project between Wallscope and OST.
+# The Olympics: How to Build a Linked Data Application
 
-collab ideas doc here: [LINK](https://oxfordsemantictechnologies-my.sharepoint.com/:w:/g/personal/charles_brecque_oxfordsemantic_tech/EY_TU_b2EbVMs-qehkLaMdYBT4azzi7SC_n-5-EoPueM3g?rtime=21mQYDgj2Eg)
+We combined RDFox and Wallscope's Platform to create [this demo](https://wallscope.rdfox.tech/) and there is an article describing how we made it [here](). This was a collaboration between Wallscope and Oxford Semantic Technologies.
+
+---
+
+## Repository Structure
+
+All of the directory headings are fairly self-explanatory and further `README.md` files exist where explanation of files is required.
+
+* data: contains the data required to run the demo.
+* dlog: contains the rules required to run the demo.
+* frontend: contains the code for the interface.
+* output: exists for query results during development.
+* queries: contains the queries required to run the demo.
+* reddit-scripts: python script to pre-process the Reddit dumps.
+
+Details of each stage of development can be found in [the article]().
+
+## Setup
+
+With a license for RDFox, you can run the `start.txt` script in this repository.
