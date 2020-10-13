@@ -351,15 +351,16 @@ export default class ParallelChart extends Vue {
 
   resized() {
     d3.select('#parallel-focus').selectAll('*').remove();
+    const height = window.innerHeight * this.heightRatio;
+    const width = window.innerWidth * this.widthRatio;
     const container = d3
       .select('#parallel-focus')
       .append('svg')
       .attr('id', 'container-svg')
-      .attr('width', this.width)
-      .attr('height', this.height);
+      .attr('width', width)
+      .attr('height', height);
     this.container = container;
-    const height = window.innerHeight * this.heightRatio;
-    const width = window.innerWidth * this.widthRatio;
+
     const margin = this.margin;
 
     const that = this;
@@ -459,26 +460,26 @@ export default class ParallelChart extends Vue {
     container
       .append('circle')
       .attr('cx', 10)
-      .attr('cy', 130)
+      .attr('cy', height / 2)
       .attr('r', 6)
 
       .style('fill', '#69b3a2');
     container
       .append('circle')
       .attr('r', 6)
-      .attr('cy', 160)
+      .attr('cy', height / 2 + 20)
       .attr('cx', 10)
       .style('fill', '#404080');
     container
       .append('text')
       .text(this.legend)
-      .attr('y', 130)
+      .attr('y', height / 2)
       .attr('x', 20)
       .style('font-size', '15px')
       .attr('alignment-baseline', 'middle');
     container
       .append('text')
-      .attr('y', 160)
+      .attr('y', height / 2 + 20)
       .attr('x', 20)
       .text('Average Stats')
       .style('font-size', '15px')
