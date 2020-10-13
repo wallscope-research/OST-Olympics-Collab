@@ -25,7 +25,7 @@
                 p 
                   | To imitate the disparity in data sources within organisations, we have brought together a few different data sources and built this demo.
                   | You can 
-                  a(href="https://medium.com/" target="_blank" alt="link to the Medium blog article") read about 
+                  a(href="https://medium.com/wallscope/the-olympics-how-to-build-a-linked-data-application-f6f844b3a19c" target="_blank" alt="link to the Medium blog article") read about 
                   | how this was all created and feel free to get in touch with 
                   a(href="https://wallscope.co.uk/#contact-us" target="_blank" alt="link to contact Wallscope") Wallscope 
                   | and 
@@ -33,7 +33,7 @@
               .links
                 div
                   p Read more on:
-                  a(href="https://medium.com/" target="_blank")
+                  a(href="https://medium.com/wallscope/the-olympics-how-to-build-a-linked-data-application-f6f844b3a19c" target="_blank")
                     img.medium(
                       src="@/assets/Wordmark_Black.png" 
                       alt="Medium Logo"
