@@ -151,19 +151,23 @@ export default class ParallelChart extends Vue {
     var w = window.innerWidth;
     var h = window.innerHeight;
     if (!this.isSmall && w <= 768) {
+      console.log('false');
       this.isSmall = true;
       this.resized();
-    }
-    if (this.isSmall && w > 768) {
+    } else if (this.isSmall && w > 768) {
+      console.log('true');
       this.isSmall = false;
-      this.resized();
+      this.draw();
     }
   }
   // Below this point it's all D3 stuff.
   // Proceed at your own risk
-  // Pray for @johnnystrachan who had to slave over this for over a week
+  // Pray for @johnnystrachan who had to slave over this
 
   async draw() {
+    if (this.container) {
+      d3.select('#parallel-focus').selectAll('*').remove();
+    }
     const container = d3
       .select('#parallel-focus')
       .append('svg')
