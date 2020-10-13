@@ -174,7 +174,6 @@ export default class AthleteView extends Vue {
   }
 
   async mounted() {
-    console.log(window.history.length);
     try {
       await Promise.all([
         this.fetchOptions(),
