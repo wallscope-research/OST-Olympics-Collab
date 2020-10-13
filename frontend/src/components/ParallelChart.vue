@@ -115,29 +115,25 @@ export default class ParallelChart extends Vue {
     this.$emit('gender-selected', uri);
   }
 
-  @Watch('comparison')
-  averageWatcher() {
-    this.reDraw();
-  }
   @Watch('focus')
   focusWatcher() {
-    this.reDraw();
+    this.draw();
   }
   @Watch('comparison')
   comparisonWatcher() {
-    this.reDraw();
+    this.draw();
   }
   @Watch('continentMap')
   continentWatcher() {
-    this.reDraw();
+    this.draw();
   }
   @Watch('sportsMap')
   sportsWatcher() {
-    this.reDraw();
+    this.draw();
   }
   @Watch('legend')
   legendWatcher() {
-    this.reDraw();
+    this.draw();
   }
 
   created() {
@@ -155,7 +151,6 @@ export default class ParallelChart extends Vue {
       this.isSmall = true;
       this.resized();
     } else if (this.isSmall && w > 768) {
-      console.log('true');
       this.isSmall = false;
       this.draw();
     }
@@ -299,58 +294,6 @@ export default class ParallelChart extends Vue {
       .text('Average Stats')
       .style('font-size', '15px')
       .attr('alignment-baseline', 'middle');
-  }
-
-  async reDraw() {
-    const height = this.height;
-    const width = this.width;
-    const margin = this.margin;
-
-    //get data again
-    const lines: { [key: string]: { focus: number; rest: number } } = {
-      age: { focus: this.focus.age!, rest: this.comparison.age ?? -50 },
-      height: { focus: this.focus.height!, rest: this.comparison.height ?? -50 },
-      weight: { focus: this.focus.weight!, rest: this.comparison.weight ?? -50 },
-      'Number of medals': { focus: this.focus.medals!, rest: this.comparison.medals ?? -50 },
-    };
-
-    const keys = Object.keys(lines);
-
-    //rescale x and y
-    const x = d3.scalePoint().range([0, width]).padding(1).domain(keys);
-
-    var y: { [key: string]: any } = {};
-    keys.forEach((k: string) => {
-      const max = this.limits[k].max;
-      const min = this.limits[k].min;
-      const arr = [min - 5, max + 5];
-
-      y[k] = d3
-        .scaleLinear()
-        //@ts-ignore
-        .domain(d3.extent(arr))
-        .range([height - 20, 5]);
-    });
-
-    //get two lines.
-    const athleteLine: [number, number][] = [];
-    Object.keys(lines).forEach((key) => {
-      athleteLine.push([x(key)!, y[key](lines[key].focus)]);
-    });
-    const restLine: [number, number][] = [];
-    Object.keys(lines).forEach((key) => {
-      restLine.push([x(key)!, y[key](lines[key].rest)]);
-    });
-
-    const makeAthLine = (d: any) => {
-      return d3.line()(athleteLine);
-    };
-
-    const makeRestLine = (d: any) => {
-      return d3.line()(restLine);
-    };
-
-    this.rest.attr('d', makeRestLine);
   }
 
   resized() {
