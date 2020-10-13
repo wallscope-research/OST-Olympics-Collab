@@ -2446,6 +2446,13 @@ bytes@3.1.0:
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.1.0.tgz#f6cf7933a360e0588fa9fde85651cdc7f805d1f6"
   integrity sha512-zauLjrfCG+xvoyaqLoV8bLVXXNGC4JqlxFCutSDWA6fJrTo2ZuvLYTqZ7aHBLZSMOopbzwv8f+wZcVzfVTI2Dg==
 
+c3@^0.7.20:
+  version "0.7.20"
+  resolved "https://registry.yarnpkg.com/c3/-/c3-0.7.20.tgz#48cb3dbeeb0a5253aee6c3d795aaaf350e9f1147"
+  integrity sha512-QZg4q5M32x2TEgoiQPgc+G+rAuDErTjtG2AeLxS8s0ZLxHBoqsaRcraVvLBG8Zbmj8hOefz2DCWSlX3gaV/11g==
+  dependencies:
+    d3 "^5.8.0"
+
 cacache@^12.0.2, cacache@^12.0.3:
   version "12.0.4"
   resolved "https://registry.yarnpkg.com/cacache/-/cacache-12.0.4.tgz#668bcbd105aeb5f1d92fe25570ec9525c8faa40c"
@@ -3532,7 +3539,7 @@ d3-zoom@1:
     d3-selection "1"
     d3-transition "1"
 
-d3@^5.16.0:
+d3@^5.16.0, d3@^5.8.0:
   version "5.16.0"
   resolved "https://registry.yarnpkg.com/d3/-/d3-5.16.0.tgz#9c5e8d3b56403c79d4ed42fbd62f6113f199c877"
   integrity sha512-4PL5hHaHwX4m7Zr1UapXW23apo6pexCgdetdJ5kTmADpG/7T9Gkxw0M0tf/pjoB63ezCCm0u5UaFYy2aMt0Mcw==
@@ -9502,11 +9509,6 @@ uuid@^3.3.2, uuid@^3.4.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-v-click-outside@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/v-click-outside/-/v-click-outside-3.1.2.tgz#1dbaa14bf09a21bd16f23a38f03bfa3988f71281"
-  integrity sha512-gMdRqfRE6m6XU6SiFi3dyBlFB2MWogiXpof8Aa3LQysrl9pzTndqp/iEaAphLoadaQUFnQ0ec6fLLaxr7LiY6A==
-
 v8-compile-cache@^2.0.3:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.1.1.tgz#54bc3cdd43317bca91e35dcaf305b1a7237de745"
@@ -9555,6 +9557,11 @@ vue-backtotop@^1.6.1:
   integrity sha512-/zbKVHrfs2gfuY/2r7n4jUGE0WrixXRNjYVOOmtPCpgnz2/1iNerczlWnbT2wnI/KJvfKMDp+sGza4CqDvElAQ==
   dependencies:
     vue "2.3.3"
+
+vue-c3@^1.2.11:
+  version "1.2.11"
+  resolved "https://registry.yarnpkg.com/vue-c3/-/vue-c3-1.2.11.tgz#6937f0dd54addab2b76de74cd30c0ab9ad788080"
+  integrity sha512-jxYZ726lKO1Qa+CHOcekPD4ZIwcMQy2LYDafYy2jYD1oswAo/4SnEJmbwp9X+NWzZg/KIAijeB9ImS7Gfvhceg==
 
 vue-class-component@^7.1.0, vue-class-component@^7.2.3:
   version "7.2.5"
