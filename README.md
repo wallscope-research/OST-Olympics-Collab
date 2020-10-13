@@ -1,6 +1,6 @@
 # The Olympics: How to Build a Linked Data Application
 
-We combined RDFox and Wallscope's Platform to create [this demo](https://wallscope.rdfox.tech/) and there is an article describing how we made it [here](). This was a collaboration between Wallscope and Oxford Semantic Technologies.
+We combined RDFox and Wallscope's Platform to create [this demo](https://wallscope.rdfox.tech/) and there is an article describing how we made it [here](https://medium.com/wallscope/the-olympics-how-to-build-a-linked-data-application-f6f844b3a19c). This was a collaboration between Wallscope and Oxford Semantic Technologies.
 
 ---
 
@@ -15,7 +15,7 @@ All of the directory headings are fairly self-explanatory and further `README.md
 * queries: contains the queries required to run the demo.
 * reddit-scripts: python script to pre-process the Reddit dumps.
 
-Details of each stage of development can be found in [the article]().
+Details of each stage of development can be found in [the article](https://medium.com/wallscope/the-olympics-how-to-build-a-linked-data-application-f6f844b3a19c).
 
 ## Setup
 
