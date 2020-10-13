@@ -108,6 +108,7 @@ export default class SearchBar extends Vue {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  top:0;
 }
 
 .sbx-custom__input-placeholder {
@@ -129,6 +130,7 @@ export default class SearchBar extends Vue {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  top:0;
 }
 
 .sbx-custom__input::-webkit-search-decoration,
