@@ -37,12 +37,12 @@ export const sportTexts: { [key: string]: { description: string, source: string,
     }]
   },
   topFemales: {
-    description: "These are the top five female athletes for the given sport, ordered by total medal count.",
+    description: "These are the top five female athletes for the given sport, ordered by weighted total medal count (gold = 3pts, silver = 2pts, bronze = 1pts).",
     source: `One of our data-sources listed each instance that a medal was won at the Olympics. We created a rule to count these instances and link each athlete to their ‘total medal count’. Therefore, to find our top athletes, we can be efficient and do not need to query over every single instance in the original knowledge graph.
     `
   },
   topMale: {
-    description: "These are the top five male athletes for the given sport, ordered by total medal count.",
+    description: "These are the top five male athletes for the given sport, ordered by weighted total medal count (gold = 3pts, silver = 2pts, bronze = 1pts).",
     source: `One of our data-sources listed each instance that a medal was won at the Olympics. We created a rule to count these instances and link each athlete to their ‘total medal count’. Therefore, to find our top athletes, we can be efficient and do not need to query over every single instance in the original knowledge graph.
     `
   },
