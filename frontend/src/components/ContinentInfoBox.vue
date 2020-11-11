@@ -3,7 +3,7 @@ div
   h2.chart-title Continent Info
   p Olympic Teams: {{ teams.toLocaleString() }}
   p Medals won: {{ medals.toLocaleString() }}
-  p Number of ahtletes competing: {{ athletes.toLocaleString() }}
+  p Number of athletes competing: {{ athletes.toLocaleString() }}
 </template>
 
 
